@@ -481,7 +481,7 @@
     <!-- HEADER — .reveal items fire top-to-bottom with 150ms stagger each -->
     <header class="text-center mb-20 mt-16">
       <div class="flex justify-center mb-8 reveal">
-        <div idclass="profile-ring"><div class="profile-ring-inner"><img src="626565681_17924096514230683_1935262150362279863_n.jpg" alt="Profile" class="object-cover w-full h-full"></div></div>
+        <div class="profile-ring"><div class="profile-ring-inner"><img src="626565681_17924096514230683_1935262150362279863_n.jpg" alt="Profile" class="object-cover w-full h-full"></div></div>
       </div>
       <h1 id="time-greeting" class="text-6xl md:text-7xl font-extrabold tracking-tight glow-title leading-none reveal" style="font-family:'Unbounded',sans-serif;"></h1>
       <div id="discord-status" class="flex items-center justify-center gap-2 mt-4 reveal">
@@ -687,7 +687,7 @@
   // ══ THEME ══
   const html=document.documentElement;
   const tsIcon=document.getElementById('tsIcon');
-  function applyTheme(t,playSound){html.setAttribute('data-theme',t);tsIcon.textContent=t==='dark'?'🌙':'☀️';localStorage.setItem('ice-theme',t);if(playSound){playThemeSound(t);showToast(t==='light'?'☀️ rise and shine!':'🌙 sleep mode activated zzz~');}}
+  function applyTheme(t,playSound){html.setAttribute('data-theme',t);tsIcon.textContent=t==='dark'?'🌙':'☀️';localStorage.setItem('ice-theme',t);if(playSound){playThemeSound(t);showToast(t==='light'?'☀️ rise and shine!':'🌙 sleep mode activated Zzz~');}}
   function toggleTheme(){applyTheme(html.getAttribute('data-theme')==='dark'?'light':'dark',true);}
   // ══ TIME GREETING ══
   (function(){
@@ -745,6 +745,35 @@
   buildPlaylist();bmpTrackName.textContent=BG_PLAYLIST[0]?.name||'—';bmpTrackIdx.textContent=`1 / ${BG_PLAYLIST.length}`;
 
   // ══ CAT SOUNDS ══
+  // ══ LINK HOVER + CLICK SOUNDS ══
+(function(){
+  const hoverSound = new Audio('hover.mp3');  // <-- rename your mp3 to hover.mp3
+  const clickSound = new Audio('click.mp3');  // <-- rename your mp3 to click.mp3
+  hoverSound.volume = 0.4;
+  clickSound.volume = 0.6;
+
+  // Elements that lead to another website
+  const externalLinks = 'a[href^="http"], a[target="_blank"]';
+
+  let lastHover = 0;
+  document.addEventListener('mouseover', e => {
+    const link = e.target.closest(externalLinks);
+    if (!link) return;
+    const now = Date.now();
+    if (now - lastHover < 300) return; // throttle so it doesn't spam
+    lastHover = now;
+    hoverSound.currentTime = 0;
+    hoverSound.play().catch(() => {});
+  }, { passive: true });
+
+  document.addEventListener('click', e => {
+    const link = e.target.closest(externalLinks);
+    if (!link) return;
+    clickSound.currentTime = 0;
+    clickSound.play().catch(() => {});
+  });
+})();
+
   const soundFiles={left:'meow-ahh-sound.mp3',right:'cat-laughing-2.mp3'};
   function playCatSound(side){const s=document.getElementById('meow-sound');s.src=soundFiles[side];s.currentTime=0;s.play();}
 
@@ -855,48 +884,7 @@
     function keyLoop(){if(gameRunning){if(keys['ArrowLeft']||keys['a']||keys['A'])player.targetX=Math.max(player.r,player.targetX-8);if(keys['ArrowRight']||keys['d']||keys['D'])player.targetX=Math.min(W-player.r,player.targetX+8);}requestAnimationFrame(keyLoop);}
     keyLoop();window.addEventListener('resize',resizeCanvas);resizeCanvas();
   })();
-  // ══ HOVER TICK SOUND (Web Audio API — no files needed) ══
-  (function () {
-    let audioCtx = null;
-  
-    function getCtx() {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      return audioCtx;
-    }
-  
-    function playHoverTick() {
-      try {
-        const ctx = getCtx();
-  
-        // ── Oscillator (short sine blip) ──
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-  
-        // ── Filter for a soft "click" tone ──
-        const filter = ctx.createBiquadFilter();
-        filter.type = 'bandpass';
-        filter.frequency.value = 1200;
-        filter.Q.value = 0.8;
-  
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(ctx.destination);
-  
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(900, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.06);
-  
-        gain.gain.setValueAtTime(0, ctx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.09, ctx.currentTime + 0.005); // soft attack
-        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.07); // quick fade
-  
-        osc.start(ctx.currentTime);
-        osc.stop(ctx.currentTime + 0.07);
-      } catch (e) {
-        // Silently fail if audio context unavailable
-      }
-    }
-  
+  // ══ HOVER TICK SOUND (Web Audio API — no files needed) ═
     // ── Selector for all clickable elements (mirrors your existing cursor logic) ──
     const CLICKABLE = 'a, button, [onclick], input, textarea, ' +
       '.game-tag, .cat-btn, .song-card, .bmp-ctrl, .bmp-play, .bmp-toggle, ' +
@@ -918,7 +906,6 @@
   
     // ── Use capture phase so it catches all elements even inside shadow-ish wrappers ──
     document.addEventListener('mouseover', onEnter, { passive: true });
-  })();
   </script>
   </body>
   </html>
