@@ -13,6 +13,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&family=Unbounded:wght@400;700;900&display=swap" rel="stylesheet">
 
   <style>
+@keyframes heartbeat {
+  0%,100%{transform:scale(1)}
+  14%{transform:scale(1.28)}
+  28%{transform:scale(1)}
+  42%{transform:scale(1.18)}
+  56%{transform:scale(1)}
+}
     /* ══ APPLE SF PRO FONT ══ */
   body {
     font-family: -apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -223,15 +230,18 @@
   .info-list li:last-child{border-bottom:none;}
   .info-list li span{min-width:110px;display:inline-block;flex-shrink:0;}
 
-.c-blue3{color:#d4affc;}   [data-theme="light"] .c-blue3{color:#fed7aa;}
+.c-blue3{color:#d4affc;}   [data-theme="light"] .c-blue3{color:#ebc79e;}
 .c-blue{color:#d8b4fe;}    [data-theme="light"] .c-blue{color:#fdba74;}
 .c-purple{color:#c084fc;}  [data-theme="light"] .c-purple{color:#fb923c;}
 .c-blue2{color:#b367fa;}   [data-theme="light"] .c-blue2{color:#f97316;}
-.c-pink{color:#a859f1;}    [data-theme="light"] .c-pink{color:#ea580c;}
+.c-pink{color:#872ddb;}    [data-theme="light"] .c-pink{color:#ea580c;}
 .c-y1{color:#8b50f1;}      [data-theme="light"] .c-y1{color:#c2410c;}
-.c-y2{color:#9570ec;}      [data-theme="light"] .c-y2{color:#9a3412;}
+.c-y2{color:#aa88fa;}      [data-theme="light"] .c-y2{color:#fa8963;}
 .c-y3{color:#5b21b6;}      [data-theme="light"] .c-y3{color:#7c2d12;}
 .c-y4{color:#783dd6;}      [data-theme="light"] .c-y4{color:#80290d;}
+.c-y4{color:#783dd6;}      [data-theme="light"] .c-y4{color:#af4825;}
+.c-blue4{color:#be79ff;}   [data-theme="light"] .c-blue4{color:#eb8136;}
+.c-blue5{color:#b361ff;}   [data-theme="light"] .c-blue5{color:#e2823d;}
 
   /* ══ GAME TAGS ══ */
   .game-tag{background:var(--tag-bg);border:1px solid var(--tag-border);padding:8px 18px;border-radius:999px;font-size:13px;color:var(--text);transition:all .2s ease;cursor:pointer;position:relative;overflow:hidden;}
@@ -507,12 +517,14 @@
           <li>&nbsp;&nbsp;<span class="c-blue3">Name:</span>&nbsp;&nbsp;Gao | Ice</li>
           <li>&nbsp;&nbsp;<span class="c-blue">Full name:</span>&nbsp;&nbsp;Mrs. Natthasit sirchoey</li>
           <li>&nbsp;&nbsp;<span class="c-purple">Age:</span>&nbsp;&nbsp;16 years old (this year)</li>
-          <li>&nbsp;&nbsp;<span class="c-blue2">Gender:</span>&nbsp;&nbsp;Male</li>
           <li>&nbsp;&nbsp;<span class="c-y2">Education:</span>&nbsp;&nbsp;วิทยาลัยเทคโนโลยีบริหารธุรกิจยานนาวา | Yannawa business administration technological college</li>
+          <li>&nbsp;&nbsp;<span class="c-blue4">Nationality:</span>&nbsp;&nbsp;Thai (Korean soon! lmao)</li>
+          <li>&nbsp;&nbsp;<span class="c-blue5">Speaking:</span>&nbsp;&nbsp;Thai, English(not that good)</li>
+          <li>&nbsp;&nbsp;<span class="c-blue2">Gender:</span>&nbsp;&nbsp;Male</li>
           <li>&nbsp;&nbsp;<span class="c-pink">Certificate:</span>&nbsp;&nbsp;I don't have any lmao</li>
           <li>&nbsp;&nbsp;<span class="c-y1">Hobbies:</span>&nbsp;&nbsp;Play games, Photography, learning some new skills</li>
           <li>&nbsp;&nbsp;<span class="c-y4">Good at:</span>&nbsp;&nbsp;Photography (I'm not a dev I don't know that much about coding)</li>
-          <li style="flex-wrap:wrap;">&nbsp;&nbsp;<span class="c-y3 mb-7">More info:&nbsp;&nbsp;</span>
+          <li style="flex-wrap:wrap;">&nbsp;&nbsp;<span class="c-y3 mb-3">More info:&nbsp;&nbsp;</span>
             <span style="flex:1;min-width:0;word-break:break-word;white-space:normal;">&nbsp;&nbsp;Welp I don't know why I made this website up but I guess it might be useful someday I don't know &nbsp;&nbsp;nither</span>
         </ul>
         <p class="text-xs mt-4 text-right italic font-mono" style="color:var(--text-dim)">I'm stupid</p>
@@ -603,7 +615,48 @@
         <div><span id="minutes">00</span><p>MINS</p></div>
         <div><span id="seconds">00</span><p>SECS</p></div>
       </div>
+<!-- PARENTS SECTION -->
+<div class="glass-card p-8 card-reveal">
+  <h2 class="text-2xl font-bold mb-8 flex items-center gap-3" style="color:var(--text);font-family:'Syne',sans-serif;"><span>❤️</span> My Family</h2>
 
+  <div style="display:flex;align-items:center;justify-content:center;gap:2rem;flex-wrap:wrap;">
+
+    <!-- MOM -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+      <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);background:rgba(120,40,202,.18);border:1px solid rgba(192,132,252,.35);border-radius:999px;padding:5px 16px;box-shadow:0 0 12px var(--glow1);">This is my mom 💜</span>
+      <div style="width:150px;height:150px;border-radius:50%;padding:3px;background:var(--profile-ring);animation:spin-ring 6s linear infinite;box-shadow:0 0 30px var(--glow1),0 0 60px var(--glow2);">
+        <div style="width:100%;height:100%;border-radius:50%;overflow:hidden;border:3px solid var(--bg);">
+          <img src="My_mom.jpg" alt="Mom" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+      </div>
+      <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-muted);">Mom</span>
+    </div>
+
+    <!-- HEART -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+      <div style="position:relative;width:70px;height:70px;display:flex;align-items:center;justify-content:center;">
+        <div style="position:absolute;inset:0;border-radius:50%;border:2px solid rgba(244,114,182,.5);animation:radar-ping 1.8s ease-out infinite;"></div>
+        <div style="position:absolute;inset:0;border-radius:50%;border:2px solid rgba(244,114,182,.3);animation:radar-ping 1.8s ease-out infinite;animation-delay:.6s;"></div>
+        <svg style="animation:heartbeat 1.2s ease-in-out infinite;filter:drop-shadow(0 0 10px rgba(244,114,182,.8));z-index:2;" width="38" height="38" viewBox="0 0 24 24" fill="#f472b6">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      </div>
+      <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:rgba(244,114,182,.6);">family</span>
+    </div>
+
+    <!-- DAD -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+      <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent2);background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.35);border-radius:999px;padding:5px 16px;box-shadow:0 0 12px rgba(56,189,248,.2);">This is my dad 💙</span>
+      <div style="width:150px;height:150px;border-radius:50%;padding:3px;background:conic-gradient(from 0deg,#0369a1,#38bdf8,#7dd3fc,#0ea5e9,#0369a1);animation:spin-ring 6s linear infinite;box-shadow:0 0 30px rgba(56,189,248,.4),0 0 60px rgba(56,189,248,.2);">
+        <div style="width:100%;height:100%;border-radius:50%;overflow:hidden;border:3px solid var(--bg);">
+          <img src="My_dad.jpg" alt="Dad" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+      </div>
+      <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-muted);">Dad</span>
+    </div>
+
+  </div>
+</div>
       <div id="ps-bottom-right ps-text" class="ps-text ps-bottom-right"><div class="ps-text">Man who's your fav femboy?</div></div>
 
       <!-- GAME -->
@@ -694,7 +747,7 @@
   // ══ TIME GREETING ══
   (function(){
     const h=new Date().getHours();
-    const greet=h>=5&&h<12?'Good Morning':h>=12&&h<17?'Good Afternoon':h>=17&&h<21?'Good Evening!':'Its late night, go sleep';
+    const greet=h>=5&&h<12?'Good Morning':h>=12&&h<17?'Good Afternoon':h>=17&&h<21?'Good Evening!':'You should go sleep';
     document.getElementById('time-greeting').textContent=greet;
   })();
 
@@ -749,8 +802,8 @@
   // ══ CAT SOUNDS ══
   // ══ LINK HOVER + CLICK SOUNDS ══
 (function(){
-  const hoverSound = new Audio('hover.mp3');  // <-- rename your mp3 to hover.mp3
-  const clickSound = new Audio('click.mp3');  // <-- rename your mp3 to click.mp3
+  const hoverSound = new Audio('hover.mp3'); 
+  const clickSound = new Audio('click.mp3'); 
   hoverSound.volume = 0.4;
   clickSound.volume = 0.6;
 
