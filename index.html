@@ -951,13 +951,6 @@
     function keyLoop(){if(gameRunning){if(keys['ArrowLeft']||keys['a']||keys['A'])player.targetX=Math.max(player.r,player.targetX-8);if(keys['ArrowRight']||keys['d']||keys['D'])player.targetX=Math.min(W-player.r,player.targetX+8);}requestAnimationFrame(keyLoop);}
     keyLoop();window.addEventListener('resize',resizeCanvas);resizeCanvas();
   })();
-  // ══ HOVER TICK SOUND (Web Audio API — no files needed) ═
-    // ── Selector for all clickable elements (mirrors your existing cursor logic) ──
-    const CLICKABLE = 'a, button, [onclick], input, textarea, ' +
-      '.game-tag, .cat-btn, .song-card, .bmp-ctrl, .bmp-play, .bmp-toggle, ' +
-      '.special-btn, .social-link, #theme-switcher, .showcase-btn, ' +
-      '.pb-item, .clock div, .bmp-playlist-item, [role="button"]';
-  
     // ── Throttle: prevent rapid-fire if mouse jitters ──
     let lastPlay = 0;
     const THROTTLE_MS = 60;
