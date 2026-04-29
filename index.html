@@ -489,7 +489,6 @@
 
   <!-- PAGE CONTENT -->
   <div id="page-content" class="max-w-5xl w-full mx-auto relative z-10">
-
     <!-- HEADER — .reveal items fire top-to-bottom with 150ms stagger each -->
     <header class="text-center mb-20 mt-16">
       <div class="flex justify-center mb-8 reveal">
@@ -539,7 +538,7 @@
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
           <div>
             <h2 class="text-2xl font-bold flex items-center gap-3" style="color:var(--text);font-family:'Syne',sans-serif;"><span>📷</span>Showcase</h2>
-            <p class="mt-2 text-sm" style="color:var(--text-muted);font-family:'Space Mono',monospace;">Landscapes · Lifestyle · Nature</p>
+            <p class="mt-2 text-sm" style="color:var(--text-muted);font-family:'Space Mono',monospace;">Landscapes · Building · Nature</p>
           </div>
           <a href="https://www.instagram.com/ssnmhjjg1/" target="_blank" class="showcase-btn">
             <span>View on Instagram</span>
@@ -734,6 +733,7 @@
 
   <script>
   // ══ THEME SOUNDS ══
+  
   const themeSfx=new Audio();themeSfx.volume=.7;
   function playThemeSound(t){themeSfx.src=t==='light'?'day.mp3':'night.mp3';themeSfx.currentTime=0;themeSfx.play().catch(()=>{});}
   let toastTimer=null;
@@ -963,4 +963,4 @@
     document.addEventListener('mouseover', onEnter, { passive: true });
   </script>
   </body>
-  </html>
+  </html> 
