@@ -13,6 +13,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&family=Unbounded:wght@400;700;900&display=swap" rel="stylesheet">
 
   <style>
+    .dad-photo {
+  background-image: url('My_dad.jpg');
+  background-size: cover;
+}
+.mom-photo {
+  background-image: url('My_mom.jpg');
+  background-size: cover;
+}
 @keyframes heartbeat {
   0%,100%{transform:scale(1)}
   14%{transform:scale(1.28)}
@@ -625,6 +633,8 @@
       <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);background:rgba(120,40,202,.18);border:1px solid rgba(192,132,252,.35);border-radius:999px;padding:5px 16px;box-shadow:0 0 12px var(--glow1);">This is my mom 💜</span>
       <div style="width:150px;height:150px;border-radius:50%;padding:3px;background:var(--profile-ring);animation:spin-ring 6s linear infinite;box-shadow:0 0 30px var(--glow1),0 0 60px var(--glow2);">
         <div style="width:100%;height:100%;border-radius:50%;overflow:hidden;border:3px solid var(--bg);">
+          <div style="-webkit-user-select:none;user-select:none;" oncontextmenu="return false;">
+            </div>
           <img src="My_mom.jpg" alt="Mom" style="width:100%;height:100%;object-fit:cover;">
         </div>
       </div>
@@ -648,6 +658,8 @@
       <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent2);background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.35);border-radius:999px;padding:5px 16px;box-shadow:0 0 12px rgba(56,189,248,.2);">This is my dad 💙</span>
       <div style="width:150px;height:150px;border-radius:50%;padding:3px;background:conic-gradient(from 0deg,#0369a1,#38bdf8,#7dd3fc,#0ea5e9,#0369a1);animation:spin-ring 6s linear infinite;box-shadow:0 0 30px rgba(56,189,248,.4),0 0 60px rgba(56,189,248,.2);">
         <div style="width:100%;height:100%;border-radius:50%;overflow:hidden;border:3px solid var(--bg);">
+          <div style="-webkit-user-select:none;user-select:none;" oncontextmenu="return false;">
+            </div>
           <img src="My_dad.jpg" alt="Dad" style="width:100%;height:100%;object-fit:cover;">
         </div>
       </div>
@@ -949,7 +961,34 @@
     // ── Throttle: prevent rapid-fire if mouse jitters ──
     let lastPlay = 0;
     const THROTTLE_MS = 60;
-  
+  let audioCtx = null;
+function getCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playHoverTick() {
+  try {
+    const ctx = getCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 1200;
+    filter.Q.value = 0.8;
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(900, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.06);
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.09, ctx.currentTime + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.07);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.07);
+  } catch(e) {}
+}
     function onEnter(e) {
       const target = e.target.closest(CLICKABLE);
       if (!target) return;
