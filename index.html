@@ -13,13 +13,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&family=Unbounded:wght@400;700;900&display=swap" rel="stylesheet">
 
   <style>
-    .dad-photo {
-  background-image: url('My_dad.jpg');
-  background-size: cover;
-}
-.mom-photo {
-  background-image: url('My_mom.jpg');
-  background-size: cover;
+    #time-greeting::before {
+  content: '\00a0';
+  display: inline;
 }
 @keyframes heartbeat {
   0%,100%{transform:scale(1)}
@@ -195,10 +191,10 @@
   #page-content{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
   #page-content.visible{opacity:1;transform:translateY(0);}
 
-  /* ══ BLUR FADE ANIMATIONS ══
+/* ══ BLUR FADE ANIMATIONS ══
     .reveal  = header items (triggered by JS with staggered setTimeout)
     .card-reveal = cards (triggered by IntersectionObserver but ONLY after header finishes)
-  */
+*/
   /* แก้ตัวเก่าให้เป็นแบบนี้ */
   .reveal {
     opacity: 0;
@@ -472,7 +468,7 @@
           <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" style="color:var(--accent)"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
           Background Music
         </span>
-        <button class="bmp-close" onclick="toggleBmpExpand()">×</button>
+        <button class="bmp-close" onclick="toggleBmpExpand()">x</button>
       </div>
       <div class="bmp-track-info">
         <div class="bmp-track-name" id="bmpTrackName">—</div>
@@ -499,21 +495,94 @@
   <div id="page-content" class="max-w-5xl w-full mx-auto relative z-10">
     <!-- HEADER — .reveal items fire top-to-bottom with 150ms stagger each -->
     <header class="text-center mb-20 mt-16">
-      <div class="flex justify-center mb-8 reveal">
-        <div class="profile-ring"><div class="profile-ring-inner"><img src="626565681_17924096514230683_1935262150362279863_n.jpg" alt="Profile" class="object-cover w-full h-full"></div></div>
-      </div>
-      <h1 id="time-greeting" class="text-6xl md:text-7xl font-extrabold tracking-tight glow-title leading-none reveal" style="font-family:'Unbounded',sans-serif;"></h1>
-      <div id="discord-status" class="flex items-center justify-center gap-2 mt-4 reveal">
-        <div id="status-dot" class="w-3 h-3 rounded-full" style="background:#80848e;box-shadow:0 0 6px #80848e"></div>
-        <span id="status-text" class="text-sm font-mono" style="color:var(--text-muted)">Loading...</span>
-      </div>
-      <p id="time-greeting sf-bold" class="sf-bold text-sm tracking-widest uppercase reveal" style="color:var(--accent);letter-spacing:0.25em;"></p>
-      <div class="flex items-center justify-center gap-4 mt-6 reveal">
-        <div class="h-px w-24" style="background:linear-gradient(to right,transparent,var(--accent))"></div>
-        <span style="color:var(--accent);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;font-family:'Space Mono',monospace;">ssnmhjjg</span>
-        <div class="h-px w-24" style="background:linear-gradient(to left,transparent,var(--accent))"></div>
-      </div>
-    </header>
+  <div class="flex justify-center mb-8 reveal">
+    <div class="profile-ring"><div class="profile-ring-inner"><img src="626565681_17924096514230683_1935262150362279863_n.jpg" alt="Profile" class="object-cover w-full h-full"></div></div>
+  </div>
+
+  <!-- GREETING FRAME — fixed height prevents layout shift -->
+  <div class="reveal" style="
+    min-height: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 28px 32px;
+    margin: 0 auto 16px;
+    max-width: 640px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 0 40px var(--glow1), 0 0 0 1px var(--border);
+    position: relative;
+    overflow: hidden;
+  ">
+    <!-- shimmer top line -->
+    <div style="position:absolute;top:0;left:0;right:0;height:1px;background:var(--card-top);"></div>
+
+    <!-- corner label -->
+
+
+    <!-- blinking cursor indicator -->
+    <div style="
+      position: absolute;
+      top: 10px; right: 14px;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+      animation: pulse-logo 1.5s ease-in-out infinite;
+    "></div>
+
+    <!-- H1 greeting — fixed height so it never shifts layout -->
+    <h1 id="time-greeting" style="
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(1.6rem, 5vw, 3rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin: 0;
+      min-height: 1.3em;
+      width: 100%;
+      text-align: center;
+      background: var(--title-grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 20px var(--glow1));
+    "></h1>
+
+    <!-- divider -->
+    <div style="width: 48px; height: 1px; background: var(--border); border-radius: 999px;"></div>
+
+    <!-- sub line — fixed height too -->
+    <p id="time-greeting-sub" style="
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(0.75rem, 2vw, 1rem);
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0;
+      min-height: 1.4em;
+      width: 100%;
+      text-align: center;
+    "></p>
+  </div>
+
+  <div id="discord-status" class="flex items-center justify-center gap-2 mt-4 reveal">
+    <div id="status-dot" class="w-3 h-3 rounded-full" style="background:#80848e;box-shadow:0 0 6px #80848e"></div>
+    <span id="status-text" class="text-sm font-mono" style="color:var(--text-muted)">Loading...</span>
+  </div>
+
+  <div class="flex items-center justify-center gap-4 mt-6 reveal">
+    <div class="h-px w-24" style="background:linear-gradient(to right,transparent,var(--accent))"></div>
+    <span style="color:var(--accent);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;font-family:'Space Mono',monospace;">ssnmhjjg</span>
+    <div class="h-px w-24" style="background:linear-gradient(to left,transparent,var(--accent))"></div>
+  </div>
+</header>
 
     <div class="grid grid-cols-1 gap-8">
 
@@ -522,7 +591,7 @@
         <h2 class="text-2xl font-bold mb-10 flex items-center gap-3 " style="color:var(--text);font-family:'Syne',sans-serif;"><span>✅</span> About me</h2>
         <ul class="info-list space-y-1 list-none p-0 m-0">
           <li>&nbsp;&nbsp;<span class="c-blue3">Name:</span>&nbsp;&nbsp;Gao | Ice</li>
-          <li>&nbsp;&nbsp;<span class="c-blue">Full name:</span>&nbsp;&nbsp;Mrs. Natthasit sirchoey</li>
+          <li>&nbsp;&nbsp;<span class="c-blue">First name:</span>&nbsp;&nbsp;Mr.Natthasit</li>
           <li>&nbsp;&nbsp;<span class="c-purple">Age:</span>&nbsp;&nbsp;16 years old (this year)</li>
           <li>&nbsp;&nbsp;<span class="c-y2">Education:</span>&nbsp;&nbsp;วิทยาลัยเทคโนโลยีบริหารธุรกิจยานนาวา | Yannawa business administration technological college</li>
           <li>&nbsp;&nbsp;<span class="c-blue4">Nationality:</span>&nbsp;&nbsp;Thai (Korean soon! lmao)</li>
@@ -622,54 +691,7 @@
         <div><span id="minutes">00</span><p>MINS</p></div>
         <div><span id="seconds">00</span><p>SECS</p></div>
       </div>
-<!-- PARENTS SECTION -->
-<div class="glass-card p-8 card-reveal">
-  <h2 class="text-2xl font-bold mb-8 flex items-center gap-3" style="color:var(--text);font-family:'Syne',sans-serif;"><span>❤️</span> My Family</h2>
-
-  <div style="display:flex;align-items:center;justify-content:center;gap:2rem;flex-wrap:wrap;">
-
-    <!-- MOM -->
-    <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
-      <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);background:rgba(120,40,202,.18);border:1px solid rgba(192,132,252,.35);border-radius:999px;padding:5px 16px;box-shadow:0 0 12px var(--glow1);">This is my mom 💜</span>
-      <div style="width:150px;height:150px;border-radius:50%;padding:3px;background:var(--profile-ring);animation:spin-ring 6s linear infinite;box-shadow:0 0 30px var(--glow1),0 0 60px var(--glow2);">
-        <div style="width:100%;height:100%;border-radius:50%;overflow:hidden;border:3px solid var(--bg);">
-          <div style="-webkit-user-select:none;user-select:none;" oncontextmenu="return false;">
-            </div>
-          <img src="My_mom.jpg" alt="Mom" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-      </div>
-      <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-muted);">Mom</span>
-    </div>
-
-    <!-- HEART -->
-    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
-      <div style="position:relative;width:70px;height:70px;display:flex;align-items:center;justify-content:center;">
-        <div style="position:absolute;inset:0;border-radius:50%;border:2px solid rgba(244,114,182,.5);animation:radar-ping 1.8s ease-out infinite;"></div>
-        <div style="position:absolute;inset:0;border-radius:50%;border:2px solid rgba(244,114,182,.3);animation:radar-ping 1.8s ease-out infinite;animation-delay:.6s;"></div>
-        <svg style="animation:heartbeat 1.2s ease-in-out infinite;filter:drop-shadow(0 0 10px rgba(244,114,182,.8));z-index:2;" width="38" height="38" viewBox="0 0 24 24" fill="#f472b6">
-          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-        </svg>
-      </div>
-      <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:rgba(244,114,182,.6);">family</span>
-    </div>
-
-    <!-- DAD -->
-    <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
-      <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent2);background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.35);border-radius:999px;padding:5px 16px;box-shadow:0 0 12px rgba(56,189,248,.2);">This is my dad 💙</span>
-      <div style="width:150px;height:150px;border-radius:50%;padding:3px;background:conic-gradient(from 0deg,#0369a1,#38bdf8,#7dd3fc,#0ea5e9,#0369a1);animation:spin-ring 6s linear infinite;box-shadow:0 0 30px rgba(56,189,248,.4),0 0 60px rgba(56,189,248,.2);">
-        <div style="width:100%;height:100%;border-radius:50%;overflow:hidden;border:3px solid var(--bg);">
-          <div style="-webkit-user-select:none;user-select:none;" oncontextmenu="return false;">
-            </div>
-          <img src="My_dad.jpg" alt="Dad" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-      </div>
-      <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-muted);">Dad</span>
-    </div>
-
-  </div>
-</div>
-      <div id="ps-bottom-right ps-text" class="ps-text ps-bottom-right"><div class="ps-text">Man who's your fav femboy?</div></div>
-
+      <div class="text">Man who's your fav femboy?</div></div>
       <!-- GAME -->
       <div class="glass-card p-8 card-reveal" id="game-section">
         <h2 class="text-2xl font-bold mb-2 flex items-center gap-3" style="color:var(--text);font-family:'Syne',sans-serif;"><span>🕹️</span> Star Dodge — Play a Game!</h2>
@@ -756,13 +778,76 @@
   const tsIcon=document.getElementById('tsIcon');
   function applyTheme(t,playSound){html.setAttribute('data-theme',t);tsIcon.textContent=t==='dark'?'🌙':'☀️';localStorage.setItem('ice-theme',t);if(playSound){playThemeSound(t);showToast(t==='light'?'☀️ rise and shine!':'🌙 sleep mode activated Zzz~');}}
   function toggleTheme(){applyTheme(html.getAttribute('data-theme')==='dark'?'light':'dark',true);}
-  // ══ TIME GREETING ══
-  (function(){
-    const h=new Date().getHours();
-    const greet=h>=5&&h<12?'Good Morning':h>=12&&h<17?'Good Afternoon':h>=17&&h<21?'Good Evening!':'You should go sleep';
-    document.getElementById('time-greeting').textContent=greet;
-  })();
+// ══ TIME GREETING ══
+const greetings = {
+  en: ["Good Morning!",    "Good Afternoon!",   "Good Evening!",   "Go sleep"],
+  th: ["อรุณสวัสดิ์!",       "สวัสดีตอนบ่าย!",     "สวัสดีตอนเย็น!",  "ไปนอนซะ"],
+  jp: ["おはようございます！", "こんにちは！",          "こんばんは！",      "もう寝た方がいいよ。"],
+  es: ["¡Buenos Días!",    "¡Buenas Tardes!",   "¡Buenas Noches!", "Deberías Ir a Dormir."]
+};
+// Sub-line cycles a different set in sync
+const subLines = {
+  en: ["ssnmhjjg / ice",   "photographer",      "gamer",           "You're tired. 🦉"],
+  th: ["ssnmhjjg / ไอซ์",  "ช่างภาพ",            "นักเล่นเกม",        "ตาบอดหมด 🦉"],
+  jp: ["ssnmhjjg / アイス", "フォトグラファー",      "ゲーマー",           "夜更かし 🦉"],
+  es: ["ssnmhjjg / ice",   "fotógrafo",         "jugador",         "trasnochador 🦉"]
+};
 
+const langs    = Object.values(greetings);
+const subLangs = Object.values(subLines);
+const h        = new Date().getHours();
+const tIdx     = h>=5&&h<12 ? 0 : h>=12&&h<17 ? 1 : h>=17&&h<21 ? 2 : 3;
+let lIdx = 0, typingTimer = null, autoTimer = null;
+
+const elH1  = document.getElementById("time-greeting");
+const elSub = document.getElementById("time-greeting-sub");
+
+const h1Ref  = { t: null };
+const subRef = { t: null };
+
+function typeInto(el, timer_ref, text, done) {
+  if (!el) { if (done) done(); return; }
+  el.textContent = "";
+  let i = 0;
+  clearInterval(timer_ref.t);
+  const speed = text.length > 14 ? 48 : 65;
+  timer_ref.t = setInterval(() => {
+    el.textContent = text.slice(0, i) + (i < text.length ? "▌" : "");
+    i++;
+    if (i > text.length) {
+      el.textContent = text;
+      clearInterval(timer_ref.t);
+      if (done) setTimeout(done, 1000);
+    }
+  }, speed);
+}
+
+function eraseEl(el, timer_ref, done) {
+  if (!el) { if (done) done(); return; }
+  clearInterval(timer_ref.t);
+  if (el.textContent.endsWith("|  ")) el.textContent = el.textContent.slice(0, -1);
+  timer_ref.t = setInterval(() => {
+    const c = el.textContent;
+    if (!c.length) { clearInterval(timer_ref.t); if (done) done(); return; }
+    el.textContent = c.slice(0, -1);
+  }, 28);
+}
+
+function cycle() {
+  clearTimeout(autoTimer);
+  typeInto(elH1, h1Ref, langs[lIdx][tIdx], () => {
+    typeInto(elSub, subRef, subLangs[lIdx][tIdx], () => {
+      autoTimer = setTimeout(() => {
+        eraseEl(elSub, subRef, () => {
+          eraseEl(elH1, h1Ref, () => {
+            lIdx = (lIdx + 1) % langs.length;
+            cycle();
+          });
+        });
+      }, 1800);
+    });
+  });
+}
   // ══ CURSOR ══
   const cursor=document.getElementById('custom-cursor');
   const clickLabel=document.getElementById('cursor-click-label');
@@ -851,43 +936,31 @@
   //   Phase 2: .card-reveal items fire via IntersectionObserver BUT only AFTER
   //             the last header item has already animated in
   // ══════════════════════════════════════
-  window.addEventListener('load',()=>{
-    const minDur=1600,start=performance.now();
-    function dismiss(){
-      const elapsed=performance.now()-start;
-      const delay=Math.max(0,minDur-elapsed);
-      setTimeout(()=>{
-        // 1. Hide loader
-        const loader=document.getElementById('loading-screen');
-        loader.classList.add('hidden');
+window.addEventListener('load',()=>{
+  const minDur=1600,start=performance.now();
+  function dismiss(){
+    const elapsed=performance.now()-start;
+    const delay=Math.max(0,minDur-elapsed);
+    setTimeout(()=>{
+      const loader=document.getElementById('loading-screen');
+      loader.classList.add('hidden');
+      const content=document.getElementById('page-content');
+      requestAnimationFrame(()=>content.classList.add('visible'));
+      const revealEls=Array.from(document.querySelectorAll('.reveal'));
+      let headerFinishTime=0;
+      revealEls.forEach((el,i)=>{
+        const t=200+i*150;
+        setTimeout(()=>el.classList.add('in-view'),t);
+        headerFinishTime=Math.max(headerFinishTime,t);
+      });
+      setTimeout(()=>initCardReveal(), headerFinishTime + 20);
+      setTimeout(()=>loader.remove(),900);
+      setTimeout(cycle, 400);
 
-        // 2. Fade in entire page wrapper
-        const content=document.getElementById('page-content');
-        requestAnimationFrame(()=>content.classList.add('visible'));
-
-        // 3. Fire header items top-to-bottom with 150ms stagger
-        //    starting 200ms after page appears
-        const revealEls=Array.from(document.querySelectorAll('.reveal'));
-        let headerFinishTime=0;
-        revealEls.forEach((el,i)=>{
-          const t=200+i*150;
-          setTimeout(()=>el.classList.add('in-view'),t);
-          headerFinishTime=Math.max(headerFinishTime,t);
-        });
-
-        // 4. After LAST header item starts animating (+900ms for its transition to finish),
-        //    start watching .card-reveal cards with IntersectionObserver
-        setTimeout(()=>{
-          initCardReveal();
-        }, headerFinishTime + 20);
-
-        // 5. Remove loader from DOM
-        setTimeout(()=>loader.remove(),900);
-      },delay);
-    }
-    dismiss();
-  });
-
+    },delay);
+  }
+  dismiss();
+});
   function initCardReveal(){
     const cardEls=Array.from(document.querySelectorAll('.card-reveal'));
     cardEls.forEach((el,i)=>{
@@ -952,8 +1025,9 @@
     keyLoop();window.addEventListener('resize',resizeCanvas);resizeCanvas();
   })();
     // ── Throttle: prevent rapid-fire if mouse jitters ──
-    let lastPlay = 0;
-    const THROTTLE_MS = 60;
+   let lastPlay = 0;
+const THROTTLE_MS = 60;
+const CLICKABLE = 'a,button,[onclick],input,textarea,.game-tag,.cat-btn,.song-card,.bmp-ctrl,.bmp-play,.bmp-toggle,.special-btn,.social-link,#theme-switcher,.showcase-btn';
   let audioCtx = null;
 function getCtx() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
