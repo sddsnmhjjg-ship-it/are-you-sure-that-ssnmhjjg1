@@ -598,7 +598,7 @@
           <li>&nbsp;&nbsp;<span class="c-blue5">Speaking:</span>&nbsp;&nbsp;Thai, English(not that good)</li>
           <li>&nbsp;&nbsp;<span class="c-blue2">Gender:</span>&nbsp;&nbsp;Male</li>
           <li>&nbsp;&nbsp;<span class="c-pink">Certificate:</span>&nbsp;&nbsp;I don't have any lmao</li>
-          <li>&nbsp;&nbsp;<span class="c-y1">Hobbies:</span>&nbsp;&nbsp;Play games, Photography, learning some new skills</li>
+          <li>&nbsp;&nbsp;<span class="c-y1">Hobbies:</span>&nbsp;&nbsp;Play games, Photography, learning some new skills I guess</li>
           <li>&nbsp;&nbsp;<span class="c-y4">Good at:</span>&nbsp;&nbsp;Photography (I'm not a dev I don't know that much about coding)</li>
           <li style="flex-wrap:wrap;">&nbsp;&nbsp;<span class="c-y3 mb-3">More info:&nbsp;&nbsp;</span>
             <span style="flex:1;min-width:0;word-break:break-word;white-space:normal;">&nbsp;&nbsp;Welp I don't know why I made this website up but I guess it might be useful someday I don't know &nbsp;&nbsp;nither</span>
@@ -787,10 +787,10 @@ const greetings = {
 };
 // Sub-line cycles a different set in sync
 const subLines = {
-  en: ["ssnmhjjg / ice",   "photographer",      "gamer",           "You're tired. 🦉"],
-  th: ["ssnmhjjg / ไอซ์",  "ช่างภาพ",            "นักเล่นเกม",        "ตาบอดหมด 🦉"],
-  jp: ["ssnmhjjg / アイス", "フォトグラファー",      "ゲーマー",           "夜更かし 🦉"],
-  es: ["ssnmhjjg / ice",   "fotógrafo",         "jugador",         "trasnochador 🦉"]
+  en: ["ssnmhjjg / ice",   "Have you ate something yet?",      "Welcome back. Sir",           "You're tired."],
+  th: ["ssnmhjjg / ไอซ์",  "กินอะไรยังเอ๋ย?",            "ยินดีต้อนรับกลับ!",        "ตาบอดหมด"],
+  jp: ["ssnmhjjg / アイス", "もう何か食べましたか？",      "おかえり！",           "なぜそんなに遅くまで寝ないのですか？"],
+  es: ["ssnmhjjg / ice",   "¿Ya has comido algo?",         "¡Bienvenido de nuevo!",         "Por favor, vete a dormir."]
 };
 
 const langs    = Object.values(greetings);
@@ -817,7 +817,7 @@ function typeInto(el, timer_ref, text, done) {
     if (i > text.length) {
       el.textContent = text;
       clearInterval(timer_ref.t);
-      if (done) setTimeout(done, 1000);
+      if (done) setTimeout(done, 700);
     }
   }, speed);
 }
@@ -844,7 +844,7 @@ function cycle() {
             cycle();
           });
         });
-      }, 1800);
+      }, 2000);
     });
   });
 }
