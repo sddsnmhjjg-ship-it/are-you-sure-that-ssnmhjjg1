@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+ <!DOCTYPE html>
   <html lang="th" data-theme="dark">
   <head>
   <meta property="og:title" content="ssnmhjjg | My website">
@@ -13,16 +13,86 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&family=Unbounded:wght@400;700;900&display=swap" rel="stylesheet">
 
   <style>
-    #time-greeting::before {
-  content: '\00a0';
-  display: inline;
+@keyframes scan-anim {
+  0%   { transform: translateY(-10px); }
+  100% { transform: translateY(60px);  }
 }
-@keyframes heartbeat {
-  0%,100%{transform:scale(1)}
-  14%{transform:scale(1.28)}
-  28%{transform:scale(1)}
-  42%{transform:scale(1.18)}
-  56%{transform:scale(1)}
+/* ══ GLITCH TEXT ══ */
+.glitch-text {
+  position: relative;
+  animation: pulse-logo 0.5s ease-in-out infinite;
+}
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  overflow: hidden;
+  font-family: 'Unbounded', sans-serif;
+  font-size: inherit;
+  font-weight: 900;
+  letter-spacing: .15em;
+  background: none;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  pointer-events: none;
+}
+.glitch-text::before {
+  background-image: linear-gradient(135deg,#f00,#f00);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: glitch-before 1s infinite steps(1);
+  opacity: 0;
+}
+.glitch-text::after {
+  background-image: linear-gradient(135deg,#0ff,#0ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: glitch-after 1s infinite steps(1);
+  opacity: 0;
+}
+
+@keyframes glitch-before {
+  0%   { opacity:0; transform:translate(0,0); }
+  5%   { opacity:.85; transform:translate(-3px, 1px); clip-path:inset(10% 0 60% 0); }
+  10%  { opacity:.85; transform:translate(2px,-1px); clip-path:inset(55% 0 5% 0); }
+  15%  { opacity:0; transform:translate(0,0); }
+  55%  { opacity:0; }
+  56%  { opacity:.7; transform:translate(-4px,0); clip-path:inset(30% 0 40% 0); }
+  60%  { opacity:0; }
+  100% { opacity:0; }
+}
+@keyframes glitch-after {
+  0%   { opacity:0; transform:translate(0,0); }
+  5%   { opacity:.85; transform:translate(3px,-1px); clip-path:inset(50% 0 20% 0); }
+  10%  { opacity:.85; transform:translate(-2px, 2px); clip-path:inset(5% 0 70% 0); }
+  15%  { opacity:0; transform:translate(0,0); }
+  55%  { opacity:0; }
+  56%  { opacity:.7; transform:translate(4px,1px); clip-path:inset(60% 0 10% 0); }
+  60%  { opacity:0; }
+  100% { opacity:0; }
+}
+
+/* ══ SUB LINE GLITCH ══ */
+.loader-sub-glitch {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  animation: pulse-logo 2s ease-in-out infinite, sub-color-shift 1.8s steps(1) infinite;
+}
+@keyframes sub-color-shift {
+  0%,100% { color: rgba(192,132,252,.5); text-shadow: none; }
+  20%      { color: #f472b6; text-shadow: -2px 0 #0ff, 2px 0 #f00; }
+  21%      { color: rgba(192,132,252,.5); text-shadow: none; }
+  50%      { color: #38bdf8; text-shadow: 2px 0 #f0f, -1px 0 #0f0; }
+  51%      { color: rgba(192,132,252,.5); text-shadow: none; }
+  75%      { color: #a3e635; text-shadow: -2px 0 #f00, 3px 0 #0ff; }
+  76%      { color: rgba(192,132,252,.5); text-shadow: none; }
 }
     /* ══ APPLE SF PRO FONT ══ */
   body {
@@ -176,15 +246,18 @@
   /* ══ LOADING ══ */
   #loading-screen{position:fixed;inset:0;z-index:99999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;transition:opacity .6s ease,visibility .6s ease;}
   #loading-screen.hidden{opacity:0;visibility:hidden;pointer-events:none;}
-  .loader-logo{font-family:'Unbounded',sans-serif;font-size:18px;font-weight:900;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.15em;animation:pulse-logo 1.5s ease-in-out infinite;}
+  .loader-logo{font-family:'Unbounded',sans-serif;font-size:48px;font-weight:900;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.15em;animation:pulse-logo 1.5s ease-in-out infinite;}
   @keyframes pulse-logo{0%,100%{opacity:1}50%{opacity:.4}}
   .loader-bar-track{width:200px;height:2px;background:var(--border);border-radius:999px;overflow:hidden;}
   .loader-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:999px;animation:load-bar 1.4s cubic-bezier(0.4,0,0.2,1) forwards;}
-  @keyframes load-bar{0%{width:0%}60%{width:75%}90%{width:92%}100%{width:100%}}
-  .loader-dots{display:flex;gap:8px;}
-  .loader-dots span{width:6px;height:6px;border-radius:50%;background:var(--accent);opacity:.6;animation:dot-bounce 1.2s ease-in-out infinite;}
-  .loader-dots span:nth-child(2){animation-delay:.2s;}
-  .loader-dots span:nth-child(3){animation-delay:.4s;}
+ @keyframes load-bar {
+  0%  { width: 0%  }
+  40% { width: 45% }
+  65% { width: 68% }
+  85% { width: 88% }
+  95% { width: 95% }
+  100%{ width: 100%}
+}
   @keyframes dot-bounce{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
 
   /* ══ PAGE CONTENT ══ */
@@ -438,11 +511,17 @@
   <div id="cursor-click-label">click</div>
 
   <!-- LOADING -->
-  <div id="loading-screen">
-    <div class="loader-logo text-5xl glow-title">✦ ICEVERSE ✦</div>
-    <div class="loader-bar-track"><div class="loader-bar-fill"></div></div>
-    <div class="loader-dots"><span></span><span></span><span></span></div>
+<div id="loading-screen">
+  <div style="position:relative;">
+    <div class="loader-logo glitch-text" id="glitch-logo" data-text="✦ ICEVERSE ✦" style="position:relative;overflow:visible;">
+      ✦ ICE<span id="gc1" style="display:inline-block;color:#f472b6;">$</span>ERS<span id="gc2" style="display:inline-block;color:#38bdf8;">%</span> ✦
+    </div>
+    <div style="position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(192,132,252,.6),transparent);animation:scan-anim 2s linear infinite;opacity:.4;pointer-events:none;"></div>
   </div>
+  <div class="loader-sub-glitch" id="loader-sub">initializing...</div>
+  <div class="loader-bar-track"><div class="loader-bar-fill"></div></div>
+  <div class="loader-dots"><span></span><span></span><span></span></div>
+</div>
 
   <div id="cursor-glow"></div>
   <canvas id="galaxy-canvas"></canvas>
@@ -590,7 +669,7 @@
       <div class="glass-card p-8 card-reveal .card-reveal">
         <h2 class="text-2xl font-bold mb-10 flex items-center gap-3 " style="color:var(--text);font-family:'Syne',sans-serif;"><span>✅</span> About me</h2>
         <ul class="info-list space-y-1 list-none p-0 m-0">
-          <li>&nbsp;&nbsp;<span class="c-blue3">Name:</span>&nbsp;&nbsp;Gao | Ice</li>
+          <li>&nbsp;&nbsp;<span class="c-blue3">Nickname:</span>&nbsp;&nbsp;Gao | Ice</li>
           <li>&nbsp;&nbsp;<span class="c-blue">First name:</span>&nbsp;&nbsp;Mr.Natthasit</li>
           <li>&nbsp;&nbsp;<span class="c-purple">Age:</span>&nbsp;&nbsp;16 years old (this year)</li>
           <li>&nbsp;&nbsp;<span class="c-y2">Education:</span>&nbsp;&nbsp;วิทยาลัยเทคโนโลยีบริหารธุรกิจยานนาวา | Yannawa business administration technological college</li>
@@ -692,25 +771,89 @@
         <div><span id="seconds">00</span><p>SECS</p></div>
       </div>
       <div class="text"></div></div>
-      <!-- GAME -->
-      <div class="glass-card p-8 card-reveal" id="game-section">
-        <h2 class="text-2xl font-bold mb-2 flex items-center gap-3" style="color:var(--text);font-family:'Syne',sans-serif;"><span>🕹️</span> Star Dodge — Play a Game!</h2>
-        <p class="text-sm mb-6 font-mono" style="color:var(--text-muted)">Dodge the purple meteors. Survive as long as you can!</p>
-        <div id="game-canvas-wrapper">
-          <canvas id="game-canvas"></canvas>
-          <div id="game-ui">
-            <div id="game-score-display">SCORE: <span id="score-val">0</span></div>
-            <div id="game-lives-display"><span class="life-heart" id="h1">♥</span><span class="life-heart" id="h2">♥</span><span class="life-heart" id="h3">♥</span></div>
-          </div>
-          <div id="game-overlay">
-            <h3 id="overlay-title">✦ STAR DODGE ✦</h3>
-            <p id="overlay-desc">Move your mouse / finger to dodge the meteors<br>Stars = +10 pts • Purple meteors = -1 life</p>
-            <div id="game-final-score"></div>
-            <button id="game-start-btn" onclick="startGame()">START GAME</button>
-          </div>
-          <div id="game-hint">← Move to dodge →</div>
-        </div>
-      </div>
+      <div class="glass-card p-8 card-reveal" id="game-section" style="margin-bottom: 24px;">
+  <div class="flex items-center justify-between mb-2 flex-wrap gap-3">
+    <h2 class="text-2xl font-bold flex items-center gap-3" style="color:var(--text);font-family:'Syne',sans-serif;"><span>🕹️</span> Star Dodge</h2>
+    <div style="display:flex;gap:8px;">
+      <button onclick="document.getElementById('slot-section').scrollIntoView({behavior:'smooth'})" class="special-btn" style="padding:10px 22px;font-size:12px;">🎰 Slots</button>
+      <button onclick="document.getElementById('bj-section').scrollIntoView({behavior:'smooth'})" class="special-btn" style="padding:10px 22px;font-size:12px;">🃏 Blackjack</button>
+    </div>
+  </div>
+  <p class="text-sm mb-6 font-mono" style="color:var(--text-muted)">Dodge the purple meteors. Survive as long as you can!</p>
+  <div id="game-canvas-wrapper">
+    <canvas id="game-canvas"></canvas>
+    <div id="game-ui">
+      <div id="game-score-display">SCORE: <span id="score-val">0</span></div>
+      <div id="game-lives-display"><span class="life-heart" id="h1">♥</span><span class="life-heart" id="h2">♥</span><span class="life-heart" id="h3">♥</span></div>
+    </div>
+    <div id="game-overlay">
+      <h3 id="overlay-title">✦ STAR DODGE ✦</h3>
+      <p id="overlay-desc">Move your mouse / finger to dodge the meteors<br>Stars = +10 pts • Purple meteors = -1 life</p>
+      <div id="game-final-score"></div>
+      <button id="game-start-btn" onclick="startGame()">START GAME</button>
+    </div>
+    <div id="game-hint">← Move to dodge →</div>
+  </div>
+</div> <div class="glass-card p-8 card-reveal" id="slot-section" style="margin-bottom: 24px;">
+  <h2 class="text-2xl font-bold mb-2 flex items-center gap-3" style="color:var(--text);font-family:'Syne',sans-serif;"><span>🎰</span> Slot Machine</h2>
+  <p class="text-sm mb-6 font-mono" style="color:var(--text-muted)">Spin the reels. Match symbols to win credits!</p>
+  <div style="text-align:center;">
+    <div id="sl-credits-disp" style="font-family:'Unbounded',sans-serif;font-size:28px;font-weight:900;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;">100 <span style="font-size:14px;-webkit-text-fill-color:var(--text-muted);color:var(--text-muted);">credits</span></div>
+    <div style="display:flex;justify-content:center;gap:12px;margin:20px 0;">
+      <div id="sr0" class="glass-card" style="width:80px;height:90px;display:flex;align-items:center;justify-content:center;font-size:42px;border-radius:16px;">🍒</div>
+      <div id="sr1" class="glass-card" style="width:80px;height:90px;display:flex;align-items:center;justify-content:center;font-size:42px;border-radius:16px;">🍋</div>
+      <div id="sr2" class="glass-card" style="width:80px;height:90px;display:flex;align-items:center;justify-content:center;font-size:42px;border-radius:16px;">⭐</div>
+    </div>
+    <div id="sl-msg" style="font-family:'Space Mono',monospace;font-size:13px;color:var(--text-muted);min-height:22px;margin:8px 0;">Place your bet and spin!</div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin:12px 0;">
+      <button onclick="slChangeBet(-5)" class="game-tag" style="padding:6px 14px;">−</button>
+      <span style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--accent);min-width:40px;" id="sl-bet-val">10</span>
+      <button onclick="slChangeBet(5)" class="game-tag" style="padding:6px 14px;">+</button>
+      <span style="font-size:12px;color:var(--text-muted);">bet</span>
+    </div>
+    <button id="sl-spin-btn" onclick="doSlotSpin()" class="special-btn" style="padding:12px 48px;">🎰 SPIN</button>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border);">
+      <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--text-muted);text-align:center;">💎💎💎<br><span style="color:var(--accent);">×50</span></div>
+      <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--text-muted);text-align:center;">7️⃣7️⃣7️⃣<br><span style="color:var(--accent);">×20</span></div>
+      <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--text-muted);text-align:center;">⭐⭐⭐<br><span style="color:var(--accent);">×10</span></div>
+      <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--text-muted);text-align:center;">🍇🍇🍇<br><span style="color:var(--accent);">×5</span></div>
+      <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--text-muted);text-align:center;">🍒🍒🍒<br><span style="color:var(--accent);">×3</span></div>
+      <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--text-muted);text-align:center;">Any pair<br><span style="color:var(--accent);">×1.5</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="glass-card p-8 card-reveal" id="bj-section" style="margin-bottom: 20px;">
+  <h2 class="text-2xl font-bold mb-2 flex items-center gap-3" style="color:var(--text);font-family:'Syne',sans-serif;"><span>🃏</span> Blackjack</h2>
+  <p class="text-sm mb-6 font-mono" style="color:var(--text-muted)">Beat the dealer to 21 without going bust!</p>
+  <div id="bj-credits-disp" style="font-family:'Unbounded',sans-serif;font-size:28px;font-weight:900;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;">100 <span style="font-size:14px;-webkit-text-fill-color:var(--text-muted);color:var(--text-muted);">credits</span></div>
+  
+  <p style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--text-muted);margin-bottom:8px;">DEALER</p>
+  <div id="bj-dealer-area" style="display:flex;gap:8px;flex-wrap:wrap;min-height:90px;align-items:flex-start;margin-bottom:6px;"></div>
+  <p id="bj-dealer-score" style="font-family:'Space Mono',monospace;font-size:12px;color:var(--text-muted);margin-bottom:16px;"></p>
+  
+  <div style="height:1px;background:var(--border);margin:12px 0;"></div>
+  
+  <p style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--text-muted);margin-bottom:8px;">YOU</p>
+  <div id="bj-player-area" style="display:flex;gap:8px;flex-wrap:wrap;min-height:90px;align-items:flex-start;margin-bottom:6px;"></div>
+  <p id="bj-player-score" style="font-family:'Space Mono',monospace;font-size:12px;color:var(--text-muted);margin-bottom:16px;"></p>
+  
+  <div id="bj-message" style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;min-height:26px;margin-bottom:12px;color:var(--accent);">Place your bet and deal!</div>
+  
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;flex-wrap:wrap;">
+    <button onclick="bjBetChange(-10)" class="game-tag" style="padding:6px 14px;">−</button>
+    <span style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--accent);min-width:40px;" id="bj-bet-disp">20</span>
+    <button onclick="bjBetChange(10)" class="game-tag" style="padding:6px 14px;">+</button>
+    <span style="font-size:12px;color:var(--text-muted);">bet</span>
+  </div>
+  
+  <div style="display:flex;gap:10px;flex-wrap:wrap;">
+    <button id="btn-deal" onclick="bjDeal()" class="special-btn" style="padding:10px 28px;font-size:12px;">Deal</button>
+    <button id="btn-hit" onclick="bjHit()" class="special-btn" style="padding:10px 28px;font-size:12px;opacity:.4;pointer-events:none;">Hit</button>
+    <button id="btn-stand" onclick="bjStand()" class="special-btn" style="padding:10px 28px;font-size:12px;opacity:.4;pointer-events:none;">Stand</button>
+    <button id="btn-dbl" onclick="bjDouble()" class="special-btn" style="padding:10px 28px;font-size:12px;opacity:.4;pointer-events:none;">Double Down</button>
+  </div>
+</div>
 
       <!-- SONGS -->
       <div class="glass-card p-8 card-reveal">
@@ -764,7 +907,6 @@
   <div class="fixed bottom-6 right-6 z-50" onclick="playCatSound('right')">
     <img src="Haluuuu, en mi insta tengo diwujitos míos y mi cuenta de edits ᨐฅ (me ayudaria un shingo su apoyo)_3.jpg" alt="Cat Right" class="cat-btn" style="transform-origin:bottom right;">
   </div>
-
   <script>
   // ══ THEME SOUNDS ══
   
@@ -780,15 +922,15 @@
   function toggleTheme(){applyTheme(html.getAttribute('data-theme')==='dark'?'light':'dark',true);}
 // ══ TIME GREETING ══
 const greetings = {
-  en: ["Good Morning!",    "Good Afternoon!",   "Good Evening!",   "Go sleep"],
-  th: ["อรุณสวัสดิ์!",       "สวัสดีตอนบ่าย!",     "สวัสดีตอนเย็น!",  "ไปนอนซะ"],
+  en: ["Good Morning!",    "Good Afternoon!",   "Good Evening!",   "Maybe sleep?"],
+  th: ["อรุณสวัสดิ์!",       "สวัสดีตอนบ่าย!",     "สวัสดีตอนเย็น!",  "ไปนอนเถอะ"],
   jp: ["おはようございます！", "こんにちは！",          "こんばんは！",      "もう寝た方がいいよ。"],
   es: ["¡Buenos Días!",    "¡Buenas Tardes!",   "¡Buenas Noches!", "Deberías Ir a Dormir."]
 };
 // Sub-line cycles a different set in sync
 const subLines = {
-  en: ["ssnmhjjg / ice",   "Have you ate something yet?",      "Welcome back. Sir",           "You're tired."],
-  th: ["ssnmhjjg / ไอซ์",  "กินอะไรยังเอ๋ย?",            "ยินดีต้อนรับกลับ!",        "ตาบอดหมด"],
+  en: ["ssnmhjjg / ice",   "Have you ate something yet?",      "Welcome back. Sir",           "You shouldn't stay late."],
+  th: ["ssnmhjjg / ไอซ์",  "กินอะไรยังเอ๋ย?",            "ยินดีต้อนรับกลับ!",        "ถือว่าผมขอเเล้วกัน 555"],
   jp: ["ssnmhjjg / アイス", "もう何か食べましたか？",      "おかえり！",           "なぜそんなに遅くまで寝ないのですか？"],
   es: ["ssnmhjjg / ice",   "¿Ya has comido algo?",         "¡Bienvenido de nuevo!",         "Por favor, vete a dormir."]
 };
@@ -895,6 +1037,15 @@ function cycle() {
   function onFirstInteraction(){startBg();document.removeEventListener('click',onFirstInteraction);document.removeEventListener('keydown',onFirstInteraction);document.removeEventListener('touchstart',onFirstInteraction);}
   document.addEventListener('click',onFirstInteraction);document.addEventListener('keydown',onFirstInteraction);document.addEventListener('touchstart',onFirstInteraction);
   buildPlaylist();bmpTrackName.textContent=BG_PLAYLIST[0]?.name||'—';bmpTrackIdx.textContent=`1 / ${BG_PLAYLIST.length}`;
+(function(){
+  const chars  = ['$','%','#','@','!','&','?','~'];
+  const colors = ['#f472b6','#38bdf8','#c084fc','#fb923c','#a3e635','#ffffff'];
+  const c1 = document.getElementById('gc1');
+  const c2 = document.getElementById('gc2');
+  function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  if(c1) setInterval(()=>{ c1.textContent=rand(chars); c1.style.color=rand(colors); },110);
+  if(c2) setInterval(()=>{ c2.textContent=rand(chars); c2.style.color=rand(colors); },140);
+})();
 
   // ══ CAT SOUNDS ══
   // ══ LINK HOVER + CLICK SOUNDS ══
@@ -937,7 +1088,7 @@ function cycle() {
   //             the last header item has already animated in
   // ══════════════════════════════════════
 window.addEventListener('load',()=>{
-  const minDur=1600,start=performance.now();
+  const minDur=2000,start=performance.now();
   function dismiss(){
     const elapsed=performance.now()-start;
     const delay=Math.max(0,minDur-elapsed);
@@ -1068,5 +1219,117 @@ function playHoverTick() {
     // ── Use capture phase so it catches all elements even inside shadow-ish wrappers ──
     document.addEventListener('mouseover', onEnter, { passive: true });
   </script>
+
+  <script>
+/* ═══ SLOT MACHINE ═══ */
+const SL_SYMS=['🍒','🍋','🍊','🍇','⭐','💎','7️⃣'];
+const SL_W=[30,25,20,15,6,3,1];
+let slCr=100,slBet2=10,slBusy=false;
+const SL_MULT={'💎💎💎':50,'7️⃣7️⃣7️⃣':20,'⭐⭐⭐':10,'🍇🍇🍇':5,'🍒🍒🍒':3,'🍋🍋🍋':3,'🍊🍊🍊':3};
+function slPick(){const t=SL_W.reduce((a,b)=>a+b,0);let r=Math.random()*t;for(let i=0;i<SL_SYMS.length;i++){r-=SL_W[i];if(r<=0)return SL_SYMS[i];}return SL_SYMS[0];}
+function slChangeBet(d){slBet2=Math.max(5,Math.min(slCr,slBet2+d));document.getElementById('sl-bet-val').textContent=slBet2;}
+function slUpdateCr(){document.getElementById('sl-credits-disp').innerHTML=slCr+' <span style="font-size:14px;color:var(--text-muted);">credits</span>';}
+function doSlotSpin(){
+  if(slBusy||slCr<slBet2)return;
+  playSound('slot-spin.mp3');
+  slCr-=slBet2;slUpdateCr();slBusy=true;
+  document.getElementById('sl-spin-btn').disabled=true;
+  document.getElementById('sl-msg').textContent='Spinning…';
+  const res=[slPick(),slPick(),slPick()];
+  let frames=0;
+  const anim=setInterval(()=>{
+    [0,1,2].forEach(i=>document.getElementById('sr'+i).textContent=slPick());
+    if(++frames>12){clearInterval(anim);finishSlot(res);}
+  },80);
+}
+function finishSlot(r){
+  [0,1,2].forEach(i=>document.getElementById('sr'+i).textContent=r[i]);
+  const key=r.join('');
+  let mult=SL_MULT[key]||0;
+  if(!mult&&(r[0]===r[1]||r[1]===r[2]||r[0]===r[2]))mult=1.5;
+  if(mult){const w=Math.round(slBet2*mult);slCr+=w;document.getElementById('sl-msg').innerHTML=`<span style="color:#23a55a;font-weight:700;">WIN! +${w} credits (×${mult})</span>`;}
+  else document.getElementById('sl-msg').innerHTML=`<span style="color:#f23f43;">No match. Try again!</span>`;
+  slUpdateCr();slBusy=false;document.getElementById('sl-spin-btn').disabled=false;
+  if(slCr<=0){slCr=100;slUpdateCr();document.getElementById('sl-msg').textContent='Refilled to 100 credits!';}
+}
+
+/* ═══ BLACKJACK ═══ */
+let bjDeck2=[],bjP=[],bjD=[],bjBet2=20,bjCr2=100,bjActive=false;
+const BJ_SUITS=['♠','♥','♦','♣'],BJ_RANKS=['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+function bjBuild(){bjDeck2=[];for(let s of BJ_SUITS)for(let r of BJ_RANKS)bjDeck2.push({r,s});for(let i=bjDeck2.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[bjDeck2[i],bjDeck2[j]]=[bjDeck2[j],bjDeck2[i]];}}
+function bjDraw(){return bjDeck2.pop();}
+function bjVal(c){if(['J','Q','K'].includes(c.r))return 10;if(c.r==='A')return 11;return+c.r;}
+function bjTotal(h){let s=h.reduce((a,c)=>a+bjVal(c),0),a=h.filter(c=>c.r==='A').length;while(s>21&&a-->0)s-=10;return s;}
+function bjCard(c,hidden){
+  if(hidden)return `<div style="width:52px;height:76px;background:var(--surface);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;">🂠</div>`;
+  const red=['♥','♦'].includes(c.s);
+  return `<div style="width:52px;height:76px;background:white;border:1px solid #ddd;border-radius:12px;display:flex;flex-direction:column;justify-content:space-between;padding:5px;color:${red?'#f23f43':'#1a1a2e'};font-weight:700;font-size:14px;"><span>${c.r}${c.s}</span><span style="font-size:22px;text-align:center;">${c.s}</span><span style="transform:rotate(180deg);display:block;">${c.r}${c.s}</span></div>`;
+}
+function bjRender(rev){
+  document.getElementById('bj-dealer-area').innerHTML=bjD.map((c,i)=>bjCard(c,!rev&&i===1)).join('');
+  document.getElementById('bj-player-area').innerHTML=bjP.map(c=>bjCard(c,false)).join('');
+  document.getElementById('bj-player-score').textContent='Total: '+bjTotal(bjP);
+  document.getElementById('bj-dealer-score').textContent=rev?'Total: '+bjTotal(bjD):'Showing: '+bjVal(bjD[0]);
+}
+function bjBetChange(d){if(bjActive)return;bjBet2=Math.max(10,Math.min(bjCr2,bjBet2+d));document.getElementById('bj-bet-disp').textContent=bjBet2;}
+function bjSetBtns(deal,hit,stand,dbl){
+  ['deal','hit','stand','dbl'].forEach((id,i)=>{const b=document.getElementById('btn-'+id);const on=[deal,hit,stand,dbl][i];b.style.opacity=on?'1':'0.4';b.style.pointerEvents=on?'auto':'none';});
+}
+function bjUpdateCr(){document.getElementById('bj-credits-disp').innerHTML=bjCr2+' <span style="font-size:14px;color:var(--text-muted);">credits</span>';}
+function bjMsg2(t,c=''){document.getElementById('bj-message').textContent=t;document.getElementById('bj-message').style.color=c||'var(--accent)';}
+function bjDeal(){
+  if(bjCr2<bjBet2)return bjMsg2('Not enough credits!','#f23f43');
+  bjBuild();bjP=[bjDraw(),bjDraw()];bjD=[bjDraw(),bjDraw()];
+  bjCr2-=bjBet2;bjUpdateCr();bjActive=true;bjRender(false);
+  bjMsg2('Your turn!');bjSetBtns(false,true,true,bjCr2>=bjBet2);
+  if(bjTotal(bjP)===21){bjMsg2('Blackjack!','#23a55a');bjStand();}
+}
+function bjHit() {
+  if (!bjActive) return;
+  
+  playSound('card-shuf.mp3'); 
+
+  bjP.push(bjDraw());
+  bjRender(false);
+  
+  if (bjTotal(bjP) > 21) {
+    bjMessage.textContent = "Bust! You Lose!";
+    bjActive = false;
+    bjSetBtns(true, false, false, false);
+  }
+}
+function bjStand(){bjRender(true);bjSetBtns(false,false,false,false);function dd(){if(bjTotal(bjD)<17){setTimeout(()=>{bjD.push(bjDraw());bjRender(true);dd();},400);}else bjResolve();}setTimeout(dd,300);}
+function bjDouble(){bjCr2-=bjBet2;bjBet2*=2;bjUpdateCr();document.getElementById('bj-bet-disp').textContent=bjBet2;bjP.push(bjDraw());bjRender(false);if(bjTotal(bjP)>21){bjMsg2('Bust on double!','#f23f43');bjEnd(-1);}else bjStand();}
+function bjResolve(){
+  const p=bjTotal(bjP), d=bjTotal(bjD);
+  
+  // 1. ถ้าตัวเราแต้มเกิน 21 (Bust) ยังไงก็ต้องแพ้ก่อนเพื่อน!
+  if (p > 21) {
+    bjMsg2(`Dealer wins (You Busted).`, '#f23f43');
+  } 
+  // 2. ถ้าเราแต้มไม่เกิน แล้วดีลเลอร์แต้มเกิน หรือเราแต้มมากกว่าดีลเลอร์ -> เราชนะ!
+  else if (d > 21 || p > d) {
+    bjMsg2(`You win! +${bjBet2}`, '#23a55a');
+    bjCr2 += bjBet2 * 2;
+  } 
+  // 3. ถ้าแต้มเท่ากัน -> เสมอคืนทุน
+  else if (p === d) {
+    bjMsg2('Push — bet returned.', '#f0b232');
+    bjCr2 += bjBet2;
+  } 
+  // 4. นอกเหนือจากนั้น -> ดีลเลอร์กินเรียบ
+  else {
+    bjMsg2(`Dealer wins (${d} vs ${p}).`, '#f23f43');
+  }
+  
+  bjEnd(0);
+}
+function bjEnd(){bjActive=false;bjBet2=Math.min(20,bjCr2);document.getElementById('bj-bet-disp').textContent=bjBet2;bjUpdateCr();bjSetBtns(true,false,false,false);if(bjCr2<=0){bjCr2=100;bjUpdateCr();bjMsg2('Refilled to 100 credits!');}}
+function playSound(src) {
+  const sound = new Audio(src);
+  sound.volume = 0.5;
+  sound.play().catch(e => console.log("เสียงยังเล่นไม่ได้ ต้องคลิกหน้าจอก่อนหนึ่งครั้งนะเพื่อน:", e));
+}
+</script>
   </body>
   </html> 
