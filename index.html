@@ -265,7 +265,7 @@
   @keyframes dot-bounce{0%,80%,100%{transform:scale(.55);opacity:.35}40%{transform:scale(1);opacity:1}}
 
   /* ══ GREETING CARD (classic look) ══ */
-  .greeting-card{position:relative;min-height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:28px 32px;margin:0 auto 16px;max-width:640px;width:100%;background:var(--surface);border:1px solid var(--border);border-radius:24px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 0 40px var(--glow1),0 0 0 1px var(--border);overflow:hidden;}
+  .greeting-card{position:relative;min-height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:28px 32px;margin:0 auto 48px;max-width:640px;width:100%;background:var(--surface);border:1px solid var(--border);border-radius:24px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 0 40px var(--glow1),0 0 0 1px var(--border);overflow:hidden;}
   .greeting-card .greeting-top-line{position:absolute;top:0;left:0;right:0;height:1px;background:var(--card-top);}
   .greeting-card .greeting-live-dot{position:absolute;top:10px;right:14px;width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:pulse-logo 1.5s ease-in-out infinite;}
   .greeting-enter{opacity:0;transform:translateY(24px);filter:blur(12px);}
@@ -284,7 +284,7 @@
   @keyframes cursor-blink{0%,49%{opacity:1;filter:brightness(1)}50%,100%{opacity:0;filter:brightness(1)}}
 
   /* ══ DISCORD MINI PROFILE (Lanyard) ══ */
-  .discord-card{position:sticky;top:14px;z-index:45;max-width:360px;width:100%;margin:0 auto 20px;border-radius:18px;overflow:visible;background:var(--surface);border:1px solid var(--border);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 0 36px var(--glow1),0 8px 32px rgba(0,0,0,.18);transition:border-color var(--transition-theme),box-shadow .45s ease,background var(--transition-theme);}
+  .discord-card{position:sticky;top:14px;z-index:45;max-width:360px;width:100%;margin:32px auto 20px;border-radius:18px;overflow:visible;background:var(--surface);border:1px solid var(--border);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 0 36px var(--glow1),0 8px 32px rgba(0,0,0,.18);transition:border-color var(--transition-theme),box-shadow .45s ease,background var(--transition-theme);}
   .discord-card__inner{border-radius:18px;overflow:hidden;}
   .discord-card:hover{border-color:var(--border-hover);box-shadow:0 0 48px var(--glow2),0 12px 40px rgba(0,0,0,.22);}
   .discord-card__banner{position:relative;height:120px;background:linear-gradient(135deg,var(--accent),var(--accent2));overflow:hidden;}
@@ -309,6 +309,10 @@
   .discord-card__act-icon{flex-shrink:0;font-size:14px;line-height:1.4;}
   .discord-card__status-row{display:flex;align-items:center;gap:8px;margin-top:4px;font-size:12px;color:var(--text-dim);font-family:'Space Mono',monospace;}
   .discord-card__status-pill{padding:3px 8px;border-radius:999px;background:var(--info-bg);border:1px solid var(--info-border);font-size:10px;letter-spacing:.06em;text-transform:uppercase;}
+  .discord-card__profile-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:14px;padding:10px 16px;border-radius:8px;background:#5865F2;color:#fff;font-size:14px;font-weight:600;font-family:-apple-system,"SF Pro Display","Segoe UI",sans-serif;text-decoration:none;letter-spacing:0;border:none;cursor:pointer;transition:background .2s ease,transform .35s var(--ease-play),box-shadow .35s ease;box-shadow:0 2px 8px rgba(88,101,242,.35);}
+  .discord-card__profile-btn:hover{background:#4752c4;transform:translateY(-2px);box-shadow:0 4px 16px rgba(88,101,242,.45);}
+  .discord-card__profile-btn:active{transform:translateY(0);box-shadow:0 2px 6px rgba(88,101,242,.3);}
+  .discord-card__profile-btn svg{flex-shrink:0;opacity:.95;}
 
   /* ══ PAGE CONTENT ══ */
   #page-content{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
@@ -754,7 +758,7 @@
   </div>
 
   <!-- DISCORD MINI PROFILE (Lanyard) — sticks on scroll -->
-  <a href="https://www.youtube.com/watch?v=QDia3e12czc" target="_blank" rel="noopener" class="discord-card reveal block no-underline" id="discord-card" aria-label="Discord profile">
+  <div class="discord-card reveal" id="discord-card">
     <div class="discord-card__inner">
       <div class="discord-card__banner" id="dc-banner">
         <img id="dc-banner-img" class="discord-card__banner-img is-hidden" src="" alt="">
@@ -772,9 +776,13 @@
         <div class="discord-card__status-row">
           <span class="discord-card__status-pill" id="dc-status-label">Loading…</span>
         </div>
+        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer" class="discord-card__profile-btn" aria-label="See profile on Discord">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037 12.3 12.3 0 0 0-.608 1.25 18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+          See profile on Discord
+        </a>
       </div>
     </div>
-  </a>
+  </div>
 
   <div class="flex items-center justify-center gap-4 mt-8 reveal">
     <div class="h-px w-24" style="background:linear-gradient(to right,transparent,var(--accent))"></div>
@@ -996,9 +1004,9 @@
           </a>
         </div>
       </div>
-
-    </div><!-- end grid -->
-
+    </div>
+    <!-- end grid -->
+    
     <!-- FOOTER -->
     <footer class="mt-24 mb-16 text-center footer-line pt-14 card-reveal">
       <h2 class="text-5xl font-extrabold glow-title mb-4" style="font-family:'Unbounded',sans-serif;">Thanks for visit</h2>
@@ -1147,7 +1155,7 @@ function startGreetingCycle() {
   const cursor=document.getElementById('custom-cursor');
   const clickLabel=document.getElementById('cursor-click-label');
   document.addEventListener('mousemove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px';clickLabel.style.left=e.clientX+'px';clickLabel.style.top=(e.clientY-34)+'px';});
-  const clickables='a,button,[onclick],input,textarea,.game-tag,.cat-corner,.song-card,.bmp-ctrl,.bmp-play,.bmp-toggle,.special-btn,.social-link,#theme-switcher,.showcase-btn';
+  const clickables='a,button,[onclick],input,textarea,.game-tag,.cat-corner,.song-card,.bmp-ctrl,.bmp-play,.bmp-toggle,.special-btn,.social-link,.discord-card__profile-btn,#theme-switcher,.showcase-btn';
   document.addEventListener('mouseover',e=>{if(e.target.closest(clickables)){cursor.classList.add('hovering');clickLabel.classList.add('visible');}});
   document.addEventListener('mouseout',e=>{if(e.target.closest(clickables)){cursor.classList.remove('hovering');clickLabel.classList.remove('visible');}});
   document.addEventListener('mousedown',()=>cursor.classList.add('pressing'));
@@ -1162,7 +1170,7 @@ function startGreetingCycle() {
   /** Your banner file (same folder as index.html). Set to '' to use Discord banner from Lanyard instead. */
   const DISCORD_BANNER_IMAGE='discord-banner.jpg';
   const statusColors={online:'#23a55a',idle:'#f0b232',dnd:'#f23f43',offline:'#80848e'};
-  const statusLabels={online:'Online',idle:'Idle',dnd:'Do Not Disturb',offline:'Offline'};
+  const statusLabels={online:'Ready to answer!',idle:'In AFK Right now',dnd:'Do Not Disturb',offline:'Offline'};
   function dcAvatarUrl(u){
     if(u.avatar)return`https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.png?size=256`;
     const idx=Number((BigInt(u.id)>>22n)%6n);
@@ -1505,7 +1513,7 @@ window.addEventListener('load',()=>{
     // ── Throttle: prevent rapid-fire if mouse jitters ──
    let lastPlay = 0;
 const THROTTLE_MS = 60;
-const CLICKABLE = 'a,button,[onclick],input,textarea,.game-tag,.cat-corner,.song-card,.bmp-ctrl,.bmp-play,.bmp-toggle,.special-btn,.social-link,#theme-switcher,.showcase-btn';
+const CLICKABLE = 'a,button,[onclick],input,textarea,.game-tag,.cat-corner,.song-card,.bmp-ctrl,.bmp-play,.bmp-toggle,.special-btn,.social-link,.discord-card__profile-btn,#theme-switcher,.showcase-btn';
   let audioCtx = null;
 function getCtx() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
