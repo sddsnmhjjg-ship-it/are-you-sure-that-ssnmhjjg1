@@ -108,15 +108,7 @@
     letter-spacing: -0.022em; /* SF Pro จะดูดีมากถ้าติดลบนิดๆ */
   }
 
-  /* ══ DISCORD STATUS DOT ══ */
-  #status-dot { position:relative; flex-shrink:0; }
-  @keyframes radar-ping { 0%{transform:scale(1);opacity:.1} 100%{transform:scale(1.5);opacity:1} }
-  #status-dot::before, #status-dot::after {
-    content:''; position:absolute; inset:0; border-radius:50%;
-    background:inherit; animation:radar-ping 1.8s ease-out infinite;
-  }
-  #status-dot::after { animation-delay:.6s; }
-  @keyframes radar-ping { 0%{transform:scale(1);opacity:.1} 100%{transform:scale(5.5);opacity:0} }
+  @keyframes status-pulse{0%{transform:scale(1);opacity:.5}100%{transform:scale(5.5);opacity:0}}
 
   /* ══ THEME VARIABLES ══ */
   :root { --transition-theme:0.55s cubic-bezier(0.4,0,0.2,1); }
@@ -132,6 +124,8 @@
     --card-top:linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent);
     --profile-ring:conic-gradient(from 0deg,#7928ca,#a855f7,#c084fc,#818cf8,#7928ca);
     --title-grad:linear-gradient(135deg,#ffffff 0%,#c084fc 50%,#38bdf8 100%);
+    --typing-cursor-grad:linear-gradient(180deg,#e9d5ff 0%,#c084fc 35%,#818cf8 65%,#38bdf8 100%);
+    --typing-cursor-glow:0 0 16px rgba(192,132,252,0.55),0 0 8px rgba(56,189,248,0.35);
     --info-bg:rgba(0,0,0,0.30); --info-border:rgba(255,255,255,0.06);
     --tag-bg:rgba(0,0,0,0.40); --tag-border:rgba(255,255,255,0.15);
     --tag-hover-bg:rgba(120,40,202,0.30); --tag-hover-bd:rgba(192,132,252,0.60); --tag-hover-glow:rgba(120,40,202,0.40);
@@ -155,6 +149,8 @@
     --card-top:linear-gradient(90deg,transparent,rgba(180,83,9,0.25),transparent);
     --profile-ring:conic-gradient(from 0deg,#92400e,#d97706,#fbbf24,#f59e0b,#92400e);
     --title-grad:linear-gradient(135deg,#1a1008 0%,#b45309 45%,#0891b2 100%);
+    --typing-cursor-grad:linear-gradient(180deg,#fcd34d 0%,#d97706 40%,#0891b2 100%);
+    --typing-cursor-glow:0 0 12px rgba(217,119,6,0.4),0 0 6px rgba(8,145,178,0.3);
     --info-bg:rgba(255,240,210,0.60); --info-border:rgba(180,83,9,0.12);
     --tag-bg:rgba(255,237,213,0.80); --tag-border:rgba(180,83,9,0.20);
     --tag-hover-bg:rgba(180,83,9,0.15); --tag-hover-bd:rgba(180,83,9,0.50); --tag-hover-glow:rgba(180,83,9,0.25);
@@ -244,58 +240,154 @@
   @keyframes burst-out{0%{transform:translate(-50%,-50%) scale(0);opacity:1}100%{transform:translate(-50%,-50%) scale(2.2);opacity:0}}
 
   /* ══ LOADING ══ */
-  #loading-screen{position:fixed;inset:0;z-index:99999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;transition:opacity .6s ease,visibility .6s ease;}
-  #loading-screen.hidden{opacity:0;visibility:hidden;pointer-events:none;}
-  .loader-logo{font-family:'Unbounded',sans-serif;font-size:48px;font-weight:900;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.15em;animation:pulse-logo 1.5s ease-in-out infinite;}
-  @keyframes pulse-logo{0%,100%{opacity:1}50%{opacity:.4}}
-  .loader-bar-track{width:200px;height:2px;background:var(--border);border-radius:999px;overflow:hidden;}
-  .loader-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:999px;animation:load-bar 1.4s cubic-bezier(0.4,0,0.2,1) forwards;}
- @keyframes load-bar {
-  0%  { width: 0%  }
-  40% { width: 45% }
-  65% { width: 68% }
-  85% { width: 88% }
-  95% { width: 95% }
-  100%{ width: 100%}
-}
-  @keyframes dot-bounce{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+  #loading-screen{position:fixed;inset:0;z-index:99999;background:var(--bg);display:flex;align-items:center;justify-content:center;overflow:hidden;pointer-events:all;}
+  #loading-screen.reveal-out{animation:loader-screen-out 1s var(--ease-premium) forwards;pointer-events:none;}
+  @keyframes loader-screen-out{0%{clip-path:inset(0 0 0 0);opacity:1;filter:blur(0)}100%{clip-path:inset(0 0 0 100%);opacity:0;filter:blur(10px)}}
+  .loader-sweep{position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(90deg,var(--bg) 0%,rgba(4,4,10,.85) 35%,rgba(4,4,10,.4) 55%,transparent 72%);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);transform:translateX(-105%);animation:loader-sweep-in 1.35s var(--ease-premium) .15s forwards;}
+  [data-theme="light"] .loader-sweep{background:linear-gradient(90deg,var(--bg) 0%,rgba(253,246,238,.9) 40%,transparent 72%);}
+  @keyframes loader-sweep-in{0%{transform:translateX(-105%);opacity:1}100%{transform:translateX(105%);opacity:0}}
+  .loader-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:22px;padding:24px;clip-path:inset(0 100% 0 0);filter:blur(14px);opacity:0;animation:loader-content-ltr 1.25s var(--ease-premium) .2s forwards;}
+  @keyframes loader-content-ltr{0%{clip-path:inset(0 100% 0 0);filter:blur(16px);opacity:0;transform:translateX(-24px)}55%{filter:blur(6px);opacity:.85}100%{clip-path:inset(0 0 0 0);filter:blur(0);opacity:1;transform:translateX(0)}}
+  .loader-welcome{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--accent);opacity:0;animation:loader-welcome-in .9s var(--ease-premium) .55s forwards;}
+  @keyframes loader-welcome-in{from{opacity:0;transform:translateX(-12px);letter-spacing:.5em}to{opacity:1;transform:translateX(0);letter-spacing:.32em}}
+  .loader-logo-wrap{position:relative;}
+  .loader-logo{font-family:'Unbounded',sans-serif;font-size:clamp(32px,8vw,48px);font-weight:900;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.15em;animation:pulse-logo 1.5s ease-in-out infinite;}
+  @keyframes pulse-logo{0%,100%{opacity:1}50%{opacity:.55}}
+  .loader-sub-glitch{margin-top:-6px;}
+  .loader-bar-track{width:220px;height:3px;background:var(--border);border-radius:999px;overflow:hidden;box-shadow:0 0 12px var(--glow1);}
+  .loader-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent));background-size:200% 100%;border-radius:999px;animation:load-bar 1.4s cubic-bezier(0.4,0,0.2,1) .35s forwards,loader-bar-shine 2.5s linear 1.7s infinite;}
+  @keyframes loader-bar-shine{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+  @keyframes load-bar{0%{width:0%}40%{width:45%}65%{width:68%}85%{width:88%}95%{width:95%}100%{width:100%}}
+  .loader-dots{display:flex;gap:6px;}
+  .loader-dots span{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:dot-bounce .9s ease-in-out infinite;}
+  .loader-dots span:nth-child(2){animation-delay:.15s;}
+  .loader-dots span:nth-child(3){animation-delay:.3s;}
+  @keyframes dot-bounce{0%,80%,100%{transform:scale(.55);opacity:.35}40%{transform:scale(1);opacity:1}}
+
+  /* ══ GREETING CARD (classic look) ══ */
+  .greeting-card{position:relative;min-height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:28px 32px;margin:0 auto 16px;max-width:640px;width:100%;background:var(--surface);border:1px solid var(--border);border-radius:24px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 0 40px var(--glow1),0 0 0 1px var(--border);overflow:hidden;}
+  .greeting-card .greeting-top-line{position:absolute;top:0;left:0;right:0;height:1px;background:var(--card-top);}
+  .greeting-card .greeting-live-dot{position:absolute;top:10px;right:14px;width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:pulse-logo 1.5s ease-in-out infinite;}
+  .greeting-enter{opacity:0;transform:translateY(24px);filter:blur(12px);}
+  .greeting-card.in-view .greeting-enter--1{animation:greeting-enter-up .95s var(--ease-premium) .12s forwards;}
+  .greeting-card.in-view .greeting-enter--2{animation:greeting-enter-up .95s var(--ease-premium) .28s forwards;}
+  .greeting-card.in-view .greeting-enter--3{animation:greeting-enter-up .95s var(--ease-premium) .44s forwards;}
+  @keyframes greeting-enter-up{to{opacity:1;transform:translateY(0);filter:blur(0);}}
+  .greeting-title-row{display:flex;align-items:baseline;justify-content:center;gap:2px;min-height:1.3em;width:100%;font-size:clamp(1.6rem,5vw,3rem);line-height:1.15;}
+  #time-greeting{font-family:'Unbounded',sans-serif;font-size:1em;font-weight:900;letter-spacing:-.02em;line-height:inherit;margin:0;text-align:center;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 20px var(--glow1));}
+  .greeting-divider{width:48px;height:1px;background:var(--border);border-radius:999px;}
+  .greeting-sub-row{display:flex;align-items:baseline;justify-content:center;gap:2px;min-height:1.4em;width:100%;font-size:clamp(.75rem,2vw,1rem);line-height:1.35;}
+  #time-greeting-sub{font-family:'Space Mono',monospace;font-size:1em;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin:0;text-align:center;line-height:inherit;}
+  .typing-cursor{display:inline-block;flex-shrink:0;height:1em;width:.11em;min-width:5px;max-width:7px;border-radius:3px;background:var(--typing-cursor-grad);box-shadow:var(--typing-cursor-glow);opacity:0;visibility:hidden;pointer-events:none;margin-left:.14em;}
+  .greeting-sub-row .typing-cursor{width:.12em;min-width:4px;max-width:6px;background:linear-gradient(180deg,var(--accent) 0%,var(--accent2) 100%);box-shadow:0 0 12px var(--glow2);}
+  .typing-cursor.is-on{visibility:visible;animation:cursor-blink 1s step-end infinite;}
+  @keyframes cursor-blink{0%,49%{opacity:1;filter:brightness(1)}50%,100%{opacity:0;filter:brightness(1)}}
+
+  /* ══ DISCORD MINI PROFILE (Lanyard) ══ */
+  .discord-card{position:sticky;top:14px;z-index:45;max-width:360px;width:100%;margin:0 auto 20px;border-radius:18px;overflow:visible;background:var(--surface);border:1px solid var(--border);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 0 36px var(--glow1),0 8px 32px rgba(0,0,0,.18);transition:border-color var(--transition-theme),box-shadow .45s ease,background var(--transition-theme);}
+  .discord-card__inner{border-radius:18px;overflow:hidden;}
+  .discord-card:hover{border-color:var(--border-hover);box-shadow:0 0 48px var(--glow2),0 12px 40px rgba(0,0,0,.22);}
+  .discord-card__banner{position:relative;height:120px;background:linear-gradient(135deg,var(--accent),var(--accent2));overflow:hidden;}
+  .discord-card__banner-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;}
+  .discord-card__banner-img.is-hidden{display:none;}
+  .discord-card__banner-fade{position:absolute;inset:0;background:linear-gradient(180deg,transparent 25%,rgba(4,4,10,.45) 70%,var(--bg) 100%);pointer-events:none;}
+  [data-theme="light"] .discord-card__banner-fade{background:linear-gradient(180deg,transparent 25%,rgba(253,246,238,.5) 70%,var(--bg) 100%);}
+  .discord-card__body{position:relative;padding:52px 18px 18px;text-align:left;overflow:visible;}
+  .discord-card__avatar-wrap{position:absolute;top:-40px;left:18px;width:84px;height:84px;overflow:visible;}
+  .discord-card__avatar{width:84px;height:84px;border-radius:50%;object-fit:cover;border:5px solid var(--bg);box-shadow:0 4px 20px rgba(0,0,0,.35);background:var(--bg2);}
+  .discord-card__status{position:absolute;bottom:4px;right:4px;width:20px;height:20px;border-radius:50%;border:4px solid var(--bg);box-shadow:0 0 10px currentColor;flex-shrink:0;z-index:2;}
+  .discord-card__status::before,.discord-card__status::after{content:'';position:absolute;inset:0;border-radius:50%;background:inherit;animation:status-pulse 1.8s ease-out infinite;pointer-events:none;z-index:-1;}
+  .discord-card__status::after{animation-delay:.75s;}
+  .discord-card__display{font-family:'Syne',sans-serif;font-size:1.35rem;font-weight:800;color:var(--text);margin:0 0 2px;line-height:1.2;letter-spacing:-.02em;}
+  .discord-card__user{color:var(--accent);font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-family:'Space Mono',monospace;margin:0 0 10px;}
+  .discord-card__custom{display:inline-flex;align-items:center;gap:6px;max-width:100%;padding:8px 12px;margin-bottom:8px;border-radius:12px;background:var(--info-bg);border:1px solid var(--info-border);font-size:13px;color:var(--text-muted);line-height:1.35;}
+  .discord-card__custom.is-hidden{display:none;}
+  .discord-card__activity{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;border-radius:12px;background:rgba(0,0,0,.2);border:1px solid var(--border);font-size:12px;color:var(--text-muted);line-height:1.4;font-family:'Space Mono',monospace;}
+  [data-theme="light"] .discord-card__activity{background:var(--info-bg);}
+  .discord-card__activity.is-hidden{display:none;}
+  .discord-card__activity strong{color:var(--text);font-weight:700;}
+  .discord-card__act-icon{flex-shrink:0;font-size:14px;line-height:1.4;}
+  .discord-card__status-row{display:flex;align-items:center;gap:8px;margin-top:4px;font-size:12px;color:var(--text-dim);font-family:'Space Mono',monospace;}
+  .discord-card__status-pill{padding:3px 8px;border-radius:999px;background:var(--info-bg);border:1px solid var(--info-border);font-size:10px;letter-spacing:.06em;text-transform:uppercase;}
 
   /* ══ PAGE CONTENT ══ */
   #page-content{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
   #page-content.visible{opacity:1;transform:translateY(0);}
 
-/* ══ BLUR FADE ANIMATIONS ══
-    .reveal  = header items (triggered by JS with staggered setTimeout)
-    .card-reveal = cards (triggered by IntersectionObserver but ONLY after header finishes)
-*/
-  /* แก้ตัวเก่าให้เป็นแบบนี้ */
-  .reveal {
-    opacity: 0;
-    filter: blur(15px); /* เพิ่มความเบลอตอนเริ่มต้น */
-    transform: translateY(30px); /* ให้มันลอยขึ้นมาจากด้านล่างนิดๆ */
-    transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1); /* ใช้ Bezier ให้มันดูเด้งนุ่มๆ */
-    will-change: opacity, filter, transform;
+  /* ══ SMOOTH REVEALS (no filter on parents — keeps glass-card backdrop-blur working) ══ */
+  :root{--ease-premium:cubic-bezier(0.22,1,0.36,1);--ease-play:cubic-bezier(0.34,1.45,0.64,1);}
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity 1.2s var(--ease-premium),transform 1.2s var(--ease-premium);will-change:opacity,transform;}
+  .reveal.in-view{opacity:1;transform:translateY(0);}
+  .card-reveal{opacity:0;transform:translateY(30px);transition:opacity 1.2s var(--ease-premium),transform 1.2s var(--ease-premium);will-change:opacity,transform;}
+  .card-reveal.in-view{opacity:1;transform:translateY(0);}
+  .pb-item{opacity:0;filter:blur(14px);transform:translateY(28px) scale(.94);transition:opacity .85s var(--ease-premium),filter .85s var(--ease-premium),transform .85s var(--ease-premium),box-shadow .5s ease,border-color .4s ease;}
+  .photo-bento.revealed .pb-item{opacity:1;filter:blur(0);transform:translateY(0) scale(1);}
+  .photo-bento.revealed .pb-item:nth-child(1){transition-delay:.06s;}
+  .photo-bento.revealed .pb-item:nth-child(2){transition-delay:.14s;}
+  .photo-bento.revealed .pb-item:nth-child(3){transition-delay:.22s;}
+  .photo-bento.revealed .pb-item:nth-child(4){transition-delay:.3s;}
+  .photo-bento.revealed .pb-item:nth-child(5){transition-delay:.38s;}
+  .photo-bento.revealed .pb-item:nth-child(6){transition-delay:.46s;}
+  /* child stagger inside cards */
+  .card-reveal .stagger-child{opacity:0;filter:blur(12px);transform:translateY(16px) scale(.98);transition:opacity .75s var(--ease-premium),filter .75s var(--ease-premium),transform .75s var(--ease-play);}
+  .card-reveal.in-view .stagger-child{opacity:1;filter:blur(0);transform:translateY(0) scale(1);}
+  .card-reveal.in-view .stagger-child:nth-child(1){transition-delay:.08s;}
+  .card-reveal.in-view .stagger-child:nth-child(2){transition-delay:.14s;}
+  .card-reveal.in-view .stagger-child:nth-child(3){transition-delay:.2s;}
+  .card-reveal.in-view .stagger-child:nth-child(4){transition-delay:.26s;}
+  .card-reveal.in-view .stagger-child:nth-child(5){transition-delay:.32s;}
+  .card-reveal.in-view .stagger-child:nth-child(6){transition-delay:.38s;}
+  .card-reveal.in-view .info-list li:nth-child(1){transition-delay:.05s;}
+  .card-reveal.in-view .info-list li:nth-child(2){transition-delay:.09s;}
+  .card-reveal.in-view .info-list li:nth-child(3){transition-delay:.13s;}
+  .card-reveal.in-view .info-list li:nth-child(4){transition-delay:.17s;}
+  .card-reveal.in-view .info-list li:nth-child(5){transition-delay:.21s;}
+  .card-reveal.in-view .info-list li:nth-child(6){transition-delay:.25s;}
+  .card-reveal.in-view .info-list li:nth-child(7){transition-delay:.29s;}
+  .card-reveal.in-view .info-list li:nth-child(8){transition-delay:.33s;}
+  .card-reveal.in-view .info-list li:nth-child(9){transition-delay:.37s;}
+  .card-reveal.in-view .info-list li:nth-child(10){transition-delay:.41s;}
+  .card-reveal.in-view .info-list li:nth-child(11){transition-delay:.45s;}
+  .card-reveal.in-view .info-list li:nth-child(12){transition-delay:.49s;}
+  .info-list li{transition:opacity .7s var(--ease-premium),filter .7s var(--ease-premium),transform .7s var(--ease-premium),color var(--transition-theme),border-color var(--transition-theme);}
+  .card-reveal:not(.in-view) .info-list li{opacity:0;filter:blur(8px);transform:translateX(-8px);}
+  @keyframes clock-pop{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1)}}
+  .glass-card::after{content:'';position:absolute;top:0;left:-120%;width:55%;height:100%;background:linear-gradient(105deg,transparent 0%,rgba(255,255,255,.07) 45%,rgba(255,255,255,.14) 50%,rgba(255,255,255,.07) 55%,transparent 100%);transform:skewX(-18deg);transition:left .75s var(--ease-premium);pointer-events:none;z-index:2;}
+  .glass-card:hover::after{left:130%;}
+  @keyframes profile-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  @keyframes title-breathe{0%,100%{filter:drop-shadow(0 0 20px var(--glow1))}50%{filter:drop-shadow(0 0 36px var(--glow2)) blur(.3px)}}
+  @keyframes tag-bounce{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-4px) scale(1.06)}}
+  @keyframes playful-wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-2deg)}75%{transform:rotate(2deg)}}
+  .playful-spark{position:fixed;border-radius:50%;pointer-events:none;z-index:999995;background:radial-gradient(circle,var(--accent) 0%,transparent 70%);filter:blur(8px);animation:spark-fade .9s var(--ease-premium) forwards;}
+  @keyframes spark-fade{0%{opacity:.7;transform:translate(-50%,-50%) scale(.3)}100%{opacity:0;transform:translate(-50%,-50%) scale(2.2)}}
+  @media(prefers-reduced-motion:reduce){
+    .reveal,.card-reveal,.pb-item,#page-content,.stagger-child,.info-list li{transition-duration:.01ms!important;}
+    .reveal,.card-reveal,.pb-item,.stagger-child,.info-list li,.photo-bento.revealed .pb-item{transform:none!important;opacity:1!important;}
+    .glass-card::after,.glass-card:hover::after,.playful-spark{display:none;}
+    .clock span.tick-pop,.profile-float,.profile-ring,.glow-title{animation:none!important;}
+    .discord-card__status::before,.discord-card__status::after{animation:none!important;}
+    #loading-screen .loader-sweep,#loading-screen .loader-content,.loader-welcome{animation:none!important;}
+    .greeting-enter{filter:none!important;transform:none!important;opacity:1!important;animation:none!important;}
+    #loading-screen .loader-content{clip-path:none!important;filter:none!important;opacity:1!important;transform:none!important;}
+    #loading-screen.reveal-out{animation:none!important;opacity:0!important;}
   }
-
-  /* เมื่อเลื่อนมาถึง (JavaScript จะเติมคลาสนี้ให้) */
-  .reveal.in-view {
-    opacity: 1;
-    filter: blur(0px);
-    transform: translateY(0);
-  }
-  .card-reveal{opacity:0;filter:blur(15px);transform:translateY(30px);transition:all 1.2s cubic-bezier(0.22,1,0.36,1);will-change:opacity,filter,transform;}
-  .card-reveal.in-view{opacity:1;filter:blur(0px);transform:translateY(0);}
   /* ══ GLASS CARD ══ */
   .glass-card{background:var(--surface);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:24px;transition:transform .35s ease,box-shadow .35s ease,border-color .35s ease,background var(--transition-theme);position:relative;overflow:hidden;}
-  .glass-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--card-top);transition:background var(--transition-theme);}
+  .glass-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--card-top);transition:background var(--transition-theme);z-index:1;}
   .glass-card:hover{transform:translateY(-6px);border-color:var(--border-hover);box-shadow:0 0 30px var(--glow1),0 20px 40px rgba(0,0,0,.12);}
 
   /* ══ PROFILE RING ══ */
-  .profile-ring{width:140px;height:140px;border-radius:50%;padding:3px;background:var(--profile-ring);animation:spin-ring 6s linear infinite;box-shadow:0 0 30px var(--glow1),0 0 60px var(--glow2);transition:background var(--transition-theme),box-shadow var(--transition-theme);}
-  .profile-ring-inner{width:100%;height:100%;border-radius:50%;overflow:hidden;border:3px solid var(--bg);transition:border-color var(--transition-theme);}
+  .profile-wrap{display:inline-block;cursor:pointer;transition:transform .5s var(--ease-play);will-change:transform;}
+  .profile-wrap:hover{transform:scale(1.05);}
+  .profile-wrap:hover .profile-float{animation-play-state:paused;}
+  .profile-float{animation:profile-float 5s ease-in-out infinite;}
+  .profile-ring{width:140px;height:140px;border-radius:50%;padding:3px;background:var(--profile-ring);box-shadow:0 0 30px var(--glow1),0 0 60px var(--glow2);transition:box-shadow .45s ease,background var(--transition-theme);}
+  .profile-wrap:hover .profile-ring{box-shadow:0 0 50px var(--glow1),0 0 90px var(--glow2);}
+  .profile-ring-inner{width:100%;height:100%;border-radius:50%;overflow:hidden;border:3px solid var(--bg);transition:border-color var(--transition-theme),filter .45s ease;}
+  .profile-wrap:hover .profile-ring-inner{filter:brightness(1.08) saturate(1.1);}
 
   /* ══ GLOW TITLE ══ */
-  .glow-title{background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 24px var(--glow1));transition:filter var(--transition-theme);}
+  .glow-title{background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 24px var(--glow1));animation:title-breathe 4s ease-in-out infinite;transition:filter var(--transition-theme);}
 
   /* ══ PARTICLES ══ */
   .particle{position:fixed;border-radius:50%;pointer-events:none;z-index:0;animation:float-up linear infinite;opacity:0;}
@@ -321,17 +413,18 @@
 .c-blue5{color:#b361ff;}   [data-theme="light"] .c-blue5{color:#e2823d;}
 
   /* ══ GAME TAGS ══ */
-  .game-tag{background:var(--tag-bg);border:1px solid var(--tag-border);padding:8px 18px;border-radius:999px;font-size:13px;color:var(--text);transition:all .2s ease;cursor:pointer;position:relative;overflow:hidden;}
-  .game-tag::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);transition:left .4s;}
+  .game-tag{background:var(--tag-bg);border:1px solid var(--tag-border);padding:8px 18px;border-radius:999px;font-size:13px;color:var(--text);transition:transform .4s var(--ease-play),box-shadow .4s ease,background .3s ease,border-color .3s ease,filter .4s ease;cursor:pointer;position:relative;overflow:hidden;}
+  .game-tag::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);transition:left .5s var(--ease-premium);}
   .game-tag:hover::before{left:100%;}
-  .game-tag:hover{background:var(--tag-hover-bg);border-color:var(--tag-hover-bd);box-shadow:0 0 15px var(--tag-hover-glow);transform:scale(1.05);}
+  .game-tag:hover{background:var(--tag-hover-bg);border-color:var(--tag-hover-bd);box-shadow:0 0 20px var(--tag-hover-glow);transform:translateY(-3px) scale(1.07);animation:tag-bounce .6s var(--ease-play);}
+  .favorite-tags .game-tag{display:inline-block;}
 
   /* ══ SONG CARDS ══ */
-  .song-card{position:relative;display:flex;flex-direction:column;border-radius:20px;overflow:hidden;text-decoration:none;border:1px solid var(--border);transition:transform .35s cubic-bezier(0.4,0,0.2,1),box-shadow .35s ease,border-color .35s ease,background var(--transition-theme);background:var(--surface);cursor:pointer;}
-  .song-card:hover{transform:translateY(-6px) scale(1.02);border-color:var(--border-hover);box-shadow:0 0 0 1px var(--border-hover),0 20px 60px rgba(0,0,0,.12),0 0 40px var(--glow1);}
+  .song-card{position:relative;display:flex;flex-direction:column;border-radius:20px;overflow:hidden;text-decoration:none;border:1px solid var(--border);transition:transform .55s var(--ease-premium),box-shadow .55s ease,border-color .4s ease,background var(--transition-theme),filter .4s ease;background:var(--surface);cursor:pointer;}
+  .song-card:hover{transform:translateY(-10px) scale(1.03) rotate(-.8deg);border-color:var(--border-hover);box-shadow:0 0 0 1px var(--border-hover),0 24px 64px rgba(0,0,0,.14),0 0 48px var(--glow1);filter:brightness(1.02);}
   .song-art-banner{position:relative;width:100%;height:140px;overflow:hidden;flex-shrink:0;}
-  .song-art-banner img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(0.4,0,0.2,1),filter .5s ease;filter:brightness(.85) saturate(.9);}
-  .song-card:hover .song-art-banner img{transform:scale(1.08);filter:brightness(1) saturate(1.1);}
+  .song-art-banner img{width:100%;height:100%;object-fit:cover;transition:transform .75s var(--ease-premium),filter .65s var(--ease-premium);filter:brightness(.82) saturate(.88) blur(1.5px);}
+  .song-card:hover .song-art-banner img{transform:scale(1.1);filter:brightness(1.05) saturate(1.12) blur(0);}
   .song-art-banner::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,rgba(0,0,0,.75) 100%);}
   .song-spotify-badge{position:absolute;top:10px;right:10px;z-index:2;width:28px;height:28px;background:#1db954;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 12px rgba(29,185,84,.6);opacity:0;transform:scale(.7);transition:opacity .25s,transform .25s;}
   .song-card:hover .song-spotify-badge{opacity:1;transform:scale(1);}
@@ -347,70 +440,120 @@
   .song-card:hover .song-color-bar{transform:scaleX(1);}
 
   /* ══ CAT + MISC ══ */
-  .cat-btn{width:110px;height:110px;border-radius:24px;overflow:hidden;border:3px solid var(--border);object-fit:cover;transition:all .25s ease;box-shadow:0 0 20px rgba(0,0,0,.2);}
-  .cat-btn:hover{transform:scale(1.12) rotate(8deg);border-color:var(--accent);box-shadow:0 0 25px var(--glow2);}
-  .social-link{color:var(--text-muted);font-size:14px;text-decoration:none;transition:all .2s;padding:6px 12px;border-radius:8px;border:1px solid transparent;}
-  .social-link:hover{color:var(--text);border-color:var(--social-border-h);background:var(--social-hover);}
-  .special-btn{background:var(--btn-bg);color:var(--btn-text);padding:12px 72px;border-radius:14px;font-weight:700;font-family:'Space Mono',monospace;border:none;cursor:pointer;transition:all .2s ease;letter-spacing:.05em;}
-  .special-btn:hover{transform:scale(1.08);box-shadow:0 0 40px var(--glow1),0 0 80px var(--glow2);}
-  .special-btn:active{transform:scale(.94);}
+  .cat-corner{cursor:pointer;transition:transform .5s var(--ease-play);will-change:transform;}
+  .cat-corner--left{transform-origin:bottom left;}
+  .cat-corner--right{transform-origin:bottom right;}
+  .cat-corner:hover{transform:scale(1.08) rotate(6deg);}
+  .cat-corner:active{transform:scale(1.02) rotate(2deg);transition-duration:.15s;}
+  .cat-btn{display:block;width:110px;height:110px;border-radius:24px;overflow:hidden;border:3px solid var(--border);object-fit:cover;transition:box-shadow .5s ease,border-color .35s ease,filter .45s ease;box-shadow:0 0 20px rgba(0,0,0,.2);pointer-events:none;}
+  .cat-corner:hover .cat-btn{border-color:var(--accent);box-shadow:0 0 32px var(--glow2);filter:brightness(1.05);}
+  .social-link{color:var(--text-muted);font-size:14px;text-decoration:none;transition:transform .35s var(--ease-premium),color .25s ease,background .25s ease,border-color .25s ease,filter .35s ease;padding:6px 12px;border-radius:8px;border:1px solid transparent;}
+  .social-link:hover{color:var(--text);border-color:var(--social-border-h);background:var(--social-hover);transform:translateY(-2px);filter:blur(0);}
+  .special-btn{background:var(--btn-bg);color:var(--btn-text);padding:12px 72px;border-radius:14px;font-weight:700;font-family:'Space Mono',monospace;border:none;cursor:pointer;transition:transform .45s var(--ease-play),box-shadow .45s ease,filter .35s ease;letter-spacing:.05em;position:relative;}
+  .special-btn:hover{transform:translateY(-4px) scale(1.06);box-shadow:0 0 48px var(--glow1),0 0 90px var(--glow2);filter:brightness(1.08);}
+  .special-btn:active{transform:translateY(0) scale(.96);transition-duration:.12s;}
 
-  /* ══ CLOCK ══ */
-  .clock{display:flex;}
-  .clock div{display:flex;flex-direction:column;justify-content:center;align-items:center;width:100px;height:100px;margin:10px;text-align:center;background:var(--surface);border-radius:16px;cursor:pointer;border:1px solid var(--border);transition:background var(--transition-theme),border-color var(--transition-theme);}
-  .clock div span{font-size:40px;font-weight:700;color:var(--clock-num);transition:color var(--transition-theme);}
-  .clock div p{font-size:11px;letter-spacing:.1em;color:var(--clock-label);margin:4px 0 0;transition:color var(--transition-theme);}
-  @media(max-width:500px){.clock div{width:70px;height:70px;margin:5px;}.clock div span{font-size:25px;}}
+  /* ══ IMAGE TILES ══ */
+  .img-tile{opacity:0;filter:blur(10px);transform:translateY(20px) scale(.96);transition:opacity .7s var(--ease-premium),filter .7s var(--ease-premium),transform .7s var(--ease-play),box-shadow .4s ease,border-color .35s ease;}
+  .card-reveal.in-view .img-tile{opacity:1;filter:blur(0);transform:translateY(0) scale(1);}
+  .card-reveal.in-view .img-tile:nth-child(1){transition-delay:.1s;}
+  .card-reveal.in-view .img-tile:nth-child(2){transition-delay:.18s;}
+  .card-reveal.in-view .img-tile:nth-child(3){transition-delay:.26s;}
+  .card-reveal.in-view .img-tile:nth-child(4){transition-delay:.34s;}
+  .img-tile:hover{transform:translateY(-6px) scale(1.04) rotate(.5deg)!important;box-shadow:0 0 28px var(--glow1);border-color:var(--accent)!important;}
+  .img-tile img{transition:transform .65s var(--ease-premium),filter .5s ease;filter:blur(.5px) brightness(.9);}
+  .img-tile:hover img{transform:scale(1.06);filter:blur(0) brightness(1);}
+
+  /* ══ CLOCK / BIRTHDAY COUNTDOWN ══ */
+  .clock-card{padding:20px 16px 24px;}
+  .clock{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px;width:100%;max-width:100%;}
+  .clock-unit{flex:0 0 auto;display:flex;flex-direction:column;justify-content:center;align-items:center;min-width:88px;width:100px;height:100px;padding:8px;box-sizing:border-box;text-align:center;background:var(--surface);border-radius:16px;border:1px solid var(--border);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:transform .45s var(--ease-play),box-shadow .45s ease,border-color .35s ease;}
+  .clock-unit:hover{transform:translateY(-5px) scale(1.04);box-shadow:0 0 24px var(--glow1);border-color:var(--border-hover);}
+  .clock-unit span{display:block;font-size:40px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums;color:var(--clock-num);transition:color var(--transition-theme);}
+  .clock-unit p{font-size:11px;letter-spacing:.1em;color:var(--clock-label);margin:6px 0 0;transition:color var(--transition-theme);}
+  .clock span.tick-pop{display:inline-block;animation:clock-pop .55s var(--ease-play);}
+  @media(max-width:500px){.clock{gap:8px;}.clock-unit{min-width:72px;width:76px;height:76px;}.clock-unit span{font-size:28px;}}
 
   /* ══ MUSIC PLAYER ══ */
-  #bg-music-player{position:fixed;bottom:140px;left:16px;z-index:9998;width:56px;transition:width .4s cubic-bezier(0.4,0,0.2,1),border-radius .4s,background var(--transition-theme),border-color var(--transition-theme);border-radius:999px;overflow:hidden;background:var(--bmp-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--bmp-bd);box-shadow:0 0 24px var(--glow1);}
-  #bg-music-player.expanded{width:300px;border-radius:20px;}
-  .bmp-collapsed{display:flex;align-items:center;justify-content:center;width:56px;height:56px;flex-shrink:0;}
-  .bmp-toggle{background:none;border:none;cursor:pointer;color:var(--accent);display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;transition:all .2s;}
-  .bmp-toggle:hover{background:var(--glow2);transform:scale(1.1);}
-  .bmp-mini-viz{display:flex;align-items:flex-end;gap:2px;height:14px;}
-  .bmp-mini-viz span{width:3px;border-radius:2px;background:linear-gradient(to top,var(--accent),var(--accent2));animation:bar-dance .8s ease-in-out infinite alternate;}
-  .bmp-mini-viz span:nth-child(1){height:6px;animation-duration:.7s;}
-  .bmp-mini-viz span:nth-child(2){height:12px;animation-duration:.9s;animation-delay:.1s;}
-  .bmp-mini-viz span:nth-child(3){height:8px;animation-duration:.6s;animation-delay:.05s;}
-  .bmp-mini-viz.paused span{animation-play-state:paused;}
-  @keyframes bar-dance{from{transform:scaleY(.3);opacity:.5}to{transform:scaleY(1);opacity:1}}
-  .bmp-panel{display:flex;flex-direction:column;gap:10px;padding:14px 16px 14px 14px;min-width:300px;}
+  #bg-music-player{position:fixed;bottom:140px;left:16px;z-index:9998;width:60px;transition:width .5s var(--ease-premium),border-radius .5s var(--ease-premium),box-shadow .5s ease,border-color .4s ease;background:var(--bmp-bg);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--bmp-bd);border-radius:999px;overflow:hidden;box-shadow:0 0 20px var(--glow1),0 8px 32px rgba(0,0,0,.25);}
+  #bg-music-player.is-playing{box-shadow:0 0 28px var(--glow1),0 0 48px var(--glow2),0 8px 32px rgba(0,0,0,.25);}
+  #bg-music-player.expanded{width:320px;border-radius:22px;box-shadow:0 0 40px var(--glow1),0 16px 48px rgba(0,0,0,.3);}
+  .bmp-collapsed{display:flex;align-items:center;justify-content:center;width:60px;height:60px;flex-shrink:0;}
+  .bmp-toggle{position:relative;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:50%;transition:transform .45s var(--ease-play);}
+  .bmp-toggle:hover{transform:scale(1.08);}
+  .bmp-toggle-ring{position:absolute;inset:0;border-radius:50%;border:1px solid var(--bmp-bd);transition:border-color .4s ease,box-shadow .4s ease;}
+  #bg-music-player.is-playing .bmp-toggle-ring{border-color:var(--accent);box-shadow:0 0 0 3px var(--glow2),inset 0 0 12px var(--glow1);animation:bmp-ring-pulse 2.2s ease-in-out infinite;}
+  @keyframes bmp-ring-pulse{0%,100%{box-shadow:0 0 0 2px var(--glow2),inset 0 0 8px var(--glow1)}50%{box-shadow:0 0 0 5px var(--glow1),inset 0 0 16px var(--glow2)}}
+  .bmp-mini-viz{position:relative;z-index:1;display:flex;align-items:flex-end;justify-content:center;gap:3px;height:18px;padding-bottom:1px;}
+  .bmp-mini-viz span{width:4px;border-radius:3px;background:linear-gradient(to top,var(--accent2),var(--accent));box-shadow:0 0 8px var(--glow2);transform-origin:bottom;animation:bar-dance .85s var(--ease-play) infinite alternate;}
+  .bmp-mini-viz span:nth-child(1){height:7px;animation-duration:.65s;}
+  .bmp-mini-viz span:nth-child(2){height:16px;animation-duration:.95s;animation-delay:.08s;}
+  .bmp-mini-viz span:nth-child(3){height:11px;animation-duration:.75s;animation-delay:.04s;}
+  .bmp-mini-viz span:nth-child(4){height:8px;animation-duration:.55s;animation-delay:.12s;}
+  .bmp-mini-viz.paused span{animation-play-state:paused;opacity:.45;transform:scaleY(.35);}
+  @keyframes bar-dance{0%{transform:scaleY(.25);opacity:.55}50%{transform:scaleY(1.05);opacity:1}100%{transform:scaleY(.5);opacity:.7}}
+  .bmp-panel{display:flex;flex-direction:column;gap:12px;padding:16px 18px 16px;min-width:320px;position:relative;}
+  .bmp-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent);opacity:.7;}
   .bmp-header{display:flex;align-items:center;justify-content:space-between;}
-  .bmp-label{font-family: -apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim);display:flex;align-items:center;gap:6px;}
-  .bmp-close{background:none;border:none;cursor:pointer;color:var(--text-dim);padding:2px;border-radius:4px;transition:color .2s;font-size:16px;line-height:1;}
-  .bmp-close:hover{color:var(--text);}
-  .bmp-track-info{display:flex;flex-direction:column;gap:2px;}
-  .bmp-track-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-  .bmp-track-index{font-family:'Space Mono',monospace;font-size:9px;color:var(--text-dim);}
-  .bmp-playlist{max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(0.4,0,0.2,1);}
-  .bmp-playlist.open{max-height:200px;}
-  .bmp-playlist-inner{display:flex;flex-direction:column;gap:2px;max-height:180px;overflow-y:auto;padding:4px 0;scrollbar-width:thin;scrollbar-color:var(--glow2) transparent;}
-  .bmp-playlist-item{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;cursor:pointer;font-family:'Space Mono',monospace;font-size:11px;color:var(--text-muted);transition:all .18s;border:1px solid transparent;}
-  .bmp-playlist-item:hover{background:var(--glow2);color:var(--text);}
+  .bmp-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);display:flex;align-items:center;gap:7px;}
+  .bmp-label svg{filter:drop-shadow(0 0 6px var(--glow2));}
+  .bmp-close{background:var(--surface);border:1px solid var(--border);cursor:pointer;color:var(--text-muted);width:26px;height:26px;border-radius:8px;transition:transform .35s var(--ease-play),color .25s ease,background .25s ease,border-color .25s ease;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;}
+  .bmp-close:hover{color:var(--text);background:var(--glow2);border-color:var(--border-hover);transform:rotate(90deg) scale(1.05);}
+  .bmp-track-row{display:flex;align-items:center;gap:12px;}
+  .bmp-track-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;}
+  .bmp-track-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .bmp-track-index{font-family:'Space Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:.06em;}
+  .bmp-panel-viz{display:flex;align-items:flex-end;gap:3px;height:22px;flex-shrink:0;padding:4px 8px;background:var(--surface);border:1px solid var(--border);border-radius:10px;}
+  .bmp-panel-viz span{width:3px;border-radius:2px;background:linear-gradient(to top,var(--accent2),var(--accent));box-shadow:0 0 6px var(--glow2);transform-origin:bottom;animation:bar-dance .8s var(--ease-play) infinite alternate;}
+  .bmp-panel-viz span:nth-child(1){height:6px;animation-duration:.6s;}
+  .bmp-panel-viz span:nth-child(2){height:14px;animation-duration:.85s;animation-delay:.06s;}
+  .bmp-panel-viz span:nth-child(3){height:9px;animation-duration:.7s;animation-delay:.03s;}
+  .bmp-panel-viz span:nth-child(4){height:12px;animation-duration:.5s;animation-delay:.1s;}
+  .bmp-panel-viz.paused span{animation-play-state:paused;opacity:.35;transform:scaleY(.3);}
+  .bmp-progress-wrap{display:flex;flex-direction:column;gap:6px;}
+  .bmp-progress-track{height:5px;background:rgba(255,255,255,.08);border-radius:999px;cursor:pointer;position:relative;overflow:visible;}
+  .bmp-progress-track::before{content:'';position:absolute;inset:0;border-radius:999px;background:var(--border);opacity:.5;}
+  .bmp-progress-fill{position:relative;z-index:1;height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent));background-size:200% 100%;box-shadow:0 0 12px var(--glow2);transition:width .25s linear;}
+  #bg-music-player.is-playing .bmp-progress-fill{animation:bmp-progress-shine 3s linear infinite;}
+  @keyframes bmp-progress-shine{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+  .bmp-progress-fill::after{content:'';position:absolute;right:-5px;top:50%;transform:translateY(-50%);width:10px;height:10px;background:var(--text);border-radius:50%;box-shadow:0 0 10px var(--accent),0 0 20px var(--glow2);opacity:0;transition:opacity .25s ease,transform .25s var(--ease-play);}
+  .bmp-progress-track:hover .bmp-progress-fill::after{opacity:1;transform:translateY(-50%) scale(1.15);}
+  .bmp-time{font-family:'Space Mono',monospace;font-size:9px;color:var(--text-dim);display:flex;justify-content:space-between;}
+  .bmp-controls{display:flex;align-items:center;justify-content:center;gap:6px;padding:4px 0;}
+  .bmp-ctrl{background:transparent;border:1px solid transparent;cursor:pointer;color:var(--text-muted);padding:8px;border-radius:12px;transition:transform .4s var(--ease-play),color .25s ease,background .25s ease,border-color .25s ease,box-shadow .25s ease;display:flex;align-items:center;justify-content:center;}
+  .bmp-ctrl:hover{color:var(--text);background:var(--surface-hover);border-color:var(--border);transform:translateY(-2px);box-shadow:0 0 14px var(--glow1);}
+  .bmp-ctrl.active{color:var(--accent);background:var(--glow1);border-color:var(--glow2);box-shadow:0 0 16px var(--glow2);}
+  .bmp-play{position:relative;width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .45s var(--ease-play),box-shadow .45s ease;margin:0 4px;}
+  .bmp-play::before{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid var(--accent);opacity:0;transition:opacity .35s ease;}
+  #bg-music-player.is-playing .bmp-play::before{opacity:.5;animation:bmp-play-ring 2s ease-out infinite;}
+  @keyframes bmp-play-ring{0%{transform:scale(.95);opacity:.6}100%{transform:scale(1.35);opacity:0}}
+  .bmp-play:hover{transform:scale(1.1);box-shadow:0 0 28px var(--glow1),0 0 48px var(--glow2);}
+  .bmp-play:active{transform:scale(.94);}
+  .bmp-vol-row{display:flex;align-items:center;gap:10px;padding-top:2px;}
+  .bmp-vol-icon{color:var(--text-dim);flex-shrink:0;opacity:.8;}
+  .bmp-vol-slider{-webkit-appearance:none;appearance:none;flex:1;height:4px;border-radius:999px;background:var(--border);outline:none;cursor:pointer;}
+  .bmp-vol-slider::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));cursor:pointer;box-shadow:0 0 10px var(--glow2);transition:transform .35s var(--ease-play);}
+  .bmp-vol-slider:hover::-webkit-slider-thumb{transform:scale(1.25);}
+  .bmp-vol-slider::-moz-range-thumb{width:12px;height:12px;border:none;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 0 10px var(--glow2);}
+  .bmp-playlist{max-height:0;overflow:hidden;transition:max-height .45s var(--ease-premium),opacity .35s ease;margin-top:-4px;opacity:0;}
+  .bmp-playlist.open{max-height:210px;opacity:1;margin-top:0;}
+  .bmp-playlist-inner{display:flex;flex-direction:column;gap:4px;max-height:190px;overflow-y:auto;padding:6px 2px 2px;scrollbar-width:thin;scrollbar-color:var(--accent) transparent;}
+  .bmp-playlist-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;cursor:pointer;font-family:'Space Mono',monospace;font-size:11px;color:var(--text-muted);transition:transform .35s var(--ease-play),background .3s ease,color .25s ease,border-color .25s ease;border:1px solid transparent;position:relative;}
+  .bmp-playlist-item::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:0;border-radius:0 3px 3px 0;background:linear-gradient(var(--accent),var(--accent2));transition:height .35s var(--ease-play);}
+  .bmp-playlist-item:hover{background:var(--glow2);color:var(--text);transform:translateX(3px);}
   .bmp-playlist-item.active{background:var(--glow1);border-color:var(--glow2);color:var(--accent);}
-  .bmp-playlist-num{font-size:9px;color:var(--text-dim);min-width:14px;}
-  .bmp-playlist-item.active .bmp-playlist-num{color:var(--accent);}
-  .bmp-progress-track{height:3px;background:var(--border);border-radius:999px;cursor:pointer;position:relative;}
-  .bmp-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:999px;transition:width .4s linear;position:relative;}
-  .bmp-progress-fill::after{content:'';position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:8px;height:8px;background:var(--text);border-radius:50%;box-shadow:0 0 8px var(--glow2);opacity:0;transition:opacity .2s;}
-  .bmp-progress-track:hover .bmp-progress-fill::after{opacity:1;}
-  .bmp-time{font-family:'Space Mono',monospace;font-size:9px;color:var(--text-dim);display:flex;justify-content:space-between;margin-top:-4px;}
-  .bmp-controls{display:flex;align-items:center;justify-content:center;gap:8px;}
-  .bmp-ctrl{background:none;border:none;cursor:pointer;color:var(--text-muted);padding:6px;border-radius:8px;transition:all .2s;display:flex;align-items:center;justify-content:center;}
-  .bmp-ctrl:hover{color:var(--text);background:var(--surface-hover);transform:scale(1.1);}
-  .bmp-ctrl.active{color:var(--accent);}
-  .bmp-play{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;box-shadow:0 0 16px var(--glow1);}
-  .bmp-play:hover{transform:scale(1.1);box-shadow:0 0 24px var(--glow2);}
-  .bmp-play:active{transform:scale(.93);}
-  .bmp-vol-row{display:flex;align-items:center;gap:8px;}
-  .bmp-vol-icon{color:var(--text-dim);flex-shrink:0;}
-  .bmp-vol-slider{-webkit-appearance:none;appearance:none;flex:1;height:3px;border-radius:999px;background:var(--border);outline:none;cursor:pointer;}
-  .bmp-vol-slider::-webkit-slider-thumb{-webkit-appearance:none;width:11px;height:11px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));cursor:pointer;box-shadow:0 0 6px var(--glow2);transition:transform .15s;}
-  .bmp-vol-slider:hover::-webkit-slider-thumb{transform:scale(1.3);}
+  .bmp-playlist-item.active::before{height:70%;}
+  .bmp-playlist-num{font-size:9px;color:var(--text-dim);min-width:16px;opacity:.7;}
+  .bmp-playlist-item.active .bmp-playlist-num{color:var(--accent);opacity:1;}
   #bg-music-player .bmp-panel{display:none;}
   #bg-music-player.expanded .bmp-collapsed{display:none;}
-  #bg-music-player.expanded .bmp-panel{display:flex;}
+  #bg-music-player.expanded .bmp-panel{display:flex;animation:bmp-panel-in .5s var(--ease-premium);}
+  @keyframes bmp-panel-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  @media(prefers-reduced-motion:reduce){
+    #bg-music-player.is-playing .bmp-toggle-ring,#bg-music-player.is-playing .bmp-progress-fill,#bg-music-player.is-playing .bmp-play::before{animation:none!important;}
+    .bmp-mini-viz span,.bmp-panel-viz span{animation:none!important;}
+    #bg-music-player.expanded .bmp-panel{animation:none!important;}
+  }
 
   /* ══ GAME ══ */
   #game-canvas-wrapper{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--border);box-shadow:0 0 30px var(--glow1),inset 0 0 60px rgba(0,0,0,.2);transition:border-color var(--transition-theme),box-shadow var(--transition-theme);}
@@ -427,6 +570,11 @@
   #game-start-btn:hover{transform:scale(1.08);box-shadow:0 0 35px var(--glow2);}
   #game-final-score{font-family:'Syne',sans-serif;font-size:16px;color:var(--accent);display:none;}
   #game-hint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);pointer-events:none;white-space:nowrap;}
+  #game-panels{position:relative;min-height:380px;}
+  #game-panels .game-panel{display:none!important;visibility:hidden!important;height:0!important;overflow:hidden!important;margin:0!important;padding:0!important;border:none!important;}
+  #game-panels .game-panel.active{display:block!important;visibility:visible!important;height:auto!important;overflow:visible!important;animation:gamePanelIn .65s var(--ease-premium);}
+  @keyframes gamePanelIn{from{opacity:0;filter:blur(14px);transform:translateY(20px) scale(.98);}to{opacity:1;filter:blur(0);transform:translateY(0) scale(1);}}
+  #next-game-btn{margin-top:4px;}
 
   /* ══ MISC ══ */
   .ps-bottom-right{position:fixed;bottom:0px;right:-400px;z-index:9999;pointer-events:none;}
@@ -442,8 +590,8 @@
   .showcase-label::before,.showcase-label::after{content:'';width:28px;height:1px;background:var(--accent);opacity:.5;}
 
   .photo-bento{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;}
-  .pb-item{border-radius:18px;overflow:hidden;position:relative;background:var(--surface);border:1px solid var(--border);transition:transform .5s cubic-bezier(0.34,1.56,.64,1),box-shadow .5s ease,border-color .4s ease;}
-  .pb-item:hover{transform:translateY(-4px) scale(1.01);border-color:var(--accent);box-shadow:0 0 30px var(--glow1),0 16px 40px rgba(0,0,0,.25);z-index:2;}
+  .pb-item{border-radius:18px;overflow:hidden;position:relative;background:var(--surface);border:1px solid var(--border);}
+  .pb-item:hover{transform:translateY(-6px) scale(1.02) rotate(.3deg)!important;border-color:var(--accent);box-shadow:0 0 36px var(--glow1),0 20px 44px rgba(0,0,0,.25);z-index:2;filter:blur(0)!important;}
   .pb-1{grid-column:1/8;grid-row:1/3;min-height:340px;}
   .pb-2{grid-column:8/13;grid-row:1/2;min-height:160px;}
   .pb-3{grid-column:8/13;grid-row:2/3;min-height:160px;}
@@ -511,17 +659,21 @@
   <div id="cursor-click-label">click</div>
 
   <!-- LOADING -->
-<div id="loading-screen">
-  <div style="position:relative;">
-    <div class="loader-logo glitch-text" id="glitch-logo" data-text="✦ ICEVERSE ✦" style="position:relative;overflow:visible;">
-      ✦ ICE<span id="gc1" style="display:inline-block;color:#f472b6;">$</span>ERS<span id="gc2" style="display:inline-block;color:#38bdf8;">%</span> ✦
+  <div id="loading-screen">
+    <div class="loader-sweep" aria-hidden="true"></div>
+    <div class="loader-content">
+      <p class="loader-welcome">Welcome...</p>
+      <div class="loader-logo-wrap">
+        <div class="loader-logo glitch-text" id="glitch-logo" data-text="✦ ICEVERSE ✦" style="position:relative;overflow:visible;">
+          ✦ ICE<span id="gc1" style="display:inline-block;color:#f472b6;">$</span>ERS<span id="gc2" style="display:inline-block;color:#38bdf8;">%</span> ✦
+        </div>
+        <div style="position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(192,132,252,.6),transparent);animation:scan-anim 2s linear infinite;opacity:.4;pointer-events:none;"></div>
+      </div>
+      <div class="loader-sub-glitch" id="loader-sub">initializing...</div>
+      <div class="loader-bar-track"><div class="loader-bar-fill"></div></div>
+      <div class="loader-dots"><span></span><span></span><span></span></div>
     </div>
-    <div style="position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(192,132,252,.6),transparent);animation:scan-anim 2s linear infinite;opacity:.4;pointer-events:none;"></div>
   </div>
-  <div class="loader-sub-glitch" id="loader-sub">initializing...</div>
-  <div class="loader-bar-track"><div class="loader-bar-fill"></div></div>
-  <div class="loader-dots"><span></span><span></span><span></span></div>
-</div>
 
   <div id="cursor-glow"></div>
   <canvas id="galaxy-canvas"></canvas>
@@ -537,24 +689,30 @@
   <!-- BG MUSIC PLAYER -->
   <div id="bg-music-player">
     <div class="bmp-collapsed">
-      <button class="bmp-toggle" onclick="toggleBmpExpand()" title="Music controls">
-        <div class="bmp-mini-viz paused" id="bmpMiniViz"><span></span><span></span><span></span></div>
+      <button class="bmp-toggle" onclick="toggleBmpExpand()" title="Music controls" aria-label="Open music player">
+        <span class="bmp-toggle-ring" aria-hidden="true"></span>
+        <div class="bmp-mini-viz paused" id="bmpMiniViz"><span></span><span></span><span></span><span></span></div>
       </button>
     </div>
     <div class="bmp-panel">
       <div class="bmp-header">
         <span class="bmp-label">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" style="color:var(--accent)"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="color:var(--accent)"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
           Background Music
         </span>
-        <button class="bmp-close" onclick="toggleBmpExpand()">x</button>
+        <button class="bmp-close" onclick="toggleBmpExpand()" aria-label="Close music player">×</button>
       </div>
-      <div class="bmp-track-info">
-        <div class="bmp-track-name" id="bmpTrackName">—</div>
-        <div class="bmp-track-index" id="bmpTrackIndex">1 / 1</div>
+      <div class="bmp-track-row">
+        <div class="bmp-track-info">
+          <div class="bmp-track-name" id="bmpTrackName">—</div>
+          <div class="bmp-track-index" id="bmpTrackIndex">1 / 1</div>
+        </div>
+        <div class="bmp-panel-viz paused" id="bmpPanelViz"><span></span><span></span><span></span><span></span></div>
       </div>
-      <div class="bmp-progress-track" id="bmpProgressTrack"><div class="bmp-progress-fill" id="bmpProgressFill"></div></div>
-      <div class="bmp-time"><span id="bmpCurrent">0:00</span><span id="bmpTotal">0:00</span></div>
+      <div class="bmp-progress-wrap">
+        <div class="bmp-progress-track" id="bmpProgressTrack"><div class="bmp-progress-fill" id="bmpProgressFill"></div></div>
+        <div class="bmp-time"><span id="bmpCurrent">0:00</span><span id="bmpTotal">0:00</span></div>
+      </div>
       <div class="bmp-controls">
         <button class="bmp-ctrl" onclick="bmpPrev()"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 20L9 12l10-8v16z"/><rect x="5" y="4" width="2" height="16"/></svg></button>
         <button class="bmp-play" id="bmpPlayBtn" onclick="toggleBgPlay()"><svg id="bmpPlayIcon" width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></button>
@@ -575,88 +733,50 @@
     <!-- HEADER — .reveal items fire top-to-bottom with 150ms stagger each -->
     <header class="text-center mb-20 mt-16">
   <div class="flex justify-center mb-8 reveal">
-    <div class="profile-ring"><div class="profile-ring-inner"><img src="626565681_17924096514230683_1935262150362279863_n.jpg" alt="Profile" class="object-cover w-full h-full"></div></div>
+    <div class="profile-wrap">
+      <div class="profile-float">
+        <div class="profile-ring"><div class="profile-ring-inner"><img src="626565681_17924096514230683_1935262150362279863_n.jpg" alt="Profile" class="object-cover w-full h-full"></div></div>
+      </div>
+    </div>
   </div>
 
-  <!-- GREETING FRAME — fixed height prevents layout shift -->
-  <div class="reveal" style="
-    min-height: 160px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    padding: 28px 32px;
-    margin: 0 auto 16px;
-    max-width: 640px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 24px;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 0 40px var(--glow1), 0 0 0 1px var(--border);
-    position: relative;
-    overflow: hidden;
-  ">
-    <!-- shimmer top line -->
-    <div style="position:absolute;top:0;left:0;right:0;height:1px;background:var(--card-top);"></div>
-
-    <!-- corner label -->
-
-
-    <!-- blinking cursor indicator -->
-    <div style="
-      position: absolute;
-      top: 10px; right: 14px;
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 8px var(--accent);
-      animation: pulse-logo 1.5s ease-in-out infinite;
-    "></div>
-
-    <!-- H1 greeting — fixed height so it never shifts layout -->
-    <h1 id="time-greeting" style="
-      font-family: 'Unbounded', sans-serif;
-      font-size: clamp(1.6rem, 5vw, 3rem);
-      font-weight: 900;
-      letter-spacing: -0.02em;
-      line-height: 1.15;
-      margin: 0;
-      min-height: 1.3em;
-      width: 100%;
-      text-align: center;
-      background: var(--title-grad);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(0 0 20px var(--glow1));
-    "></h1>
-
-    <!-- divider -->
-    <div style="width: 48px; height: 1px; background: var(--border); border-radius: 999px;"></div>
-
-    <!-- sub line — fixed height too -->
-    <p id="time-greeting-sub" style="
-      font-family: 'Space Mono', monospace;
-      font-size: clamp(0.75rem, 2vw, 1rem);
-      font-weight: 700;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin: 0;
-      min-height: 1.4em;
-      width: 100%;
-      text-align: center;
-    "></p>
+  <!-- GREETING CARD (above Discord mini profile) -->
+  <div class="greeting-card reveal" id="greeting-card">
+    <div class="greeting-top-line" aria-hidden="true"></div>
+    <span class="greeting-live-dot" aria-hidden="true"></span>
+    <div class="greeting-title-row greeting-enter greeting-enter--1">
+      <h1 id="time-greeting"></h1>
+    </div>
+    <div class="greeting-divider greeting-enter greeting-enter--2"></div>
+    <div class="greeting-sub-row greeting-enter greeting-enter--3">
+      <p id="time-greeting-sub"></p>
+    </div>
   </div>
 
-  <div id="discord-status" class="flex items-center justify-center gap-2 mt-4 reveal">
-    <div id="status-dot" class="w-3 h-3 rounded-full" style="background:#80848e;box-shadow:0 0 6px #80848e"></div>
-    <span id="status-text" class="text-sm font-mono" style="color:var(--text-muted)">Loading...</span>
-  </div>
+  <!-- DISCORD MINI PROFILE (Lanyard) — sticks on scroll -->
+  <a href="https://www.youtube.com/watch?v=QDia3e12czc" target="_blank" rel="noopener" class="discord-card reveal block no-underline" id="discord-card" aria-label="Discord profile">
+    <div class="discord-card__inner">
+      <div class="discord-card__banner" id="dc-banner">
+        <img id="dc-banner-img" class="discord-card__banner-img is-hidden" src="" alt="">
+        <div class="discord-card__banner-fade" aria-hidden="true"></div>
+      </div>
+      <div class="discord-card__body">
+        <div class="discord-card__avatar-wrap">
+          <img id="dc-avatar" class="discord-card__avatar" src="" alt="Discord avatar" width="84" height="84">
+          <span id="dc-status-dot" class="discord-card__status" style="background:#80848e" aria-hidden="true"></span>
+        </div>
+        <h3 class="discord-card__display" id="dc-display-name">ssnmhjjg</h3>
+        <p class="discord-card__user" id="dc-username">ssnmhjjg</p>
+        <div class="discord-card__custom is-hidden" id="dc-custom-status"></div>
+        <div class="discord-card__activity is-hidden" id="dc-activity"></div>
+        <div class="discord-card__status-row">
+          <span class="discord-card__status-pill" id="dc-status-label">Loading…</span>
+        </div>
+      </div>
+    </div>
+  </a>
 
-  <div class="flex items-center justify-center gap-4 mt-6 reveal">
+  <div class="flex items-center justify-center gap-4 mt-8 reveal">
     <div class="h-px w-24" style="background:linear-gradient(to right,transparent,var(--accent))"></div>
     <span style="color:var(--accent);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;font-family:'Space Mono',monospace;">ssnmhjjg</span>
     <div class="h-px w-24" style="background:linear-gradient(to left,transparent,var(--accent))"></div>
@@ -745,9 +865,9 @@
       <!-- FAVORITE GAMES -->
       <div class="glass-card p-8 card-reveal">
         <h2 class="text-2xl font-bold mb-6 flex items-center gap-3" style="color:var(--text);font-family:'Syne',sans-serif;"><span>🎮</span> Favorite Games</h2>
-        <div class="flex flex-wrap gap-3">
-          <span class="game-tag">Body Cam</span><span class="game-tag">RDR 2</span>
-          <span class="game-tag">Roblox</span><span class="game-tag">CS2</span><span class="game-tag">Titanfall 2</span>
+        <div class="flex flex-wrap gap-3 favorite-tags">
+          <span class="game-tag stagger-child">Body Cam</span><span class="game-tag stagger-child">RDR 2</span>
+          <span class="game-tag stagger-child">Roblox</span><span class="game-tag stagger-child">CS2</span><span class="game-tag stagger-child">Titanfall 2</span>
         </div>
       </div>
 
@@ -755,103 +875,102 @@
       <div class="glass-card p-8 card-reveal">
         <h2 class="text-2xl font-bold mb-8 flex items-center gap-3" style="color:var(--text);font-family:'Syne',sans-serif;"><span>📸</span> If I was in image I will be</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
-          <div class="aspect-square rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300" style="background:var(--surface);border:1px solid var(--border)"><img src="download (1).jpg" class="w-full h-full object-cover" alt="Trip"></div>
-          <div class="aspect-square rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300" style="background:var(--surface);border:1px solid var(--border)"><img src="download.jpg" class="w-full h-full object-cover" alt="Cat"></div>
-          <div class="aspect-square rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300" style="background:var(--surface);border:1px solid var(--border)"><img src="68c1123808436d0d56a87e2e_OWT037_HERO_gaming-setup_1200x674.jpg" class="w-full h-full object-cover" alt="Setup"></div>
-          <div class="aspect-square rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300" style="background:var(--surface);border:1px solid var(--border)"><img src="images.jpeg" class="w-full h-full object-cover" alt="Life"></div>
+          <div class="img-tile aspect-square rounded-2xl overflow-hidden" style="background:var(--surface);border:1px solid var(--border)"><img src="download (1).jpg" class="w-full h-full object-cover" alt="Trip"></div>
+          <div class="img-tile aspect-square rounded-2xl overflow-hidden" style="background:var(--surface);border:1px solid var(--border)"><img src="download.jpg" class="w-full h-full object-cover" alt="Cat"></div>
+          <div class="img-tile aspect-square rounded-2xl overflow-hidden" style="background:var(--surface);border:1px solid var(--border)"><img src="68c1123808436d0d56a87e2e_OWT037_HERO_gaming-setup_1200x674.jpg" class="w-full h-full object-cover" alt="Setup"></div>
+          <div class="img-tile aspect-square rounded-2xl overflow-hidden" style="background:var(--surface);border:1px solid var(--border)"><img src="images.jpeg" class="w-full h-full object-cover" alt="Life"></div>
         </div>
       </div>
 
       <!-- BIRTHDAY -->
       <a class="text-5xl font-extrabold glow-title mb-8 text-center block reveal" style="font-family:'Unbounded',sans-serif;">birthday in</a>
-      <div class="glass-card bg clock mb-10 text-center justify-center flex card-reveal">
-        <div><span id="days">00</span><p>DAYS</p></div>
-        <div><span id="hours">00</span><p>HOURS</p></div>
-        <div><span id="minutes">00</span><p>MINS</p></div>
-        <div><span id="seconds">00</span><p>SECS</p></div>
+      <div class="glass-card clock-card mb-10 card-reveal">
+        <div class="clock">
+          <div class="clock-unit"><span id="days">00</span><p>DAYS</p></div>
+          <div class="clock-unit"><span id="hours">00</span><p>HOURS</p></div>
+          <div class="clock-unit"><span id="minutes">00</span><p>MINS</p></div>
+          <div class="clock-unit"><span id="seconds">00</span><p>SECS</p></div>
+        </div>
       </div>
-      <div class="text"></div></div>
+
       <div class="glass-card p-8 card-reveal" id="game-section" style="margin-bottom: 24px;">
   <div class="flex items-center justify-between mb-2 flex-wrap gap-3">
-    <h2 class="text-2xl font-bold flex items-center gap-3" style="color:var(--text);font-family:'Syne',sans-serif;"><span>🕹️</span> Star Dodge</h2>
-    <div style="display:flex;gap:8px;">
-      <button onclick="document.getElementById('slot-section').scrollIntoView({behavior:'smooth'})" class="special-btn" style="padding:10px 22px;font-size:12px;">🎰 Slots</button>
-      <button onclick="document.getElementById('bj-section').scrollIntoView({behavior:'smooth'})" class="special-btn" style="padding:10px 22px;font-size:12px;">🃏 Blackjack</button>
-    </div>
+    <h2 class="text-2xl font-bold flex items-center gap-3" style="color:var(--text);font-family:'Syne',sans-serif;"><span id="game-hub-icon">🕹️</span> <span id="game-hub-title">Star Dodge</span></h2>
+    <span id="game-hub-counter" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:.08em;">1 / 3</span>
   </div>
-  <p class="text-sm mb-6 font-mono" style="color:var(--text-muted)">Dodge the purple meteors. Survive as long as you can!</p>
-  <div id="game-canvas-wrapper">
-    <canvas id="game-canvas"></canvas>
-    <div id="game-ui">
-      <div id="game-score-display">SCORE: <span id="score-val">0</span></div>
-      <div id="game-lives-display"><span class="life-heart" id="h1">♥</span><span class="life-heart" id="h2">♥</span><span class="life-heart" id="h3">♥</span></div>
+  <p id="game-hub-desc" class="text-sm mb-6 font-mono" style="color:var(--text-muted)">Dodge the purple meteors. Survive as long as you can!</p>
+  <div id="game-panels">
+    <div class="game-panel active" data-game="dodge" id="panel-dodge">
+      <div id="game-canvas-wrapper">
+        <canvas id="game-canvas"></canvas>
+        <div id="game-ui">
+          <div id="game-score-display">SCORE: <span id="score-val">0</span></div>
+          <div id="game-lives-display"><span class="life-heart" id="h1">♥</span><span class="life-heart" id="h2">♥</span><span class="life-heart" id="h3">♥</span></div>
+        </div>
+        <div id="game-overlay">
+          <h3 id="overlay-title">✦ STAR DODGE ✦</h3>
+          <p id="overlay-desc">Move your mouse / finger to dodge the meteors<br>Stars = +10 pts • Purple meteors = -1 life</p>
+          <div id="game-final-score"></div>
+          <button id="game-start-btn" onclick="startGame()">START GAME</button>
+        </div>
+        <div id="game-hint">← Move to dodge →</div>
+      </div>
     </div>
-    <div id="game-overlay">
-      <h3 id="overlay-title">✦ STAR DODGE ✦</h3>
-      <p id="overlay-desc">Move your mouse / finger to dodge the meteors<br>Stars = +10 pts • Purple meteors = -1 life</p>
-      <div id="game-final-score"></div>
-      <button id="game-start-btn" onclick="startGame()">START GAME</button>
-    </div>
-    <div id="game-hint">← Move to dodge →</div>
-  </div>
-</div> <div class="glass-card p-8 card-reveal" id="slot-section" style="margin-bottom: 24px;">
-  <h2 class="text-2xl font-bold mb-2 flex items-center gap-3" style="color:var(--text);font-family:'Syne',sans-serif;"><span>🎰</span> Slot Machine</h2>
-  <p class="text-sm mb-6 font-mono" style="color:var(--text-muted)">Spin the reels. Match symbols to win credits!</p>
-  <div style="text-align:center;">
-    <div id="sl-credits-disp" style="font-family:'Unbounded',sans-serif;font-size:28px;font-weight:900;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;">100 <span style="font-size:14px;-webkit-text-fill-color:var(--text-muted);color:var(--text-muted);">credits</span></div>
-    <div style="display:flex;justify-content:center;gap:12px;margin:20px 0;">
-      <div id="sr0" class="glass-card" style="width:80px;height:90px;display:flex;align-items:center;justify-content:center;font-size:42px;border-radius:16px;">🍒</div>
-      <div id="sr1" class="glass-card" style="width:80px;height:90px;display:flex;align-items:center;justify-content:center;font-size:42px;border-radius:16px;">🍋</div>
-      <div id="sr2" class="glass-card" style="width:80px;height:90px;display:flex;align-items:center;justify-content:center;font-size:42px;border-radius:16px;">⭐</div>
-    </div>
-    <div id="sl-msg" style="font-family:'Space Mono',monospace;font-size:13px;color:var(--text-muted);min-height:22px;margin:8px 0;">Place your bet and spin!</div>
-    <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin:12px 0;">
-      <button onclick="slChangeBet(-5)" class="game-tag" style="padding:6px 14px;">−</button>
-      <span style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--accent);min-width:40px;" id="sl-bet-val">10</span>
-      <button onclick="slChangeBet(5)" class="game-tag" style="padding:6px 14px;">+</button>
-      <span style="font-size:12px;color:var(--text-muted);">bet</span>
-    </div>
-    <button id="sl-spin-btn" onclick="doSlotSpin()" class="special-btn" style="padding:12px 48px;">🎰 SPIN</button>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border);">
-      <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--text-muted);text-align:center;">💎💎💎<br><span style="color:var(--accent);">×50</span></div>
-      <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--text-muted);text-align:center;">7️⃣7️⃣7️⃣<br><span style="color:var(--accent);">×20</span></div>
-      <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--text-muted);text-align:center;">⭐⭐⭐<br><span style="color:var(--accent);">×10</span></div>
-      <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--text-muted);text-align:center;">🍇🍇🍇<br><span style="color:var(--accent);">×5</span></div>
-      <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--text-muted);text-align:center;">🍒🍒🍒<br><span style="color:var(--accent);">×3</span></div>
-      <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--text-muted);text-align:center;">Any pair<br><span style="color:var(--accent);">×1.5</span></div>
-    </div>
-  </div>
-</div>
 
-<div class="glass-card p-8 card-reveal" id="bj-section" style="margin-bottom: 20px;">
-  <h2 class="text-2xl font-bold mb-2 flex items-center gap-3" style="color:var(--text);font-family:'Syne',sans-serif;"><span>🃏</span> Blackjack</h2>
-  <p class="text-sm mb-6 font-mono" style="color:var(--text-muted)">Beat the dealer to 21 without going bust!</p>
-  <div id="bj-credits-disp" style="font-family:'Unbounded',sans-serif;font-size:28px;font-weight:900;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;">100 <span style="font-size:14px;-webkit-text-fill-color:var(--text-muted);color:var(--text-muted);">credits</span></div>
-  
-  <p style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--text-muted);margin-bottom:8px;">DEALER</p>
-  <div id="bj-dealer-area" style="display:flex;gap:8px;flex-wrap:wrap;min-height:90px;align-items:flex-start;margin-bottom:6px;"></div>
-  <p id="bj-dealer-score" style="font-family:'Space Mono',monospace;font-size:12px;color:var(--text-muted);margin-bottom:16px;"></p>
-  
-  <div style="height:1px;background:var(--border);margin:12px 0;"></div>
-  
-  <p style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--text-muted);margin-bottom:8px;">YOU</p>
-  <div id="bj-player-area" style="display:flex;gap:8px;flex-wrap:wrap;min-height:90px;align-items:flex-start;margin-bottom:6px;"></div>
-  <p id="bj-player-score" style="font-family:'Space Mono',monospace;font-size:12px;color:var(--text-muted);margin-bottom:16px;"></p>
-  
-  <div id="bj-message" style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;min-height:26px;margin-bottom:12px;color:var(--accent);">Place your bet and deal!</div>
-  
-  <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;flex-wrap:wrap;">
-    <button onclick="bjBetChange(-10)" class="game-tag" style="padding:6px 14px;">−</button>
-    <span style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--accent);min-width:40px;" id="bj-bet-disp">20</span>
-    <button onclick="bjBetChange(10)" class="game-tag" style="padding:6px 14px;">+</button>
-    <span style="font-size:12px;color:var(--text-muted);">bet</span>
+    <div class="game-panel" data-game="slots" id="panel-slots" hidden>
+      <div style="text-align:center;">
+        <div id="sl-credits-disp" style="font-family:'Unbounded',sans-serif;font-size:28px;font-weight:900;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;">100 <span style="font-size:14px;-webkit-text-fill-color:var(--text-muted);color:var(--text-muted);">credits</span></div>
+        <div style="display:flex;justify-content:center;gap:12px;margin:20px 0;">
+          <div id="sr0" class="glass-card" style="width:80px;height:90px;display:flex;align-items:center;justify-content:center;font-size:42px;border-radius:16px;">🍒</div>
+          <div id="sr1" class="glass-card" style="width:80px;height:90px;display:flex;align-items:center;justify-content:center;font-size:42px;border-radius:16px;">🍋</div>
+          <div id="sr2" class="glass-card" style="width:80px;height:90px;display:flex;align-items:center;justify-content:center;font-size:42px;border-radius:16px;">⭐</div>
+        </div>
+        <div id="sl-msg" style="font-family:'Space Mono',monospace;font-size:13px;color:var(--text-muted);min-height:22px;margin:8px 0;">Place your bet and spin!</div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin:12px 0;">
+          <button onclick="slChangeBet(-5)" class="game-tag" style="padding:6px 14px;">−</button>
+          <span style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--accent);min-width:40px;" id="sl-bet-val">10</span>
+          <button onclick="slChangeBet(5)" class="game-tag" style="padding:6px 14px;">+</button>
+          <span style="font-size:12px;color:var(--text-muted);">bet</span>
+        </div>
+        <button id="sl-spin-btn" onclick="doSlotSpin()" class="special-btn" style="padding:12px 48px;">🎰 SPIN</button>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border);">
+          <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--text-muted);text-align:center;">💎💎💎<br><span style="color:var(--accent);">×50</span></div>
+          <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--text-muted);text-align:center;">7️⃣7️⃣7️⃣<br><span style="color:var(--accent);">×20</span></div>
+          <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--text-muted);text-align:center;">⭐⭐⭐<br><span style="color:var(--accent);">×10</span></div>
+          <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--text-muted);text-align:center;">🍇🍇🍇<br><span style="color:var(--accent);">×5</span></div>
+          <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--text-muted);text-align:center;">🍒🍒🍒<br><span style="color:var(--accent);">×3</span></div>
+          <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--text-muted);text-align:center;">Any pair<br><span style="color:var(--accent);">×1.5</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-panel" data-game="blackjack" id="panel-bj" hidden>
+      <div id="bj-credits-disp" style="font-family:'Unbounded',sans-serif;font-size:28px;font-weight:900;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;">100 <span style="font-size:14px;-webkit-text-fill-color:var(--text-muted);color:var(--text-muted);">credits</span></div>
+      <p style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--text-muted);margin-bottom:8px;">DEALER</p>
+      <div id="bj-dealer-area" style="display:flex;gap:8px;flex-wrap:wrap;min-height:90px;align-items:flex-start;margin-bottom:6px;"></div>
+      <p id="bj-dealer-score" style="font-family:'Space Mono',monospace;font-size:12px;color:var(--text-muted);margin-bottom:16px;"></p>
+      <div style="height:1px;background:var(--border);margin:12px 0;"></div>
+      <p style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--text-muted);margin-bottom:8px;">YOU</p>
+      <div id="bj-player-area" style="display:flex;gap:8px;flex-wrap:wrap;min-height:90px;align-items:flex-start;margin-bottom:6px;"></div>
+      <p id="bj-player-score" style="font-family:'Space Mono',monospace;font-size:12px;color:var(--text-muted);margin-bottom:16px;"></p>
+      <div id="bj-message" style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;min-height:26px;margin-bottom:12px;color:var(--accent);">Place your bet and deal!</div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;flex-wrap:wrap;">
+        <button onclick="bjBetChange(-10)" class="game-tag" style="padding:6px 14px;">−</button>
+        <span style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--accent);min-width:40px;" id="bj-bet-disp">20</span>
+        <button onclick="bjBetChange(10)" class="game-tag" style="padding:6px 14px;">+</button>
+        <span style="font-size:12px;color:var(--text-muted);">bet</span>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button id="btn-deal" onclick="bjDeal()" class="special-btn" style="padding:10px 28px;font-size:12px;">Deal</button>
+        <button id="btn-hit" onclick="bjHit()" class="special-btn" style="padding:10px 28px;font-size:12px;opacity:.4;pointer-events:none;">Hit</button>
+        <button id="btn-stand" onclick="bjStand()" class="special-btn" style="padding:10px 28px;font-size:12px;opacity:.4;pointer-events:none;">Stand</button>
+        <button id="btn-dbl" onclick="bjDouble()" class="special-btn" style="padding:10px 28px;font-size:12px;opacity:.4;pointer-events:none;">Double Down</button>
+      </div>
+    </div>
   </div>
-  
-  <div style="display:flex;gap:10px;flex-wrap:wrap;">
-    <button id="btn-deal" onclick="bjDeal()" class="special-btn" style="padding:10px 28px;font-size:12px;">Deal</button>
-    <button id="btn-hit" onclick="bjHit()" class="special-btn" style="padding:10px 28px;font-size:12px;opacity:.4;pointer-events:none;">Hit</button>
-    <button id="btn-stand" onclick="bjStand()" class="special-btn" style="padding:10px 28px;font-size:12px;opacity:.4;pointer-events:none;">Stand</button>
-    <button id="btn-dbl" onclick="bjDouble()" class="special-btn" style="padding:10px 28px;font-size:12px;opacity:.4;pointer-events:none;">Double Down</button>
+
+  <div style="text-align:center;margin-top:20px;padding-top:16px;border-top:1px solid var(--border);">
+    <button id="next-game-btn" type="button" onclick="playNextGame()" class="special-btn" style="padding:12px 32px;font-size:13px;">Play next game — <span id="next-game-label">Slot Machine</span> ---></button>
   </div>
 </div>
 
@@ -859,19 +978,19 @@
       <div class="glass-card p-8 card-reveal">
         <h2 class="text-2xl font-bold mb-8 flex items-center gap-3" style="color:var(--text);font-family:'Syne',sans-serif;"><span>🎵</span> My Favorite Songs</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <a href="https://open.spotify.com/album/0sSOZZhpG9iGE1XFVUWmtU?si=YfWW-NaeSKi1HeSKwtVEUg" target="_blank" class="song-card group" style="--accent:rgba(56,189,248,0.5);--glow:rgba(56,189,248,0.25);--accent-btn:rgba(56,189,248,0.15);--accent-btn-hover:rgba(56,189,248,0.4);--bar:linear-gradient(90deg,#0ea5e9,#38bdf8)">
+          <a href="https://open.spotify.com/album/0sSOZZhpG9iGE1XFVUWmtU?si=YfWW-NaeSKi1HeSKwtVEUg" target="_blank" class="song-card stagger-child group" style="--accent:rgba(56,189,248,0.5);--glow:rgba(56,189,248,0.25);--accent-btn:rgba(56,189,248,0.15);--accent-btn-hover:rgba(56,189,248,0.4);--bar:linear-gradient(90deg,#0ea5e9,#38bdf8)">
             <div class="song-art-banner"><img src="music-1.jpg" alt="WOS"><div class="song-spotify-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg></div></div>
             <div class="song-body"><div class="song-meta"><div class="song-title">WOS</div><div class="song-artist">By 80purppp</div></div><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>PLAY</div></div><div class="song-color-bar"></div>
           </a>
-          <a href="https://open.spotify.com/album/2NT6FlJ28v0gl8BBZCH32w?si=4a113a6a19b147fb" target="_blank" class="song-card group" style="--accent:rgba(244,114,182,0.5);--glow:rgba(244,114,182,0.25);--accent-btn:rgba(244,114,182,0.15);--accent-btn-hover:rgba(244,114,182,0.4);--bar:linear-gradient(90deg,#ec4899,#f472b6)">
+          <a href="https://open.spotify.com/album/2NT6FlJ28v0gl8BBZCH32w?si=4a113a6a19b147fb" target="_blank" class="song-card stagger-child group" style="--accent:rgba(244,114,182,0.5);--glow:rgba(244,114,182,0.25);--accent-btn:rgba(244,114,182,0.15);--accent-btn-hover:rgba(244,114,182,0.4);--bar:linear-gradient(90deg,#ec4899,#f472b6)">
             <div class="song-art-banner"><img src="music-2.jpg" alt="Barbie & Ken"><div class="song-spotify-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg></div></div>
             <div class="song-body"><div class="song-meta"><div class="song-title">Barbie &amp; Ken</div><div class="song-artist">By Scene Queen, Set It Off</div></div><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>PLAY</div></div><div class="song-color-bar"></div>
           </a>
-          <a href="https://open.spotify.com/track/76Si9yxntjn6GktxrY321f?si=57cf7e41fcf143e1" target="_blank" class="song-card group" style="--accent:rgba(163,230,53,0.5);--glow:rgba(163,230,53,0.2);--accent-btn:rgba(163,230,53,0.12);--accent-btn-hover:rgba(163,230,53,0.35);--bar:linear-gradient(90deg,#65a30d,#a3e635)">
+          <a href="https://open.spotify.com/track/76Si9yxntjn6GktxrY321f?si=57cf7e41fcf143e1" target="_blank" class="song-card stagger-child group" style="--accent:rgba(163,230,53,0.5);--glow:rgba(163,230,53,0.2);--accent-btn:rgba(163,230,53,0.12);--accent-btn-hover:rgba(163,230,53,0.35);--bar:linear-gradient(90deg,#65a30d,#a3e635)">
             <div class="song-art-banner"><img src="music-3.jpg" alt="M0ons1ide"><div class="song-spotify-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg></div></div>
             <div class="song-body"><div class="song-meta"><div class="song-title">M0ons1ide</div><div class="song-artist">By khalil?</div></div><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>PLAY</div></div><div class="song-color-bar"></div>
           </a>
-          <a href="https://open.spotify.com/track/5rc7178sa2YRDlBFBHY0e8?si=023d5ea9edbd429c" target="_blank" class="song-card group" style="--accent:rgba(251,191,36,0.5);--glow:rgba(251,191,36,0.2);--accent-btn:rgba(251,191,36,0.12);--accent-btn-hover:rgba(251,191,36,0.35);--bar:linear-gradient(90deg,#d97706,#fbbf24)">
+          <a href="https://open.spotify.com/track/5rc7178sa2YRDlBFBHY0e8?si=023d5ea9edbd429c" target="_blank" class="song-card stagger-child group" style="--accent:rgba(251,191,36,0.5);--glow:rgba(251,191,36,0.2);--accent-btn:rgba(251,191,36,0.12);--accent-btn-hover:rgba(251,191,36,0.35);--bar:linear-gradient(90deg,#d97706,#fbbf24)">
             <div class="song-art-banner"><img src="music-4.png" alt="Stephanie"><div class="song-spotify-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg></div></div>
             <div class="song-body"><div class="song-meta"><div class="song-title">Stephanie</div><div class="song-artist">By Nafeesisboujee</div></div><div class="song-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>PLAY</div></div><div class="song-color-bar"></div>
           </a>
@@ -901,11 +1020,11 @@
   <audio id="meow-sound"></audio>
   <audio id="bg-sound" preload="auto"></audio>
 
-  <div class="fixed bottom-6 left-6 z-50" onclick="playCatSound('left')">
+  <div class="cat-corner cat-corner--left fixed bottom-6 left-6 z-50" onclick="playCatSound('left')">
     <img src="9653f749c03eb888c0dde626b925437b.jpg" alt="Cat Left" class="cat-btn">
   </div>
-  <div class="fixed bottom-6 right-6 z-50" onclick="playCatSound('right')">
-    <img src="Haluuuu, en mi insta tengo diwujitos míos y mi cuenta de edits ᨐฅ (me ayudaria un shingo su apoyo)_3.jpg" alt="Cat Right" class="cat-btn" style="transform-origin:bottom right;">
+  <div class="cat-corner cat-corner--right fixed bottom-6 right-6 z-50" onclick="playCatSound('right')">
+    <img src="Haluuuu, en mi insta tengo diwujitos míos y mi cuenta de edits ᨐฅ (me ayudaria un shingo su apoyo)_3.jpg" alt="Cat Right" class="cat-btn">
   </div>
   <script>
   // ══ THEME SOUNDS ══
@@ -927,74 +1046,108 @@ const greetings = {
   jp: ["おはようございます！", "こんにちは！",          "こんばんは！",      "もう寝た方がいいよ。"],
   es: ["¡Buenos Días!",    "¡Buenas Tardes!",   "¡Buenas Noches!", "Deberías Ir a Dormir."]
 };
-// Sub-line cycles a different set in sync
 const subLines = {
-  en: ["ssnmhjjg / ice",   "Have you ate something yet?",      "Welcome back. Sir",           "You shouldn't stay late."],
-  th: ["ssnmhjjg / ไอซ์",  "กินอะไรยังเอ๋ย?",            "ยินดีต้อนรับกลับ!",        "ถือว่าผมขอเเล้วกัน 555"],
-  jp: ["ssnmhjjg / アイス", "もう何か食べましたか？",      "おかえり！",           "なぜそんなに遅くまで寝ないのですか？"],
-  es: ["ssnmhjjg / ice",   "¿Ya has comido algo?",         "¡Bienvenido de nuevo!",         "Por favor, vete a dormir."]
+  en: ["Stranger!",   "Have you ate something yet?",      "Welcome back. Sir",           "You shouldn't stay late."],
+  th: ["คนแปลกหน้า",  "กินอะไรยังเอ๋ย?",            "ยินดีต้อนรับกลับ!",        "คุณไม่ควรนอนดึกนะ"],
+  jp: ["見知らぬ人", "もう何か食べましたか？",      "おかえり！",           "なぜそんなに遅くまで寝ないのですか？"],
+  es: ["extraño",   "¿Ya has comido algo?",         "¡Bienvenido de nuevo!",         "Por favor, vete a dormir."]
 };
-
 const langs    = Object.values(greetings);
 const subLangs = Object.values(subLines);
 const h        = new Date().getHours();
 const tIdx     = h>=5&&h<12 ? 0 : h>=12&&h<17 ? 1 : h>=17&&h<21 ? 2 : 3;
-let lIdx = 0, typingTimer = null, autoTimer = null;
+let lIdx = 0, autoTimer = null, greetingCycleStarted = false;
 
 const elH1  = document.getElementById("time-greeting");
 const elSub = document.getElementById("time-greeting-sub");
-
+const rowH1 = document.querySelector(".greeting-title-row");
+const rowSub = document.querySelector(".greeting-sub-row");
 const h1Ref  = { t: null };
 const subRef = { t: null };
+const typingCursor = document.createElement("span");
+typingCursor.className = "typing-cursor";
+typingCursor.setAttribute("aria-hidden", "true");
+if (rowH1) rowH1.appendChild(typingCursor);
 
-function typeInto(el, timer_ref, text, done) {
-  if (!el) { if (done) done(); return; }
-  el.textContent = "";
-  let i = 0;
-  clearInterval(timer_ref.t);
-  const speed = text.length > 14 ? 48 : 65;
-  timer_ref.t = setInterval(() => {
-    el.textContent = text.slice(0, i) + (i < text.length ? "▌" : "");
-    i++;
-    if (i > text.length) {
-      el.textContent = text;
-      clearInterval(timer_ref.t);
-      if (done) setTimeout(done, 700);
-    }
-  }, speed);
+function placeCursor(row) {
+  if (!typingCursor || !row) return;
+  if (typingCursor.parentElement !== row) row.appendChild(typingCursor);
+  typingCursor.classList.add("is-on");
 }
 
-function eraseEl(el, timer_ref, done) {
+function hideCursor() {
+  if (typingCursor) typingCursor.classList.remove("is-on");
+}
+
+function typeInto(el, row, timer_ref, text, done) {
+  if (!el) { if (done) done(); return; }
+  let i = 0;
+  clearInterval(timer_ref.t);
+  placeCursor(row);
+  const ms = text.length > 22 ? 42 : text.length > 14 ? 55 : 72;
+  timer_ref.t = setInterval(() => {
+    el.textContent = text.slice(0, i);
+    placeCursor(row);
+    if (i >= text.length) {
+      clearInterval(timer_ref.t);
+      el.textContent = text;
+      placeCursor(row);
+      if (done) setTimeout(done, 450);
+      return;
+    }
+    i++;
+  }, ms);
+}
+
+function eraseEl(el, row, timer_ref, done) {
   if (!el) { if (done) done(); return; }
   clearInterval(timer_ref.t);
-  if (el.textContent.endsWith("|  ")) el.textContent = el.textContent.slice(0, -1);
+  let current = el.textContent || "";
+  if (current.length) placeCursor(row);
   timer_ref.t = setInterval(() => {
-    const c = el.textContent;
-    if (!c.length) { clearInterval(timer_ref.t); if (done) done(); return; }
-    el.textContent = c.slice(0, -1);
-  }, 28);
+    if (!current.length) {
+      clearInterval(timer_ref.t);
+      el.textContent = "";
+      hideCursor();
+      if (done) done();
+      return;
+    }
+    current = current.slice(0, -1);
+    el.textContent = current;
+    placeCursor(row);
+  }, 36);
 }
 
 function cycle() {
   clearTimeout(autoTimer);
-  typeInto(elH1, h1Ref, langs[lIdx][tIdx], () => {
-    typeInto(elSub, subRef, subLangs[lIdx][tIdx], () => {
-      autoTimer = setTimeout(() => {
-        eraseEl(elSub, subRef, () => {
-          eraseEl(elH1, h1Ref, () => {
-            lIdx = (lIdx + 1) % langs.length;
-            cycle();
+  typeInto(elH1, rowH1, h1Ref, langs[lIdx][tIdx], () => {
+    setTimeout(() => {
+      typeInto(elSub, rowSub, subRef, subLangs[lIdx][tIdx], () => {
+        autoTimer = setTimeout(() => {
+          eraseEl(elSub, rowSub, subRef, () => {
+            eraseEl(elH1, rowH1, h1Ref, () => {
+              lIdx = (lIdx + 1) % langs.length;
+              cycle();
+            });
           });
-        });
-      }, 2000);
-    });
+        }, 2200);
+      });
+    }, 350);
   });
+}
+
+function startGreetingCycle() {
+  if (greetingCycleStarted) return;
+  greetingCycleStarted = true;
+  const card = document.getElementById("greeting-card");
+  const wait = card && card.classList.contains("in-view") ? 1300 : 1700;
+  setTimeout(cycle, wait);
 }
   // ══ CURSOR ══
   const cursor=document.getElementById('custom-cursor');
   const clickLabel=document.getElementById('cursor-click-label');
   document.addEventListener('mousemove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px';clickLabel.style.left=e.clientX+'px';clickLabel.style.top=(e.clientY-34)+'px';});
-  const clickables='a,button,[onclick],input,textarea,.game-tag,.cat-btn,.song-card,.bmp-ctrl,.bmp-play,.bmp-toggle,.special-btn,.social-link,#theme-switcher,.showcase-btn';
+  const clickables='a,button,[onclick],input,textarea,.game-tag,.cat-corner,.song-card,.bmp-ctrl,.bmp-play,.bmp-toggle,.special-btn,.social-link,#theme-switcher,.showcase-btn';
   document.addEventListener('mouseover',e=>{if(e.target.closest(clickables)){cursor.classList.add('hovering');clickLabel.classList.add('visible');}});
   document.addEventListener('mouseout',e=>{if(e.target.closest(clickables)){cursor.classList.remove('hovering');clickLabel.classList.remove('visible');}});
   document.addEventListener('mousedown',()=>cursor.classList.add('pressing'));
@@ -1004,11 +1157,88 @@ function cycle() {
   function getAccentRgb(){return html.getAttribute('data-theme')==='dark'?['rgba(192,132,252,','rgba(56,189,248,','rgba(244,114,182,','rgba(251,191,36,']:['rgba(180,83,9,','rgba(8,145,178,','rgba(190,24,93,','rgba(217,119,6,'];}
   document.addEventListener('click',e=>{const c=getAccentRgb()[Math.floor(Math.random()*4)];const r=document.createElement('div');r.className='click-ripple';r.style.cssText=`left:${e.clientX}px;top:${e.clientY}px;width:40px;height:40px;border:2px solid ${c}0.9);background:transparent;`;document.body.appendChild(r);const b=document.createElement('div');b.className='click-burst';b.style.cssText=`left:${e.clientX}px;top:${e.clientY}px;width:18px;height:18px;background:radial-gradient(circle,${c}0.7) 0%,${c}0) 70%);`;document.body.appendChild(b);setTimeout(()=>{r.remove();b.remove();},700);});
 
-  // ══ DISCORD ══
+  // ══ DISCORD (Lanyard mini profile) ══
   const DISCORD_USER_ID='1083375896221712436';
+  /** Your banner file (same folder as index.html). Set to '' to use Discord banner from Lanyard instead. */
+  const DISCORD_BANNER_IMAGE='discord-banner.jpg';
   const statusColors={online:'#23a55a',idle:'#f0b232',dnd:'#f23f43',offline:'#80848e'};
   const statusLabels={online:'Online',idle:'Idle',dnd:'Do Not Disturb',offline:'Offline'};
-  async function fetchDiscordStatus(){try{const res=await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`);const d=await res.json();const s=d.data.discord_status,u=d.data.discord_user;const dot=document.getElementById('status-dot');dot.style.background=statusColors[s];dot.style.boxShadow=`0 0 8px ${statusColors[s]}`;document.getElementById('status-text').textContent=`${u.username} — ${statusLabels[s]}`;}catch{document.getElementById('status-text').textContent='Status unavailable';}}
+  function dcAvatarUrl(u){
+    if(u.avatar)return`https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.png?size=256`;
+    const idx=Number((BigInt(u.id)>>22n)%6n);
+    return`https://cdn.discordapp.com/embed/avatars/${idx}.png`;
+  }
+  function applyDcBanner(u){
+    const wrap=document.getElementById('dc-banner');
+    const img=document.getElementById('dc-banner-img');
+    const grad='linear-gradient(135deg,var(--accent),var(--accent2))';
+    function useLanyard(){
+      if(u?.banner){
+        img.src=`https://cdn.discordapp.com/banners/${u.id}/${u.banner}.png?size=600`;
+        img.classList.remove('is-hidden');
+        wrap.style.background='transparent';
+        return;
+      }
+      img.classList.add('is-hidden');
+      img.removeAttribute('src');
+      wrap.style.background=u?.banner_color||grad;
+    }
+    if(DISCORD_BANNER_IMAGE){
+      img.onerror=()=>useLanyard();
+      img.onload=()=>{img.classList.remove('is-hidden');wrap.style.background='transparent';};
+      img.src=DISCORD_BANNER_IMAGE;
+      if(img.complete&&img.naturalWidth)img.classList.remove('is-hidden');
+    }else useLanyard();
+  }
+  function dcEsc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function setDcActivity(el,icon,html){
+    el.classList.remove('is-hidden');
+    el.innerHTML=`<span class="discord-card__act-icon">${icon}</span><span>${html}</span>`;
+  }
+  function renderDiscordCard(data){
+    const s=data.discord_status,u=data.discord_user;
+    const dot=document.getElementById('dc-status-dot');
+    const avatar=document.getElementById('dc-avatar');
+    const avUrl=dcAvatarUrl(u);
+    const col=statusColors[s]||statusColors.offline;
+    dot.style.background=col;
+    dot.style.color=col;
+    dot.style.boxShadow=`0 0 10px ${col}`;
+    applyDcBanner(u);
+    avatar.src=avUrl;
+    avatar.alt=u.global_name||u.username;
+    document.getElementById('dc-display-name').textContent=u.global_name||u.display_name||u.username;
+    document.getElementById('dc-username').textContent=u.discriminator==='0'?u.username:`${u.username}#${u.discriminator}`;
+    document.getElementById('dc-status-label').textContent=statusLabels[s]||'Offline';
+    const customEl=document.getElementById('dc-custom-status');
+    const actEl=document.getElementById('dc-activity');
+    const custom=data.activities?.find(a=>a.type===4);
+    if(custom?.state){
+      customEl.textContent=custom.emoji?`${custom.emoji} ${custom.state}`:custom.state;
+      customEl.classList.remove('is-hidden');
+    }else customEl.classList.add('is-hidden');
+    actEl.classList.add('is-hidden');
+    actEl.innerHTML='';
+    if(data.listening_to_spotify&&data.spotify){
+      const sp=data.spotify;
+      setDcActivity(actEl,'🎵',`Listening to <strong>${dcEsc(sp.song)}</strong> · ${dcEsc(sp.artist)}`);
+    }else{
+      const game=data.activities?.find(a=>a.type===0);
+      if(game)setDcActivity(actEl,'🎮',`Playing <strong>${dcEsc(game.name)}</strong>`);
+    }
+  }
+  async function fetchDiscordStatus(){
+    try{
+      const res=await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`);
+      const json=await res.json();
+      if(!json.success)throw new Error('lanyard');
+      renderDiscordCard(json.data);
+    }catch{
+      document.getElementById('dc-status-label').textContent='Status unavailable';
+      applyDcBanner(null);
+    }
+  }
+  applyDcBanner(null);
   fetchDiscordStatus();setInterval(fetchDiscordStatus,30000);
 
   // ══ BG MUSIC ══
@@ -1017,17 +1247,24 @@ function cycle() {
   let bgPlaying=false,bgMuted=false,bgStarted=false,bmpExpanded=false,bmpListOpen=false,currentIdx=0;
   function buildPlaylist(){bmpListInner.innerHTML='';BG_PLAYLIST.forEach((t,i)=>{const item=document.createElement('div');item.className='bmp-playlist-item'+(i===currentIdx?' active':'');item.innerHTML=`<span class="bmp-playlist-num">${String(i+1).padStart(2,'0')}</span><span>${t.name}</span>`;item.onclick=()=>loadTrack(i,true);bmpListInner.appendChild(item);});}
   function updatePlaylistActive(){document.querySelectorAll('.bmp-playlist-item').forEach((el,i)=>el.classList.toggle('active',i===currentIdx));}
-  function loadTrack(idx,autoplay){currentIdx=idx;const t=BG_PLAYLIST[idx];bgAudio.src=t.file;bgAudio.load();bmpTrackName.textContent=t.name;bmpTrackIdx.textContent=`${idx+1} / ${BG_PLAYLIST.length}`;bmpProgress.style.width='0%';bmpCurrent.textContent='0:00';bmpTotal.textContent='0:00';updatePlaylistActive();if(autoplay||bgPlaying){bgAudio.volume=bmpVolSlider.value/100;bgAudio.play().catch(()=>{});bgPlaying=true;bmpMiniViz.classList.remove('paused');updatePlayIcon();bgStarted=true;}}
+  function loadTrack(idx,autoplay){currentIdx=idx;const t=BG_PLAYLIST[idx];bgAudio.src=t.file;bgAudio.load();bmpTrackName.textContent=t.name;bmpTrackIdx.textContent=`${idx+1} / ${BG_PLAYLIST.length}`;bmpProgress.style.width='0%';bmpCurrent.textContent='0:00';bmpTotal.textContent='0:00';updatePlaylistActive();if(autoplay||bgPlaying){bgAudio.volume=bmpVolSlider.value/100;bgAudio.play().catch(()=>{});bgPlaying=true;bgStarted=true;syncBmpUI();}else{syncBmpUI();}}
   function bmpNext(){loadTrack((currentIdx+1)%BG_PLAYLIST.length,bgPlaying||bgStarted);}
   function bmpPrev(){if(bgAudio.currentTime>3){bgAudio.currentTime=0;return;}loadTrack((currentIdx-1+BG_PLAYLIST.length)%BG_PLAYLIST.length,bgPlaying||bgStarted);}
   bgAudio.addEventListener('ended',()=>bmpNext());
   let _ft=null;
   function _fade(a,from,to,dur,onDone){clearInterval(_ft);a.volume=Math.max(0,Math.min(1,from));const steps=30,delta=(to-from)/steps,step=dur/steps;let i=0;_ft=setInterval(()=>{i++;a.volume=Math.max(0,Math.min(1,from+delta*i));if(i>=steps){clearInterval(_ft);if(onDone)onDone();}},step);}
-  function startBg(){if(bgStarted)return;bgStarted=true;loadTrack(0,false);bgAudio.volume=0;bgAudio.play().then(()=>{bgPlaying=true;_fade(bgAudio,0,bmpVolSlider.value/100,1500);updatePlayIcon();bmpMiniViz.classList.remove('paused');}).catch(()=>{});}
-  function toggleBgPlay(){if(!bgStarted){startBg();return;}if(bgPlaying){_fade(bgAudio,bgAudio.volume,0,400,()=>bgAudio.pause());bgPlaying=false;bmpMiniViz.classList.add('paused');}else{bgAudio.play().catch(()=>{});_fade(bgAudio,0,bmpVolSlider.value/100,400);bgPlaying=true;bmpMiniViz.classList.remove('paused');}updatePlayIcon();}
+  function startBg(){if(bgStarted)return;bgStarted=true;loadTrack(0,false);bgAudio.volume=0;bgAudio.play().then(()=>{bgPlaying=true;_fade(bgAudio,0,bmpVolSlider.value/100,1500);syncBmpUI();}).catch(()=>{});}
+  function toggleBgPlay(){if(!bgStarted){startBg();return;}if(bgPlaying){_fade(bgAudio,bgAudio.volume,0,400,()=>bgAudio.pause());bgPlaying=false;}else{bgAudio.play().catch(()=>{});_fade(bgAudio,0,bmpVolSlider.value/100,400);bgPlaying=true;}syncBmpUI();}
   function toggleMute(){bgMuted=!bgMuted;bgAudio.muted=bgMuted;document.getElementById('bmpVolIcon').innerHTML=bgMuted?`<path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15" stroke="currentColor" stroke-width="2"/><line x1="17" y1="9" x2="23" y2="15" stroke="currentColor" stroke-width="2"/>`:`<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07" stroke="currentColor" stroke-width="2" fill="none"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14" stroke="currentColor" stroke-width="2" fill="none"/>`;}
   function setBgVolume(val){bgAudio.volume=val/100;if(bgMuted&&val>0){bgMuted=false;bgAudio.muted=false;}}
-  function updatePlayIcon(){bmpPlayIcon.innerHTML=bgPlaying?'<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>':'<path d="M8 5v14l11-7z"/>';}
+  const bmpPanelViz=document.getElementById('bmpPanelViz');
+  function syncBmpUI(){
+    bmpPlayer.classList.toggle('is-playing',bgPlaying&&bgStarted);
+    bmpMiniViz.classList.toggle('paused',!bgPlaying);
+    if(bmpPanelViz)bmpPanelViz.classList.toggle('paused',!bgPlaying);
+    bmpPlayIcon.innerHTML=bgPlaying?'<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>':'<path d="M8 5v14l11-7z"/>';
+  }
+  function updatePlayIcon(){syncBmpUI();}
   function toggleBmpExpand(){bmpExpanded=!bmpExpanded;bmpPlayer.classList.toggle('expanded',bmpExpanded);if(bmpExpanded&&!bgStarted)startBg();}
   function togglePlaylist(){bmpListOpen=!bmpListOpen;bmpListEl.classList.toggle('open',bmpListOpen);document.getElementById('bmpListBtn').classList.toggle('active',bmpListOpen);}
   bgAudio.addEventListener('timeupdate',()=>{if(!bgAudio.duration)return;bmpProgress.style.width=(bgAudio.currentTime/bgAudio.duration*100)+'%';bmpCurrent.textContent=fmt(bgAudio.currentTime);bmpTotal.textContent=fmt(bgAudio.duration);});
@@ -1036,7 +1273,7 @@ function cycle() {
   document.addEventListener('visibilitychange',()=>{if(!bgStarted||!bgPlaying)return;if(document.hidden){_fade(bgAudio,bgAudio.volume,0,600,()=>bgAudio.pause());}else{bgAudio.play().catch(()=>{});_fade(bgAudio,0,bmpVolSlider.value/100,600);}});
   function onFirstInteraction(){startBg();document.removeEventListener('click',onFirstInteraction);document.removeEventListener('keydown',onFirstInteraction);document.removeEventListener('touchstart',onFirstInteraction);}
   document.addEventListener('click',onFirstInteraction);document.addEventListener('keydown',onFirstInteraction);document.addEventListener('touchstart',onFirstInteraction);
-  buildPlaylist();bmpTrackName.textContent=BG_PLAYLIST[0]?.name||'—';bmpTrackIdx.textContent=`1 / ${BG_PLAYLIST.length}`;
+  buildPlaylist();bmpTrackName.textContent=BG_PLAYLIST[0]?.name||'—';bmpTrackIdx.textContent=`1 / ${BG_PLAYLIST.length}`;syncBmpUI();
 (function(){
   const chars  = ['$','%','#','@','!','&','?','~'];
   const colors = ['#f472b6','#38bdf8','#c084fc','#fb923c','#a3e635','#ffffff'];
@@ -1081,11 +1318,9 @@ function cycle() {
   function playCatSound(side){const s=document.getElementById('meow-sound');s.src=soundFiles[side];s.currentTime=0;s.play();}
 
   // ══════════════════════════════════════
-  // LOADING + ANIMATION SYSTEM
-  // Two-phase approach:
-  //   Phase 1: .reveal items (header) fire with staggered setTimeout — top to bottom
-  //   Phase 2: .card-reveal items fire via IntersectionObserver BUT only AFTER
-  //             the last header item has already animated in
+  // LOADING + ANIMATION SYSTEM (plays once on load, not on scroll)
+  //   Phase 1: .reveal header items — staggered setTimeout
+  //   Phase 2: .card-reveal items — staggered setTimeout after header
   // ══════════════════════════════════════
 window.addEventListener('load',()=>{
   const minDur=2000,start=performance.now();
@@ -1094,34 +1329,66 @@ window.addEventListener('load',()=>{
     const delay=Math.max(0,minDur-elapsed);
     setTimeout(()=>{
       const loader=document.getElementById('loading-screen');
-      loader.classList.add('hidden');
       const content=document.getElementById('page-content');
-      requestAnimationFrame(()=>content.classList.add('visible'));
-      const revealEls=Array.from(document.querySelectorAll('.reveal'));
-      let headerFinishTime=0;
-      revealEls.forEach((el,i)=>{
-        const t=200+i*150;
-        setTimeout(()=>el.classList.add('in-view'),t);
-        headerFinishTime=Math.max(headerFinishTime,t);
-      });
-      setTimeout(()=>initCardReveal(), headerFinishTime + 20);
-      setTimeout(()=>loader.remove(),900);
-      setTimeout(cycle, 400);
+      let loadDone=false;
+      const finishLoad=()=>{
+        if(loadDone)return;
+        loadDone=true;
+        loader.remove();
+        requestAnimationFrame(()=>content.classList.add('visible'));
+        const revealEls=Array.from(document.querySelectorAll('.reveal'));
+        let headerFinishTime=0;
+        revealEls.forEach((el,i)=>{
+          const t=200+i*150;
+          setTimeout(()=>el.classList.add('in-view'),t);
+          headerFinishTime=Math.max(headerFinishTime,t);
+        });
+        setTimeout(()=>initCardReveal(),headerFinishTime+20);
+        startGreetingCycle();
+      };
+      loader.classList.add('reveal-out');
+      loader.addEventListener('animationend',finishLoad,{once:true});
+      setTimeout(finishLoad,1100);
 
     },delay);
   }
   dismiss();
 });
   function initCardReveal(){
+    const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const cardEls=Array.from(document.querySelectorAll('.card-reveal'));
+    if(reduceMotion){
+      cardEls.forEach(el=>{
+        el.classList.add('in-view');
+        el.querySelector('.photo-bento')?.classList.add('revealed');
+      });
+      return;
+    }
     cardEls.forEach((el,i)=>{
-      setTimeout(()=>el.classList.add('in-view'), i*120);
+      setTimeout(()=>{
+        el.classList.add('in-view');
+        el.querySelector('.photo-bento')?.classList.add('revealed');
+      },i*140);
     });
   }
 
   // ══ CURSOR GLOW ══
   const cursorGlow=document.getElementById('cursor-glow');
   document.addEventListener('mousemove',e=>{cursorGlow.style.left=e.clientX+'px';cursorGlow.style.top=e.clientY+'px';});
+
+  // ══ PLAYFUL BLUR SPARKS ON CLICK ══
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    document.addEventListener('click',e=>{
+      for(let i=0;i<3;i++){
+        const s=document.createElement('div');
+        s.className='playful-spark';
+        const size=12+Math.random()*20;
+        s.style.cssText=`left:${e.clientX+(Math.random()-.5)*40}px;top:${e.clientY+(Math.random()-.5)*40}px;width:${size}px;height:${size}px;animation-delay:${i*.08}s;`;
+        document.body.appendChild(s);
+        setTimeout(()=>s.remove(),1000);
+      }
+    });
+  }
 
   // ══ GALAXY STARFIELD ══
   const canvas=document.getElementById('galaxy-canvas');
@@ -1142,11 +1409,35 @@ window.addEventListener('load',()=>{
   for(let i=0;i<30;i++)spawnParticle();setInterval(spawnParticle,800);
 
   // ══ BIRTHDAY COUNTDOWN ══
-  const today=new Date();const todayAt12=new Date();todayAt12.setHours(0,0,0,0);
-  const birthdate=new Date("01/22/2010");let totalSeconds=0;
-  if(todayAt12.getTime()===birthdate.getTime()){totalSeconds=0;}else{birthdate.setFullYear(today.getFullYear()+(today>birthdate?1:0));totalSeconds=(birthdate-today)/1000;}
-  const setDisplay=sec=>{document.getElementById('days').innerText=String(Math.floor(sec/(24*60*60))).padStart(2,"0");sec=sec%(24*60*60);document.getElementById('hours').innerText=String(Math.floor(sec/(60*60))).padStart(2,"0");sec=sec%(60*60);document.getElementById('minutes').innerText=String(Math.floor(sec/60)).padStart(2,"0");sec=sec%60;document.getElementById('seconds').innerText=String(Math.floor(sec)).padStart(2,"0");};
-  setDisplay(totalSeconds);const timer=setInterval(()=>{if(totalSeconds<=0){clearInterval(timer);return;}totalSeconds-=1;setDisplay(totalSeconds);},1000);
+  const today=new Date();
+  const nextBirthday=new Date(today.getFullYear(),0,22,0,0,0,0);
+  if(today>=nextBirthday)nextBirthday.setFullYear(today.getFullYear()+1);
+  let totalSeconds=Math.max(0,Math.floor((nextBirthday-today)/1000));
+  function tickClockEl(id,val){
+    const el=document.getElementById(id);
+    if(!el)return;
+    const n=Math.floor(val);
+    const next=id==='days'?String(n):String(n).padStart(2,'0');
+    if(el.textContent===next)return;
+    el.textContent=next;
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    el.classList.remove('tick-pop');
+    void el.offsetWidth;
+    el.classList.add('tick-pop');
+  }
+  function setDisplay(sec){
+    sec=Math.max(0,Math.floor(sec));
+    const d=Math.floor(sec/86400);sec%=86400;
+    const h=Math.floor(sec/3600);sec%=3600;
+    const m=Math.floor(sec/60);
+    const s=sec%60;
+    tickClockEl('days',d);
+    tickClockEl('hours',h);
+    tickClockEl('minutes',m);
+    tickClockEl('seconds',s);
+  }
+  setDisplay(totalSeconds);
+  const timer=setInterval(()=>{if(totalSeconds<=0){clearInterval(timer);setDisplay(0);return;}totalSeconds-=1;setDisplay(totalSeconds);},1000);
 
   // ══ MINI GAME ══
   (function(){
@@ -1167,6 +1458,8 @@ window.addEventListener('load',()=>{
     function drawCollectible(ctx,c){c.pulse=(c.pulse+.08)%(Math.PI*2);const pulsed=c.r+Math.sin(c.pulse)*2;const grd=ctx.createRadialGradient(c.x,c.y,0,c.x,c.y,pulsed*3);grd.addColorStop(0,'rgba(251,191,36,0.5)');grd.addColorStop(1,'rgba(251,191,36,0)');ctx.beginPath();ctx.arc(c.x,c.y,pulsed*3,0,Math.PI*2);ctx.fillStyle=grd;ctx.fill();ctx.save();ctx.translate(c.x,c.y);c.angle+=.04;ctx.rotate(c.angle);ctx.beginPath();for(let i=0;i<5;i++){const a=(i*4*Math.PI/5)-Math.PI/2,a2=((i*4+2)*Math.PI/5)-Math.PI/2;i===0?ctx.moveTo(Math.cos(a)*pulsed,Math.sin(a)*pulsed):ctx.lineTo(Math.cos(a)*pulsed,Math.sin(a)*pulsed);ctx.lineTo(Math.cos(a2)*pulsed*.45,Math.sin(a2)*pulsed*.45);}ctx.closePath();ctx.fillStyle='#fbbf24';ctx.shadowColor='#fbbf24';ctx.shadowBlur=18;ctx.fill();ctx.restore();}
     function gameLoop(ts){if(!gameRunning)return;animId=requestAnimationFrame(gameLoop);const dt=ts-lastTime;lastTime=ts;gctx.clearRect(0,0,W,H);const[bgTop,bgBot]=getGameBg();const bgG=gctx.createLinearGradient(0,0,0,H);bgG.addColorStop(0,bgTop);bgG.addColorStop(1,bgBot);gctx.fillStyle=bgG;gctx.fillRect(0,0,W,H);const el=(ts-gameStartTime)/1000;difficulty=1+el*.04;speed=3+el*.06;spawnRate=Math.max(500,1400-el*20);player.x+=(player.targetX-player.x)*.12;spawnMeteor(ts);spawnCollectible(ts);meteors=meteors.filter(m=>{m.trail.push({x:m.x,y:m.y});if(m.trail.length>10)m.trail.shift();m.x+=m.vx;m.y+=m.vy*(difficulty*.3+.7);m.rotation+=m.rotSpeed;drawMeteor(gctx,m);if(dist(m,player)<m.r+player.r-4&&ts>invincibleUntil){emitParts(player.x,player.y,'#f472b6',16);lives=Math.max(0,lives-1);updateHearts();invincibleUntil=ts+1500;if(lives===0){endGame();return false;}return false;}return m.y<H+40;});collectibles=collectibles.filter(c=>{c.y+=c.vy;drawCollectible(gctx,c);if(dist(c,player)<c.r+player.r+6){score+=10;scoreValEl.textContent=score;emitParts(c.x,c.y,'#fbbf24',10);return false;}return c.y<H+30;});parts2=parts2.filter(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.08;p.life-=p.decay;if(p.life<=0)return false;const rad=Math.max(.01,p.r*p.life);gctx.beginPath();gctx.arc(p.x,p.y,rad,0,Math.PI*2);gctx.fillStyle=p.color;gctx.globalAlpha=Math.max(0,p.life);gctx.fill();gctx.globalAlpha=1;return true;});if(Math.floor(ts/1000)>Math.floor((ts-dt)/1000)){score+=1;scoreValEl.textContent=score;}drawPlayer(gctx,ts);gctx.globalAlpha=1;}
     function endGame(){gameRunning=false;cancelAnimationFrame(animId);overlayTitle.textContent='GAME OVER';overlayDesc.textContent='Better luck next time!';finalScoreEl.style.display='block';finalScoreEl.textContent=`Final Score: ${score}`;document.getElementById('game-start-btn').textContent='PLAY AGAIN';overlay.classList.remove('hidden');}
+    window.stopStarDodge=function(){if(!gameRunning)return;gameRunning=false;cancelAnimationFrame(animId);overlay.classList.remove('hidden');};
+    window.resizeStarDodge=function(){resizeCanvas();};
     window.startGame=function(){initGame();overlay.classList.add('hidden');gameRunning=true;lastTime=performance.now();gameStartTime=performance.now();finalScoreEl.style.display='none';requestAnimationFrame(gameLoop);};
     const wrapper=document.getElementById('game-canvas-wrapper');
     wrapper.addEventListener('mousemove',e=>{if(!gameRunning)return;const rect=gc.getBoundingClientRect();player.targetX=Math.max(player.r,Math.min(W-player.r,e.clientX-rect.left));});
@@ -1175,10 +1468,44 @@ window.addEventListener('load',()=>{
     function keyLoop(){if(gameRunning){if(keys['ArrowLeft']||keys['a']||keys['A'])player.targetX=Math.max(player.r,player.targetX-8);if(keys['ArrowRight']||keys['d']||keys['D'])player.targetX=Math.min(W-player.r,player.targetX+8);}requestAnimationFrame(keyLoop);}
     keyLoop();window.addEventListener('resize',resizeCanvas);resizeCanvas();
   })();
+
+  // ══ GAME HUB (rotate one game at a time) ══
+  const GAME_HUB=[
+    {id:'dodge',icon:'🕹️',title:'Star Dodge',desc:'Dodge the purple meteors. Survive as long as you can!',nextLabel:'Star Dodge'},
+    {id:'slots',icon:'🎰',title:'Slot Machine',desc:'Spin the reels. Match symbols to win credits!',nextLabel:'Slot Machine'},
+    {id:'blackjack',icon:'🃏',title:'Blackjack',desc:'Beat the dealer to 21 without going bust!',nextLabel:'Black Jack'}
+  ];
+  let gameHubIndex=0;
+  function setActiveGamePanel(gameId){
+    document.querySelectorAll('#game-panels .game-panel').forEach(p=>{
+      const on=p.dataset.game===gameId;
+      p.classList.toggle('active',on);
+      p.hidden=!on;
+    });
+  }
+  function updateGameHubUI(){
+    const g=GAME_HUB[gameHubIndex],next=GAME_HUB[(gameHubIndex+1)%GAME_HUB.length];
+    document.getElementById('game-hub-icon').textContent=g.icon;
+    document.getElementById('game-hub-title').textContent=g.title;
+    document.getElementById('game-hub-desc').textContent=g.desc;
+    document.getElementById('game-hub-counter').textContent=`${gameHubIndex+1} / ${GAME_HUB.length}`;
+    document.getElementById('next-game-label').textContent=next.nextLabel||next.title;
+    setActiveGamePanel(g.id);
+  }
+  window.playNextGame=function(){
+    const leaving=GAME_HUB[gameHubIndex];
+    if(leaving.id==='dodge'&&window.stopStarDodge)window.stopStarDodge();
+    gameHubIndex=(gameHubIndex+1)%GAME_HUB.length;
+    updateGameHubUI();
+    if(GAME_HUB[gameHubIndex].id==='dodge'&&window.resizeStarDodge)window.resizeStarDodge();
+    document.getElementById('game-section')?.scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+  updateGameHubUI();
+
     // ── Throttle: prevent rapid-fire if mouse jitters ──
    let lastPlay = 0;
 const THROTTLE_MS = 60;
-const CLICKABLE = 'a,button,[onclick],input,textarea,.game-tag,.cat-btn,.song-card,.bmp-ctrl,.bmp-play,.bmp-toggle,.special-btn,.social-link,#theme-switcher,.showcase-btn';
+const CLICKABLE = 'a,button,[onclick],input,textarea,.game-tag,.cat-corner,.song-card,.bmp-ctrl,.bmp-play,.bmp-toggle,.special-btn,.social-link,#theme-switcher,.showcase-btn';
   let audioCtx = null;
 function getCtx() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
