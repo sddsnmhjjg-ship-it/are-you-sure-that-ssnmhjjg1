@@ -7,7 +7,7 @@
   <meta property="og:url" content="https://ssnmhjjg-gg.vercel.app/">
   <meta property="og:image" content="https://ssnmhjjg-gg.vercel.app/aaaaaa.gif">
   <meta name="theme-color" content="#1e3a8a">
-  <meta name="viewport" content="width=1200px, initial-scale=1">
+  <meta name="viewport" content="width=1200px, initial-scale=2">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -621,7 +621,6 @@
   .pb-tag{display:inline-block;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:4px;}
   .pb-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:#fff;line-height:1.2;}
   .pb-hero-badge{position:absolute;top:14px;left:14px;z-index:3;background:var(--accent);color:#fff;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;padding:4px 10px;border-radius:999px;box-shadow:0 0 14px var(--glow1);}
-
   .showcase-btn{display:inline-flex;align-items:center;gap:10px;padding:13px 34px;background:transparent;border:1px solid var(--accent);border-radius:14px;color:var(--accent);font-family:'Space Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.08em;cursor:pointer;transition:all .3s cubic-bezier(0.34,1.56,.64,1);position:relative;overflow:hidden;text-decoration:none;}
   .showcase-btn::before{content:'';position:absolute;inset:0;background:var(--accent);transform:translateX(-105%);transition:transform .35s cubic-bezier(0.4,0,0.2,1);}
   .showcase-btn:hover{color:#fff;box-shadow:0 0 28px var(--glow1);}
@@ -633,6 +632,13 @@
   .photo-stat{display:flex;flex-direction:column;gap:2px;}
   .photo-stat-num{font-family:'Unbounded',sans-serif;font-size:22px;font-weight:900;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
   .photo-stat-label{font-family:'Space Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:.15em;text-transform:uppercase;}
+
+  @media(max-width:1024px){
+    img {
+      transform: scale(0.5);
+      transform-origin: top center;
+    }
+  }
 
   </style>
   </head>
