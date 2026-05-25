@@ -7,7 +7,7 @@
   <meta property="og:url" content="https://ssnmhjjg-gg.vercel.app/">
   <meta property="og:image" content="https://ssnmhjjg-gg.vercel.app/aaaaaa.gif">
   <meta name="theme-color" content="#1e3a8a">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=1200px, initial-scale=1">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -243,7 +243,9 @@
   /* ══ LOADING ══ */
   #loading-screen{position:fixed;inset:0;z-index:99999;background:var(--bg);display:flex;align-items:center;justify-content:center;overflow:hidden;pointer-events:all;}
   #loading-screen.reveal-out{animation:loader-screen-out 1s var(--ease-premium) forwards;pointer-events:none;}
+  #loading-screen.reveal-out::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3));background-size:200% 100%;animation:swipe-wipe 0.8s cubic-bezier(0.4,0,0.2,1) forwards;z-index:999999;}
   @keyframes loader-screen-out{0%{clip-path:inset(0 0 0 0);opacity:1;filter:blur(0)}100%{clip-path:inset(0 0 0 100%);opacity:0;filter:blur(10px)}}
+  @keyframes swipe-wipe{0%{background-position:0% 50%;clip-path:inset(0 100% 0 0)}100%{background-position:100% 50%;clip-path:inset(0 0 0 0)}}
   .loader-sweep{position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(90deg,var(--bg) 0%,rgba(4,4,10,.85) 35%,rgba(4,4,10,.4) 55%,transparent 72%);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);transform:translateX(-105%);animation:loader-sweep-in 1.35s var(--ease-premium) .15s forwards;}
   [data-theme="light"] .loader-sweep{background:linear-gradient(90deg,var(--bg) 0%,rgba(253,246,238,.9) 40%,transparent 72%);}
   @keyframes loader-sweep-in{0%{transform:translateX(-105%);opacity:1}100%{transform:translateX(105%);opacity:0}}
@@ -477,7 +479,7 @@
   .clock-unit span{display:block;font-size:40px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums;color:var(--clock-num);transition:color var(--transition-theme);}
   .clock-unit p{font-size:11px;letter-spacing:.1em;color:var(--clock-label);margin:6px 0 0;transition:color var(--transition-theme);}
   .clock span.tick-pop{display:inline-block;animation:clock-pop .55s var(--ease-play);}
-  @media(max-width:500px){.clock{gap:8px;}.clock-unit{min-width:72px;width:76px;height:76px;}.clock-unit span{font-size:28px;}}
+
 
   /* ══ MUSIC PLAYER ══ */
   #bg-music-player{position:fixed;bottom:140px;left:16px;z-index:9998;width:60px;transition:width .5s var(--ease-premium),border-radius .5s var(--ease-premium),box-shadow .5s ease,border-color .4s ease;background:var(--bmp-bg);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--bmp-bd);border-radius:999px;overflow:hidden;box-shadow:0 0 20px var(--glow1),0 8px 32px rgba(0,0,0,.25);}
@@ -573,6 +575,13 @@
   #game-overlay p{font-family:'Space Mono',monospace;font-size:12px;color:var(--text-muted);margin:0;text-align:center;line-height:1.8;}
   #game-start-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:12px;padding:12px 40px;color:white;font-family:'Space Mono',monospace;font-weight:700;font-size:13px;letter-spacing:.08em;cursor:pointer;transition:all .2s;box-shadow:0 0 20px var(--glow1);}
   #game-start-btn:hover{transform:scale(1.08);box-shadow:0 0 35px var(--glow2);}
+  
+  /* ══ LIGHT THEME SHINY GLOW ══ */
+  @keyframes shine-pulse{0%,100%{box-shadow:0 0 16px rgba(217,119,6,0.5),0 0 32px rgba(217,119,6,0.25),inset 0 0 20px rgba(255,255,255,0.3)}50%{box-shadow:0 0 28px rgba(217,119,6,0.8),0 0 56px rgba(217,119,6,0.4),inset 0 0 30px rgba(255,255,255,0.5)}}
+  [data-theme="light"] #game-start-btn{animation:shine-pulse 3s ease-in-out infinite;background:linear-gradient(135deg,var(--accent),#f59e0b);box-shadow:0 0 20px rgba(217,119,6,0.6),0 0 40px rgba(217,119,6,0.3),inset 0 0 20px rgba(255,255,255,0.3);}
+  [data-theme="light"] .bmp-play{animation:shine-pulse 3s ease-in-out infinite;box-shadow:0 0 16px rgba(217,119,6,0.5),0 0 28px rgba(217,119,6,0.3),inset 0 0 15px rgba(255,255,255,0.25);}
+  [data-theme="light"] #theme-switcher{animation:shine-pulse 4s ease-in-out infinite;box-shadow:0 0 18px rgba(217,119,6,0.4),0 0 32px rgba(217,119,6,0.2),inset 0 0 12px rgba(255,255,255,0.2);}
+  [data-theme="dark"] #game-start-btn,[data-theme="dark"] .bmp-play,[data-theme="dark"] #theme-switcher{animation:none;}
   #game-final-score{font-family:'Syne',sans-serif;font-size:16px;color:var(--accent);display:none;}
   #game-hint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);pointer-events:none;white-space:nowrap;}
   #game-panels{position:relative;min-height:380px;}
@@ -603,73 +612,10 @@
   .pb-4{grid-column:1/5;grid-row:3/4;min-height:200px;}
   .pb-5{grid-column:5/9;grid-row:3/4;min-height:200px;}
   .pb-6{grid-column:9/13;grid-row:3/4;min-height:200px;}
-  @media(max-width:768px){
-    .photo-bento{grid-template-columns:1fr 1fr;}
-    .pb-1{grid-column:1/3;grid-row:auto;min-height:220px;}
-    .pb-2,.pb-3,.pb-4,.pb-5,.pb-6{grid-column:span 1;grid-row:auto;min-height:160px;}
-  }
-  @media(max-width:480px){
-    .photo-bento{grid-template-columns:1fr;}
-    .pb-1,.pb-2,.pb-3,.pb-4,.pb-5,.pb-6{grid-column:1;min-height:180px;}
-  }
   .pb-item img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(0.4,0,0.2,1),filter .5s ease;filter:brightness(.88) saturate(.9);}
   .pb-item:hover img{transform:scale(1.07);filter:brightness(1) saturate(1.05);}
-  @media(max-width:768px){
-    body{padding:1rem;}
-    #theme-switcher{top:14px;right:14px;width:52px;height:28px;}
-    .ts-track{padding:3px;}
-    #celestial-container{width:90px;height:90px;top:12px;right:12px;}
-    #moon-body,#sun-body{width:90px;height:90px;}
-    .cat-btn{width:90px;height:90px;}
-    #game-canvas{height:280px;}
-    #game-ui{font-size:11px;left:12px;right:12px;}
-    .showcase-btn{padding:12px 28px;}
-    .photo-stats{gap:20px;margin-top:28px;padding-top:20px;}
-  }
-  @media(max-width:480px){
-    html{font-size:14px;} /* smaller base font */
-    body{padding:0.5rem;}
-    /* compact controls */
-    #theme-switcher{top:8px;right:8px;width:44px;height:26px;}
-    .ts-track{padding:2px;}
 
-    /* hide heavy decorative layers to prevent overflow */
-    #galaxy-canvas,.aurora-layer,.nebula,.aurora-blob{display:none!important}
 
-    /* scale down celestial */
-    #celestial-container{width:64px;height:64px;top:8px;right:8px;}
-    #moon-body,#sun-body{width:64px;height:64px;}
-
-    /* compact interactive elements */
-    .cat-btn{width:64px;height:64px;}
-    #game-canvas{height:200px;}
-    #game-ui{font-size:10px;top:8px;left:8px;right:8px;}
-
-    /* ensure cards fit the viewport */
-    .glass-card,.discord-card,.greeting-card{width:100%;max-width:420px;margin:12px auto;padding-inline:12px}
-    .glass-card{border-radius:14px}
-
-    /* responsive media */
-    img,iframe,canvas,video{max-width:100%;height:auto;display:block}
-
-    /* photo grid collapse tweaks */
-    .pb-item{min-height:140px}
-    .pb-overlay{padding:12px}
-    .pb-title{font-size:14px}
-
-    /* smaller discord card elements */
-    .discord-card{margin:18px auto 12px}
-    .discord-card__body{padding:40px 12px 12px}
-    .discord-card__avatar-wrap{left:12px;top:-34px;width:64px;height:64px}
-    .discord-card__avatar{width:64px;height:64px;border-width:4px}
-    .discord-card__status{width:16px;height:16px;border-width:3px}
-    .discord-card__display{font-size:1rem}
-    .discord-card__user{font-size:11px}
-
-    /* condense other UI */
-    .showcase-btn{padding:10px 18px;font-size:11px}
-    .photo-stats{gap:12px;margin-top:16px;padding-top:12px}
-  }
   .pb-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,transparent 55%);display:flex;flex-direction:column;justify-content:flex-end;padding:20px;opacity:0;transition:opacity .4s ease;}
   .pb-item:hover .pb-overlay{opacity:1;}
   .pb-tag{display:inline-block;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:4px;}
@@ -688,103 +634,8 @@
   .photo-stat{display:flex;flex-direction:column;gap:2px;}
   .photo-stat-num{font-family:'Unbounded',sans-serif;font-size:22px;font-weight:900;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
   .photo-stat-label{font-family:'Space Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:.15em;text-transform:uppercase;}
-  /* Portrait-specific: tighten layout for vertical mobile screens */
-  @media (orientation:portrait) {
-    html{font-size:13px}
-    body{padding:0.5rem}
-    /* constrain main content to phone width */
-    .glass-card,.discord-card,.greeting-card,#page-content{width:100%;max-width:360px;margin:10px auto}
-    .glass-card{padding:12px}
 
-    /* smaller banners and avatars */
-    .discord-card__banner{height:88px}
-    .discord-card__avatar-wrap{left:12px;top:-28px;width:56px;height:56px}
-    .discord-card__avatar{width:56px;height:56px;border-width:3px}
-
-    /* shrink heavy panels */
-    #game-canvas{height:160px}
-    .greeting-card{padding:16px;min-height:110px}
-
-    /* compact photo grid */
-    .photo-bento{gap:8px}
-    .pb-item{border-radius:12px}
-    .pb-item img{height:auto}
-
-    /* condense header/footer spacing */
-    header,footer{padding-inline:8px}
-
-    /* reduce large decorative layers that cause overflow */
-    #celestial-container,.aurora-layer,#galaxy-canvas,.grid-overlay,.aurora-blob{display:none!important}
-
-    /* reduce visual noise */
-    .pb-overlay{padding:10px}
-    .pb-title{font-size:13px}
-    .showcase-btn{padding:10px 14px}
-  }
-  /* stronger portrait shrink for tight vertical view */
-  @media (max-width:420px) and (orientation:portrait) {
-    .greeting-title-row{font-size:1.1rem!important;}
-    .greeting-sub-row{font-size:0.78rem!important;}
-    .glass-card{padding:10px;border-radius:12px}
-    .pb-item{min-height:120px}
-    .pb-1{min-height:180px}
-    .pb-2,.pb-3,.pb-4,.pb-5,.pb-6{min-height:120px}
-    .clock .clock-unit{width:64px;height:64px}
-    .clock .clock-unit span{font-size:22px}
-    /* reduce card inner paddings */
-    .discord-card__body{padding:34px 10px 10px}
-    .song-card{padding:10px}
-    .song-color-bar{height:6px}
-    /* reduce list/table font-sizes */
-    .info-list li{font-size:13px;line-height:1.35}
-    .info-list li span{font-size:13px}
-    /* shrink footer button */
-    #next-game-btn{padding:10px 18px;font-size:12px}
-    /* move avatar rings inwards to avoid overlap */
-    .cat-corner{bottom:6px}
-    .cat-btn{width:56px;height:56px}
-  }
-  @media (max-width:360px) and (orientation:portrait){
-    .greeting-title-row{font-size:1rem!important}
-    .greeting-sub-row{font-size:0.75rem!important}
-    .info-list li{font-size:12px}
-    .discord-card__display{font-size:0.95rem}
-    .discord-card__user{font-size:9px}
-    .pb-item{min-height:110px}
-    #next-game-btn{padding:8px 12px;font-size:11px}
-  }
-
-  /* Extra small phones: reduce type scale to match high DPI portrait devices */
-  @media (max-width:420px) and (orientation:portrait) {
-    html{font-size:12px}
-    body{font-size:0.95rem}
-    h1{font-size:1.4rem}
-    h2{font-size:1.1rem}
-    h3{font-size:1rem}
-    .greeting-title-row{font-size:1.4rem}
-    .pb-title{font-size:12px}
-    .pb-tag{font-size:9px}
-    .showcase-label{font-size:8px}
-    .discord-card__display{font-size:0.95rem}
-    .discord-card__user{font-size:10px}
-    .discord-card__custom{font-size:11px}
-    .song-card .song-title{font-size:13px}
-    .song-card .song-artist{font-size:11px}
-    .showcase-btn{font-size:10px;padding:8px 12px}
-    .photo-stat-num{font-size:18px}
-    .photo-stat-label{font-size:8px}
-    /* tighten spacing */
-    .glass-card, .discord-card{padding-top:10px;padding-bottom:10px}
-  }
-
-  @media (max-width:360px) and (orientation:portrait) {
-    html{font-size:11px}
-    body{font-size:0.92rem}
-    .pb-title{font-size:11px}
-    .discord-card__display{font-size:0.9rem}
-    .discord-card__user{font-size:9px}
-    .showcase-btn{font-size:9px;padding:7px 10px}
-  }
+  
   </style>
   </head>
 
@@ -1449,7 +1300,36 @@ function startGreetingCycle() {
   // ══ CAT SOUNDS ══
   // ══ LINK HOVER + CLICK SOUNDS ══
 (function(){
-  const hoverSound = new Audio('hover.mp3'); 
+  const hoverSound = new Audio(''); 
+  const clickSound = new Audio('click.mp3'); 
+  hoverSound.volume = 0.4;
+  clickSound.volume = 0.6;
+
+  // Elements that lead to another website
+  const externalLinks = 'a[href^="http"], a[target="_blank"]';
+
+  let lastHover = 0;
+  document.addEventListener('mouseover', e => {
+    const link = e.target.closest(externalLinks);
+    if (!link) return;
+    const now = Date.now();
+    if (now - lastHover < 300) return; // throttle so it doesn't spam
+    lastHover = now;
+    hoverSound.currentTime = 0;
+    hoverSound.play().catch(() => {});
+  }, { passive: true });
+
+  document.addEventListener('click', e => {
+    const link = e.target.closest(externalLinks);
+    if (!link) return;
+    clickSound.currentTime = 0;
+    clickSound.play().catch(() => {});
+  });
+})();
+
+  // ══ LINK HOVER + CLICK SOUNDS ══
+(function(){
+  const hoverSound = new Audio(''); 
   const clickSound = new Audio('click.mp3'); 
   hoverSound.volume = 0.4;
   clickSound.volume = 0.6;
@@ -1748,7 +1628,7 @@ const BJ_SUITS=['♠','♥','♦','♣'],BJ_RANKS=['A','2','3','4','5','6','7','
 function bjBuild(){bjDeck2=[];for(let s of BJ_SUITS)for(let r of BJ_RANKS)bjDeck2.push({r,s});for(let i=bjDeck2.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[bjDeck2[i],bjDeck2[j]]=[bjDeck2[j],bjDeck2[i]];}}
 function bjDraw(){return bjDeck2.pop();}
 function bjVal(c){if(['J','Q','K'].includes(c.r))return 10;if(c.r==='A')return 11;return+c.r;}
-function bjTotal(h){let s=h.reduce((a,c)=>a+bjVal(c),0),a=h.filter(c=>c.r==='A').length;while(s>21&&a-->0)s-=10;return s;}
+function bjTotal(h){let s=h.reduce((a,c)=>a+bjVal(c),0),a=h.filter(c=>c.r==='A').length;while(s>21&&a-- >0)s-=10;return s;}
 function bjCard(c,hidden){
   if(hidden)return `<div style="width:52px;height:76px;background:var(--surface);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;">🂠</div>`;
   const red=['♥','♦'].includes(c.s);
