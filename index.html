@@ -11,7 +11,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&family=Unbounded:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&family=Unbounded:wght@400;700;900&display=swap" rel="stylesheet">
 
   <style>
 @keyframes scan-anim {
@@ -96,6 +96,13 @@
   76%      { color: rgba(192,132,252,.5); text-shadow: none; }
 }
     /* ══ APPLE SF PRO FONT ══ */
+  html[lang="th"] h1:not(.no-th-style), 
+  html[lang="th"] h2:not(.no-th-style), 
+  html[lang="th"] h3:not(.no-th-style), 
+  html[lang="th"] .glow-title:not(.no-th-style) {
+    font-weight: 500 !important;
+    letter-spacing: -0.02em !important;
+  }
   body {
     font-family: -apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -167,7 +174,7 @@
   *,*::before,*::after{box-sizing:border-box;}
   *{cursor:none!important;}
   html{scroll-behavior:smooth;}
-  body{margin:0;padding:0;font-family:'Space Mono',monospace;background-color:var(--bg);color:var(--text);overflow-x:hidden;min-height:100vh;transition:background-color var(--transition-theme),color var(--transition-theme);}
+  body{margin:0;padding:0;font-family:'Space Mono', 'Mitr', monospace;background-color:var(--bg);color:var(--text);overflow-x:hidden;min-height:100vh;transition:background-color var(--transition-theme),color var(--transition-theme);}
 
   [data-theme="light"] body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradient(ellipse 80% 50% at 20% -10%,rgba(251,191,36,0.22),transparent),radial-gradient(ellipse 60% 60% at 85% 110%,rgba(8,145,178,0.12),transparent),radial-gradient(ellipse 40% 40% at 60% 40%,rgba(244,114,182,0.06),transparent);pointer-events:none;}
 
@@ -222,15 +229,21 @@
   .ts-knob{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 0 8px var(--glow1);transition:transform var(--transition-theme),background var(--transition-theme);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
   [data-theme="dark"] .ts-knob{transform:translateX(0px);}
   [data-theme="light"] .ts-knob{transform:translateX(26px);}
-  #theme-switcher::after{content:attr(data-tip);position:absolute;right:64px;top:50%;transform:translateY(-50%);background:var(--theme-btn-bg);border:1px solid var(--theme-btn-bd);color:var(--text-muted);font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.12em;padding:4px 10px;border-radius:999px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;backdrop-filter:blur(8px);}
+  #theme-switcher::after{content:attr(data-tip);position:absolute;right:64px;top:50%;transform:translateY(-50%);background:var(--theme-btn-bg);border:1px solid var(--theme-btn-bd);color:var(--text-muted);font-family:'Space Mono', 'Mitr', monospace;font-size:9px;letter-spacing:.12em;padding:4px 10px;border-radius:999px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;backdrop-filter:blur(8px);}
   #theme-switcher:hover::after{opacity:1;}
+
+  /* ══ LANGUAGE SWITCHER ══ */
+  #lang-switcher{position:fixed;top:18px;left:18px;z-index:99000;background:var(--theme-btn-bg);border:1px solid var(--theme-btn-bd);border-radius:999px;padding:0;width:56px;height:30px;cursor:pointer!important;transition:background var(--transition-theme),border-color var(--transition-theme),box-shadow var(--transition-theme);box-shadow:0 0 14px var(--glow1);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:'Space Mono', 'Mitr', monospace;font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--accent);}
+  #lang-switcher:hover{box-shadow:0 0 28px var(--glow1);border-color:var(--accent);}
+  #lang-switcher::after{content:attr(data-tip);position:absolute;left:64px;top:50%;transform:translateY(-50%);background:var(--theme-btn-bg);border:1px solid var(--theme-btn-bd);color:var(--text-muted);font-family:'Space Mono', 'Mitr', monospace;font-size:9px;letter-spacing:.12em;padding:4px 10px;border-radius:999px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;backdrop-filter:blur(8px);}
+  #lang-switcher:hover::after{opacity:1;}
 
   /* ══ CURSOR ══ */
   #custom-cursor{position:fixed;width:20px;height:20px;border-radius:50%;background:var(--cursor-color);border:2px solid var(--cursor-border);pointer-events:none;z-index:999999;transform:translate(-50%,-50%) scale(1);transition:width .18s cubic-bezier(0.34,1.56,0.64,1),height .18s cubic-bezier(0.34,1.56,0.64,1),background .18s,border-color .18s,box-shadow .18s,transform .18s cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 0 12px var(--cursor-color);}
   #custom-cursor.hovering{width:52px;height:52px;background:var(--cursor-hover);border-color:var(--accent);box-shadow:0 0 24px var(--glow2),0 0 48px var(--glow1);}
   #custom-cursor.pressing{transform:translate(-50%,-50%) scale(0.65) translateY(6px);box-shadow:0 0 6px var(--glow1);}
   #custom-cursor.hovering.pressing{transform:translate(-50%,-50%) scale(0.72) translateY(6px);}
-  #cursor-click-label{position:fixed;pointer-events:none;z-index:999998;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.1em;transform:translate(-50%,-50%);opacity:0;transition:opacity .15s;text-shadow:0 0 8px var(--glow2);white-space:nowrap;}
+  #cursor-click-label{position:fixed;pointer-events:none;z-index:999998;font-family:'Space Mono', 'Mitr', monospace;font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.1em;transform:translate(-50%,-50%);opacity:0;transition:opacity .15s;text-shadow:0 0 8px var(--glow2);white-space:nowrap;}
   #cursor-click-label.visible{opacity:1;}
   #cursor-glow{position:fixed;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,var(--cursor-glow) 0%,transparent 70%);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
 
@@ -251,10 +264,10 @@
   @keyframes loader-sweep-in{0%{transform:translateX(-105%);opacity:1}100%{transform:translateX(105%);opacity:0}}
   .loader-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:22px;padding:24px;clip-path:inset(0 100% 0 0);filter:blur(14px);opacity:0;animation:loader-content-ltr 1.25s var(--ease-premium) .2s forwards;}
   @keyframes loader-content-ltr{0%{clip-path:inset(0 100% 0 0);filter:blur(16px);opacity:0;transform:translateX(-24px)}55%{filter:blur(6px);opacity:.85}100%{clip-path:inset(0 0 0 0);filter:blur(0);opacity:1;transform:translateX(0)}}
-  .loader-welcome{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--accent);opacity:0;animation:loader-welcome-in .9s var(--ease-premium) .55s forwards;}
+  .loader-welcome{font-family:'Space Mono', 'Mitr', monospace;font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--accent);opacity:0;animation:loader-welcome-in .9s var(--ease-premium) .55s forwards;}
   @keyframes loader-welcome-in{from{opacity:0;transform:translateX(-12px);letter-spacing:.5em}to{opacity:1;transform:translateX(0);letter-spacing:.32em}}
   .loader-logo-wrap{position:relative;}
-  .loader-logo{font-family:'Unbounded',sans-serif;font-size:clamp(32px,8vw,48px);font-weight:900;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.15em;animation:pulse-logo 1.5s ease-in-out infinite;}
+  .loader-logo{font-family:'Unbounded', 'Mitr', sans-serif;font-size:clamp(32px,8vw,48px);font-weight:900;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.15em;animation:pulse-logo 1.5s ease-in-out infinite;}
   @keyframes pulse-logo{0%,100%{opacity:1}50%{opacity:.55}}
   .loader-sub-glitch{margin-top:-6px;}
   .loader-bar-track{width:220px;height:3px;background:var(--border);border-radius:999px;overflow:hidden;box-shadow:0 0 12px var(--glow1);}
@@ -277,10 +290,10 @@
   .greeting-card.in-view .greeting-enter--3{animation:greeting-enter-up .95s var(--ease-premium) .44s forwards;}
   @keyframes greeting-enter-up{to{opacity:1;transform:translateY(0);filter:blur(0);}}
   .greeting-title-row{display:flex;align-items:baseline;justify-content:center;gap:2px;min-height:1.3em;width:100%;font-size:clamp(1.6rem,5vw,3rem);line-height:1.15;}
-  #time-greeting{font-family:'Unbounded',sans-serif;font-size:1em;font-weight:900;letter-spacing:-.02em;line-height:inherit;margin:0;text-align:center;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 20px var(--glow1));}
+  #time-greeting{font-family:'Unbounded', 'Mitr', sans-serif;font-size:1em;font-weight:900;letter-spacing:-.02em;line-height:inherit;margin:0;text-align:center;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 20px var(--glow1));}
   .greeting-divider{width:48px;height:1px;background:var(--border);border-radius:999px;}
   .greeting-sub-row{display:flex;align-items:baseline;justify-content:center;gap:2px;min-height:1.4em;width:100%;font-size:clamp(.75rem,2vw,1rem);line-height:1.35;}
-  #time-greeting-sub{font-family:'Space Mono',monospace;font-size:1em;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin:0;text-align:center;line-height:inherit;}
+  #time-greeting-sub{font-family:'Space Mono', 'Mitr', monospace;font-size:1em;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin:0;text-align:center;line-height:inherit;}
   .typing-cursor{display:inline-block;flex-shrink:0;height:1em;width:.11em;min-width:5px;max-width:7px;border-radius:3px;background:var(--typing-cursor-grad);box-shadow:var(--typing-cursor-glow);opacity:0;visibility:hidden;pointer-events:none;margin-left:.14em;}
   .greeting-sub-row .typing-cursor{width:.12em;min-width:4px;max-width:6px;background:linear-gradient(180deg,var(--accent) 0%,var(--accent2) 100%);box-shadow:0 0 12px var(--glow2);}
   .typing-cursor.is-on{visibility:visible;animation:cursor-blink 1s step-end infinite;}
@@ -301,16 +314,16 @@
   .discord-card__status{position:absolute;bottom:4px;right:4px;width:20px;height:20px;border-radius:50%;border:4px solid var(--bg);box-shadow:0 0 10px currentColor;flex-shrink:0;z-index:2;}
   .discord-card__status::before,.discord-card__status::after{content:'';position:absolute;inset:0;border-radius:50%;background:inherit;animation:status-pulse 1.8s ease-out infinite;pointer-events:none;z-index:-1;}
   .discord-card__status::after{animation-delay:.75s;}
-  .discord-card__display{font-family:'Syne',sans-serif;font-size:1.35rem;font-weight:800;color:var(--text);margin:0 0 2px;line-height:1.2;letter-spacing:-.02em;}
-  .discord-card__user{color:var(--accent);font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-family:'Space Mono',monospace;margin:0 0 10px;}
+  .discord-card__display{font-family:'Syne', 'Mitr', sans-serif;font-size:1.35rem;font-weight:800;color:var(--text);margin:0 0 2px;line-height:1.2;letter-spacing:-.02em;}
+  .discord-card__user{color:var(--accent);font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-family:'Space Mono', 'Mitr', monospace;margin:0 0 10px;}
   .discord-card__custom{display:inline-flex;align-items:center;gap:6px;max-width:100%;padding:8px 12px;margin-bottom:8px;border-radius:12px;background:var(--info-bg);border:1px solid var(--info-border);font-size:13px;color:var(--text-muted);line-height:1.35;}
   .discord-card__custom.is-hidden{display:none;}
-  .discord-card__activity{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;border-radius:12px;background:rgba(0,0,0,.2);border:1px solid var(--border);font-size:12px;color:var(--text-muted);line-height:1.4;font-family:'Space Mono',monospace;}
+  .discord-card__activity{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;border-radius:12px;background:rgba(0,0,0,.2);border:1px solid var(--border);font-size:12px;color:var(--text-muted);line-height:1.4;font-family:'Space Mono', 'Mitr', monospace;}
   [data-theme="light"] .discord-card__activity{background:var(--info-bg);}
   .discord-card__activity.is-hidden{display:none;}
   .discord-card__activity strong{color:var(--text);font-weight:700;}
   .discord-card__act-icon{flex-shrink:0;font-size:14px;line-height:1.4;}
-  .discord-card__status-row{display:flex;align-items:center;gap:8px;margin-top:4px;font-size:12px;color:var(--text-dim);font-family:'Space Mono',monospace;}
+  .discord-card__status-row{display:flex;align-items:center;gap:8px;margin-top:4px;font-size:12px;color:var(--text-dim);font-family:'Space Mono', 'Mitr', monospace;}
   .discord-card__status-pill{padding:3px 8px;border-radius:999px;background:var(--info-bg);border:1px solid var(--info-border);font-size:10px;letter-spacing:.06em;text-transform:uppercase;}
   .discord-card__profile-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:14px;padding:10px 16px;border-radius:8px;background:#5865F2;color:#fff;font-size:14px;font-weight:600;font-family:-apple-system,"SF Pro Display","Segoe UI",sans-serif;text-decoration:none;letter-spacing:0;border:none;cursor:pointer;transition:background .2s ease,transform .35s var(--ease-play),box-shadow .35s ease;box-shadow:0 2px 8px rgba(88,101,242,.35);}
   .discord-card__profile-btn:hover{background:#4752c4;transform:translateY(-2px);box-shadow:0 4px 16px rgba(88,101,242,.45);}
@@ -401,7 +414,7 @@
   @keyframes float-up{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:.7}90%{opacity:.4}100%{transform:translateY(-10vh) scale(1);opacity:0}}
 
   /* ══ INFO LIST ══ */
-  .info-list{font-family:'Space Mono',monospace;background:var(--info-bg);padding:24px 28px;border-radius:14px;border:1px solid var(--info-border);list-style:none;margin:0;transition:background var(--transition-theme),border-color var(--transition-theme);}
+  .info-list{font-family:'Space Mono', 'Mitr', monospace;background:var(--info-bg);padding:24px 28px;border-radius:14px;border:1px solid var(--info-border);list-style:none;margin:0;transition:background var(--transition-theme),border-color var(--transition-theme);}
   .info-list li{padding:10px 0;border-bottom:1px solid var(--info-border);font-size:13px;display:flex;gap:12px;color:var(--text);transition:color var(--transition-theme),border-color var(--transition-theme);}
   .info-list li:last-child{border-bottom:none;}
   .info-list li span{min-width:110px;display:inline-block;flex-shrink:0;}
@@ -437,9 +450,9 @@
   .song-card:hover .song-spotify-badge{opacity:1;transform:scale(1);}
   .song-body{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;gap:12px;}
   .song-meta{flex:1;min-width:0;}
-  .song-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color var(--transition-theme);}
-  .song-artist{font-size:11px;color:var(--text-muted);margin-top:3px;font-family:'Space Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color var(--transition-theme);}
-  .song-play-btn{flex-shrink:0;display:flex;align-items:center;gap:6px;padding:8px 14px 8px 10px;border-radius:999px;background:var(--accent-btn,rgba(120,40,202,.25));border:1px solid var(--accent,rgba(192,132,252,.3));color:var(--text);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.05em;white-space:nowrap;transition:all .25s ease;}
+  .song-title{font-family:'Syne', 'Mitr', sans-serif;font-size:15px;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color var(--transition-theme);}
+  .song-artist{font-size:11px;color:var(--text-muted);margin-top:3px;font-family:'Space Mono', 'Mitr', monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color var(--transition-theme);}
+  .song-play-btn{flex-shrink:0;display:flex;align-items:center;gap:6px;padding:8px 14px 8px 10px;border-radius:999px;background:var(--accent-btn,rgba(120,40,202,.25));border:1px solid var(--accent,rgba(192,132,252,.3));color:var(--text);font-family:'Space Mono', 'Mitr', monospace;font-size:10px;letter-spacing:.05em;white-space:nowrap;transition:all .25s ease;}
   .song-card:hover .song-play-btn{background:var(--accent-btn-hover,rgba(120,40,202,.6));box-shadow:0 0 20px var(--glow,rgba(120,40,202,.4));transform:scale(1.06);}
   .song-play-btn svg{width:14px;height:14px;fill:currentColor;transition:transform .2s;}
   .song-card:hover .song-play-btn svg{transform:scale(1.2);}
@@ -456,7 +469,7 @@
   .cat-corner:hover .cat-btn{border-color:var(--accent);box-shadow:0 0 32px var(--glow2);filter:brightness(1.05);}
   .social-link{color:var(--text-muted);font-size:14px;text-decoration:none;transition:transform .35s var(--ease-premium),color .25s ease,background .25s ease,border-color .25s ease,filter .35s ease;padding:6px 12px;border-radius:8px;border:1px solid transparent;}
   .social-link:hover{color:var(--text);border-color:var(--social-border-h);background:var(--social-hover);transform:translateY(-2px);filter:blur(0);}
-  .special-btn{background:var(--btn-bg);color:var(--btn-text);padding:12px 72px;border-radius:14px;font-weight:700;font-family:'Space Mono',monospace;border:none;cursor:pointer;transition:transform .45s var(--ease-play),box-shadow .45s ease,filter .35s ease;letter-spacing:.05em;position:relative;}
+  .special-btn{background:var(--btn-bg);color:var(--btn-text);padding:12px 72px;border-radius:14px;font-weight:700;font-family:'Space Mono', 'Mitr', monospace;border:none;cursor:pointer;transition:transform .45s var(--ease-play),box-shadow .45s ease,filter .35s ease;letter-spacing:.05em;position:relative;}
   .special-btn:hover{transform:translateY(-4px) scale(1.06);box-shadow:0 0 48px var(--glow1),0 0 90px var(--glow2);filter:brightness(1.08);}
   .special-btn:active{transform:translateY(0) scale(.96);transition-duration:.12s;}
 
@@ -502,14 +515,14 @@
   .bmp-panel{display:flex;flex-direction:column;gap:12px;padding:16px 18px 16px;min-width:320px;position:relative;}
   .bmp-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent);opacity:.7;}
   .bmp-header{display:flex;align-items:center;justify-content:space-between;}
-  .bmp-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);display:flex;align-items:center;gap:7px;}
+  .bmp-label{font-family:'Space Mono', 'Mitr', monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);display:flex;align-items:center;gap:7px;}
   .bmp-label svg{filter:drop-shadow(0 0 6px var(--glow2));}
   .bmp-close{background:var(--surface);border:1px solid var(--border);cursor:pointer;color:var(--text-muted);width:26px;height:26px;border-radius:8px;transition:transform .35s var(--ease-play),color .25s ease,background .25s ease,border-color .25s ease;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;}
   .bmp-close:hover{color:var(--text);background:var(--glow2);border-color:var(--border-hover);transform:rotate(90deg) scale(1.05);}
   .bmp-track-row{display:flex;align-items:center;gap:12px;}
   .bmp-track-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;}
-  .bmp-track-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-  .bmp-track-index{font-family:'Space Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:.06em;}
+  .bmp-track-name{font-family:'Syne', 'Mitr', sans-serif;font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .bmp-track-index{font-family:'Space Mono', 'Mitr', monospace;font-size:9px;color:var(--text-dim);letter-spacing:.06em;}
   .bmp-panel-viz{display:flex;align-items:flex-end;gap:3px;height:22px;flex-shrink:0;padding:4px 8px;background:var(--surface);border:1px solid var(--border);border-radius:10px;}
   .bmp-panel-viz span{width:3px;border-radius:2px;background:linear-gradient(to top,var(--accent2),var(--accent));box-shadow:0 0 6px var(--glow2);transform-origin:bottom;animation:bar-dance .8s var(--ease-play) infinite alternate;}
   .bmp-panel-viz span:nth-child(1){height:6px;animation-duration:.6s;}
@@ -525,7 +538,7 @@
   @keyframes bmp-progress-shine{0%{background-position:0% 50%}100%{background-position:200% 50%}}
   .bmp-progress-fill::after{content:'';position:absolute;right:-5px;top:50%;transform:translateY(-50%);width:10px;height:10px;background:var(--text);border-radius:50%;box-shadow:0 0 10px var(--accent),0 0 20px var(--glow2);opacity:0;transition:opacity .25s ease,transform .25s var(--ease-play);}
   .bmp-progress-track:hover .bmp-progress-fill::after{opacity:1;transform:translateY(-50%) scale(1.15);}
-  .bmp-time{font-family:'Space Mono',monospace;font-size:9px;color:var(--text-dim);display:flex;justify-content:space-between;}
+  .bmp-time{font-family:'Space Mono', 'Mitr', monospace;font-size:9px;color:var(--text-dim);display:flex;justify-content:space-between;}
   .bmp-controls{display:flex;align-items:center;justify-content:center;gap:6px;padding:4px 0;}
   .bmp-ctrl{background:transparent;border:1px solid transparent;cursor:pointer;color:var(--text-muted);padding:8px;border-radius:12px;transition:transform .4s var(--ease-play),color .25s ease,background .25s ease,border-color .25s ease,box-shadow .25s ease;display:flex;align-items:center;justify-content:center;}
   .bmp-ctrl:hover{color:var(--text);background:var(--surface-hover);border-color:var(--border);transform:translateY(-2px);box-shadow:0 0 14px var(--glow1);}
@@ -545,7 +558,7 @@
   .bmp-playlist{max-height:0;overflow:hidden;transition:max-height .45s var(--ease-premium),opacity .35s ease;margin-top:-4px;opacity:0;}
   .bmp-playlist.open{max-height:210px;opacity:1;margin-top:0;}
   .bmp-playlist-inner{display:flex;flex-direction:column;gap:4px;max-height:190px;overflow-y:auto;padding:6px 2px 2px;scrollbar-width:thin;scrollbar-color:var(--accent) transparent;}
-  .bmp-playlist-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;cursor:pointer;font-family:'Space Mono',monospace;font-size:11px;color:var(--text-muted);transition:transform .35s var(--ease-play),background .3s ease,color .25s ease,border-color .25s ease;border:1px solid transparent;position:relative;}
+  .bmp-playlist-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;cursor:pointer;font-family:'Space Mono', 'Mitr', monospace;font-size:11px;color:var(--text-muted);transition:transform .35s var(--ease-play),background .3s ease,color .25s ease,border-color .25s ease;border:1px solid transparent;position:relative;}
   .bmp-playlist-item::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:0;border-radius:0 3px 3px 0;background:linear-gradient(var(--accent),var(--accent2));transition:height .35s var(--ease-play);}
   .bmp-playlist-item:hover{background:var(--glow2);color:var(--text);transform:translateX(3px);}
   .bmp-playlist-item.active{background:var(--glow1);border-color:var(--glow2);color:var(--accent);}
@@ -565,15 +578,15 @@
   /* ══ GAME ══ */
   #game-canvas-wrapper{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--border);box-shadow:0 0 30px var(--glow1),inset 0 0 60px rgba(0,0,0,.2);transition:border-color var(--transition-theme),box-shadow var(--transition-theme);}
   #game-canvas{display:block;width:100%;height:360px;background:transparent;}
-  #game-ui{position:absolute;top:12px;left:16px;right:16px;display:flex;justify-content:space-between;align-items:center;pointer-events:none;font-family:'Space Mono',monospace;font-size:12px;z-index:5;}
+  #game-ui{position:absolute;top:12px;left:16px;right:16px;display:flex;justify-content:space-between;align-items:center;pointer-events:none;font-family:'Space Mono', 'Mitr', monospace;font-size:12px;z-index:5;}
   #game-score-display{background:rgba(0,0,0,.5);border:1px solid var(--border);border-radius:999px;padding:5px 14px;color:var(--accent);font-weight:700;letter-spacing:.08em;}
   #game-lives-display{display:flex;gap:4px;background:rgba(0,0,0,.5);border:1px solid rgba(255,100,100,.3);border-radius:999px;padding:5px 14px;}
   .life-heart{color:#f472b6;font-size:14px;}
   #game-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:var(--overlay-bg);backdrop-filter:blur(8px);z-index:10;border-radius:16px;transition:opacity .3s,background var(--transition-theme);}
   #game-overlay.hidden{opacity:0;pointer-events:none;}
-  #game-overlay h3{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:0;filter:drop-shadow(0 0 20px var(--glow2));}
-  #game-overlay p{font-family:'Space Mono',monospace;font-size:12px;color:var(--text-muted);margin:0;text-align:center;line-height:1.8;}
-  #game-start-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:12px;padding:12px 40px;color:white;font-family:'Space Mono',monospace;font-weight:700;font-size:13px;letter-spacing:.08em;cursor:pointer;transition:all .2s;box-shadow:0 0 20px var(--glow1);}
+  #game-overlay h3{font-family:'Syne', 'Mitr', sans-serif;font-size:28px;font-weight:800;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:0;filter:drop-shadow(0 0 20px var(--glow2));}
+  #game-overlay p{font-family:'Space Mono', 'Mitr', monospace;font-size:12px;color:var(--text-muted);margin:0;text-align:center;line-height:1.8;}
+  #game-start-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:12px;padding:12px 40px;color:white;font-family:'Space Mono', 'Mitr', monospace;font-weight:700;font-size:13px;letter-spacing:.08em;cursor:pointer;transition:all .2s;box-shadow:0 0 20px var(--glow1);}
   #game-start-btn:hover{transform:scale(1.08);box-shadow:0 0 35px var(--glow2);}
   
   /* ══ LIGHT THEME SHINY GLOW ══ */
@@ -582,8 +595,8 @@
   [data-theme="light"] .bmp-play{animation:shine-pulse 3s ease-in-out infinite;box-shadow:0 0 16px rgba(217,119,6,0.5),0 0 28px rgba(217,119,6,0.3),inset 0 0 15px rgba(255,255,255,0.25);}
   [data-theme="light"] #theme-switcher{animation:shine-pulse 4s ease-in-out infinite;box-shadow:0 0 18px rgba(217,119,6,0.4),0 0 32px rgba(217,119,6,0.2),inset 0 0 12px rgba(255,255,255,0.2);}
   [data-theme="dark"] #game-start-btn,[data-theme="dark"] .bmp-play,[data-theme="dark"] #theme-switcher{animation:none;}
-  #game-final-score{font-family:'Syne',sans-serif;font-size:16px;color:var(--accent);display:none;}
-  #game-hint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);pointer-events:none;white-space:nowrap;}
+  #game-final-score{font-family:'Syne', 'Mitr', sans-serif;font-size:16px;color:var(--accent);display:none;}
+  #game-hint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-family:'Space Mono', 'Mitr', monospace;font-size:10px;color:var(--text-dim);pointer-events:none;white-space:nowrap;}
   #game-panels{position:relative;min-height:380px;}
   #game-panels .game-panel{display:none!important;visibility:hidden!important;height:0!important;overflow:hidden!important;margin:0!important;padding:0!important;border:none!important;}
   #game-panels .game-panel.active{display:block!important;visibility:visible!important;height:auto!important;overflow:visible!important;animation:gamePanelIn .65s var(--ease-premium);}
@@ -592,15 +605,15 @@
 
   /* ══ MISC ══ */
   .ps-bottom-right{position:fixed;bottom:0px;right:-400px;z-index:9999;pointer-events:none;}
-  .ps-text{font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);background:transparent!important;border:none!important;box-shadow:none!important;padding:10px;}
+  .ps-text{font-family:'Space Mono', 'Mitr', monospace;font-size:11px;color:var(--text-dim);background:transparent!important;border:none!important;box-shadow:none!important;padding:10px;}
   .footer-line{border-top:1px solid var(--footer-border);transition:border-color var(--transition-theme);}
 
   /* ══ THEME TOAST ══ */
-  #theme-sound-toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--theme-btn-bg);border:1px solid var(--theme-btn-bd);color:var(--text-muted);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.1em;padding:8px 20px;border-radius:999px;backdrop-filter:blur(16px);z-index:99001;pointer-events:none;transition:transform .4s cubic-bezier(0.4,0,0.2,1),opacity .4s ease;opacity:0;white-space:nowrap;}
+  #theme-sound-toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--theme-btn-bg);border:1px solid var(--theme-btn-bd);color:var(--text-muted);font-family:'Space Mono', 'Mitr', monospace;font-size:11px;letter-spacing:.1em;padding:8px 20px;border-radius:999px;backdrop-filter:blur(16px);z-index:99001;pointer-events:none;transition:transform .4s cubic-bezier(0.4,0,0.2,1),opacity .4s ease;opacity:0;white-space:nowrap;}
   #theme-sound-toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
 
   /* ══ PHOTOGRAPHY SHOWCASE ══ */
-  .showcase-label{display:inline-flex;align-items:center;gap:10px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;}
+  .showcase-label{display:inline-flex;align-items:center;gap:10px;font-family:'Space Mono', 'Mitr', monospace;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;}
   .showcase-label::before,.showcase-label::after{content:'';width:28px;height:1px;background:var(--accent);opacity:.5;}
 
   .photo-bento{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;}
@@ -618,10 +631,10 @@
 
   .pb-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,transparent 55%);display:flex;flex-direction:column;justify-content:flex-end;padding:20px;opacity:0;transition:opacity .4s ease;}
   .pb-item:hover .pb-overlay{opacity:1;}
-  .pb-tag{display:inline-block;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:4px;}
-  .pb-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:#fff;line-height:1.2;}
-  .pb-hero-badge{position:absolute;top:14px;left:14px;z-index:3;background:var(--accent);color:#fff;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;padding:4px 10px;border-radius:999px;box-shadow:0 0 14px var(--glow1);}
-  .showcase-btn{display:inline-flex;align-items:center;gap:10px;padding:13px 34px;background:transparent;border:1px solid var(--accent);border-radius:14px;color:var(--accent);font-family:'Space Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.08em;cursor:pointer;transition:all .3s cubic-bezier(0.34,1.56,.64,1);position:relative;overflow:hidden;text-decoration:none;}
+  .pb-tag{display:inline-block;font-family:'Space Mono', 'Mitr', monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:4px;}
+  .pb-title{font-family:'Syne', 'Mitr', sans-serif;font-size:15px;font-weight:800;color:#fff;line-height:1.2;}
+  .pb-hero-badge{position:absolute;top:14px;left:14px;z-index:3;background:var(--accent);color:#fff;font-family:'Space Mono', 'Mitr', monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;padding:4px 10px;border-radius:999px;box-shadow:0 0 14px var(--glow1);}
+  .showcase-btn{display:inline-flex;align-items:center;gap:10px;padding:13px 34px;background:transparent;border:1px solid var(--accent);border-radius:14px;color:var(--accent);font-family:'Space Mono', 'Mitr', monospace;font-size:12px;font-weight:700;letter-spacing:.08em;cursor:pointer;transition:all .3s cubic-bezier(0.34,1.56,.64,1);position:relative;overflow:hidden;text-decoration:none;}
   .showcase-btn::before{content:'';position:absolute;inset:0;background:var(--accent);transform:translateX(-105%);transition:transform .35s cubic-bezier(0.4,0,0.2,1);}
   .showcase-btn:hover{color:#fff;box-shadow:0 0 28px var(--glow1);}
   .showcase-btn:hover::before{transform:translateX(0);}
@@ -630,8 +643,8 @@
   .showcase-btn:hover svg{transform:translateX(4px);}
   .photo-stats{display:flex;align-items:center;gap:28px;flex-wrap:wrap;margin-top:32px;padding-top:24px;border-top:1px solid var(--border);}
   .photo-stat{display:flex;flex-direction:column;gap:2px;}
-  .photo-stat-num{font-family:'Unbounded',sans-serif;font-size:22px;font-weight:900;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-  .photo-stat-label{font-family:'Space Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:.15em;text-transform:uppercase;}
+  .photo-stat-num{font-family:'Unbounded', 'Mitr', sans-serif;font-size:22px;font-weight:900;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .photo-stat-label{font-family:'Space Mono', 'Mitr', monospace;font-size:9px;color:var(--text-dim);letter-spacing:.15em;text-transform:uppercase;}
 
   @media(max-width:1024px){
     img {
@@ -644,6 +657,11 @@
   </head>
 
   <body class="p-4 md:p-8 flex flex-col items-center">
+
+  <!-- LANGUAGE SWITCHER -->
+  <button id="lang-switcher" onclick="toggleLanguage()" aria-label="Toggle language" data-tip="SWITCH LANGUAGE">
+    <span id="langText">EN</span>
+  </button>
 
   <!-- THEME SWITCHER -->
   <button id="theme-switcher" onclick="toggleTheme()" aria-label="Toggle theme" data-tip="SWITCH THEME">
@@ -783,11 +801,11 @@
         <div class="discord-card__custom is-hidden" id="dc-custom-status"></div>
         <div class="discord-card__activity is-hidden" id="dc-activity"></div>
         <div class="discord-card__status-row">
-          <span class="discord-card__status-pill" id="dc-status-label">Loading…</span>
+          <span class="discord-card__status-pill" id="dc-status-label" data-i18n="discord-loading">Loading…</span>
         </div>
         <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer" class="discord-card__profile-btn" aria-label="See profile on Discord">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037 12.3 12.3 0 0 0-.608 1.25 18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
-          See profile on Discord
+          <span data-i18n="discord-profile">See profile on Discord</span>
         </a>
       </div>
     </div>
@@ -795,7 +813,7 @@
 
   <div class="flex items-center justify-center gap-4 mt-8 reveal">
     <div class="h-px w-24" style="background:linear-gradient(to right,transparent,var(--accent))"></div>
-    <span style="color:var(--accent);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;font-family:'Space Mono',monospace;">ssnmhjjg</span>
+    <span style="color:var(--accent);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;font-family:'Space Mono', 'Mitr', monospace;">ssnmhjjg</span>
     <div class="h-px w-24" style="background:linear-gradient(to left,transparent,var(--accent))"></div>
   </div>
 </header>
@@ -804,22 +822,22 @@
 
       <!-- ABOUT ME — card-reveal (fires after header finishes) -->
       <div class="glass-card p-8 card-reveal .card-reveal">
-        <h2 class="text-2xl font-bold mb-10 flex items-center gap-3 " style="color:var(--text);font-family:'Syne',sans-serif;"><span>✅</span> About me</h2>
+        <h2 class="text-2xl font-bold mb-10 flex items-center gap-3 " style="color:var(--text);font-family:'Syne', 'Mitr', sans-serif;"><span>✅</span> <span data-i18n="about-title">About me</span></h2>
         <ul class="info-list space-y-1 list-none p-0 m-0">
-          <li>&nbsp;&nbsp;<span class="c-blue3">Nickname:</span>&nbsp;&nbsp;Gao | Ice</li>
-          <li>&nbsp;&nbsp;<span class="c-blue">First name:</span>&nbsp;&nbsp;Mr.Natthasit</li>
-          <li>&nbsp;&nbsp;<span class="c-purple">Age:</span>&nbsp;&nbsp;16 years old (this year)</li>
-          <li>&nbsp;&nbsp;<span class="c-y2">Education:</span>&nbsp;&nbsp;วิทยาลัยเทคโนโลยีบริหารธุรกิจยานนาวา | Yannawa business administration technological college</li>
-          <li>&nbsp;&nbsp;<span class="c-blue4">Nationality:</span>&nbsp;&nbsp;Thai (Korean soon! lmao)</li>
-          <li>&nbsp;&nbsp;<span class="c-blue5">Speaking:</span>&nbsp;&nbsp;Thai, English(not that good)</li>
-          <li>&nbsp;&nbsp;<span class="c-blue2">Gender:</span>&nbsp;&nbsp;Male</li>
-          <li>&nbsp;&nbsp;<span class="c-pink">Certificate:</span>&nbsp;&nbsp;I don't have any lmao</li>
-          <li>&nbsp;&nbsp;<span class="c-y1">Hobbies:</span>&nbsp;&nbsp;Play games, Photography, learning some new skills I guess</li>
-          <li>&nbsp;&nbsp;<span class="c-y4">Good at:</span>&nbsp;&nbsp;Photography (I'm not a dev I don't know that much about coding)</li>
-          <li style="flex-wrap:wrap;">&nbsp;&nbsp;<span class="c-y3 mb-3">More info:&nbsp;&nbsp;</span>
-            <span style="flex:1;min-width:0;word-break:break-word;white-space:normal;">&nbsp;&nbsp;Welp I don't know why I made this website up but I guess it might be useful someday I don't know &nbsp;&nbsp;nither</span>
+          <li>&nbsp;&nbsp;<span class="c-blue3" data-i18n="info-nickname">Nickname:</span>&nbsp;&nbsp;<span data-i18n="info-nickname-val">Gao | Ice</span></li>
+          <li>&nbsp;&nbsp;<span class="c-blue" data-i18n="info-firstname">First name:</span>&nbsp;&nbsp;<span data-i18n="info-firstname-val">Mr.Natthasit</span></li>
+          <li>&nbsp;&nbsp;<span class="c-purple" data-i18n="info-age">Age:</span>&nbsp;&nbsp;<span data-i18n="info-age-val">16 years old (this year)</span></li>
+          <li>&nbsp;&nbsp;<span class="c-y2" data-i18n="info-education">Education:</span>&nbsp;&nbsp;<span data-i18n="info-education-val">วิทยาลัยเทคโนโลยีบริหารธุรกิจยานนาวา | Yannawa business administration technological college</span></li>
+          <li>&nbsp;&nbsp;<span class="c-blue4" data-i18n="info-nationality">Nationality:</span>&nbsp;&nbsp;<span data-i18n="info-nationality-val">Thai (Korean soon! lmao)</span></li>
+          <li>&nbsp;&nbsp;<span class="c-blue5" data-i18n="info-speaking">Speaking:</span>&nbsp;&nbsp;<span data-i18n="info-speaking-val">Thai, English(not that good)</span></li>
+          <li>&nbsp;&nbsp;<span class="c-blue2" data-i18n="info-gender">Gender:</span>&nbsp;&nbsp;<span data-i18n="info-gender-val">Male</span></li>
+          <li>&nbsp;&nbsp;<span class="c-pink" data-i18n="info-certificate">Certificate:</span>&nbsp;&nbsp;<span data-i18n="info-certificate-val">I don't have any lmao</span></li>
+          <li>&nbsp;&nbsp;<span class="c-y1" data-i18n="info-hobbies">Hobbies:</span>&nbsp;&nbsp;<span data-i18n="info-hobbies-val">Play games, Photography, learning some new skills I guess</span></li>
+          <li>&nbsp;&nbsp;<span class="c-y4" data-i18n="info-goodat">Good at:</span>&nbsp;&nbsp;<span data-i18n="info-goodat-val">Photography (I'm not a dev I don't know that much about coding)</span></li>
+          <li style="flex-wrap:wrap;">&nbsp;&nbsp;<span class="c-y3 mb-3" data-i18n="info-moreinfo">More info:&nbsp;&nbsp;</span>
+            &nbsp;&nbsp;<span style="flex:1;min-width:0;word-break:break-word;white-space:normal;" data-i18n="info-moreinfo-val">Welp I don't know why I made this website up but I guess it might be useful someday I don't know &nbsp;&nbsp;nither</span>
         </ul>
-        <p class="text-xs mt-4 text-right italic font-mono" style="color:var(--text-dim)">I'm stupid</p>
+        <p class="text-xs mt-4 text-right italic font-mono" style="color:var(--text-dim)" data-i18n="footer-stupid">I'm stupid</p>
       </div>
 
       <!-- PHOTOGRAPHY SHOWCASE -->
@@ -830,11 +848,11 @@
         </div>
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
           <div>
-            <h2 class="text-2xl font-bold flex items-center gap-3" style="color:var(--text);font-family:'Syne',sans-serif;"><span>📷</span>Showcase</h2>
-            <p class="mt-2 text-sm" style="color:var(--text-muted);font-family:'Space Mono',monospace;">Landscapes · Building · Nature</p>
+            <h2 class="text-2xl font-bold flex items-center gap-3" style="color:var(--text);font-family:'Syne', 'Mitr', sans-serif;" data-i18n="photo-title"><span>📷</span>Showcase</h2>
+            <p class="mt-2 text-sm" style="color:var(--text-muted);font-family:'Space Mono', 'Mitr', monospace;" data-i18n="photo-desc">Landscapes · Building · Nature</p>
           </div>
           <a href="https://www.instagram.com/ssnmhjjg1/" target="_blank" class="showcase-btn">
-            <span>View on Instagram</span>
+            <span data-i18n="photo-view-btn">View on Instagram</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
         </div>
@@ -868,12 +886,12 @@
         </div>
 
         <div class="photo-stats">
-          <div class="photo-stat"><div class="photo-stat-num">7</div><div class="photo-stat-label">Photos Shared</div></div>
-          <div class="photo-stat"><div class="photo-stat-num">7</div><div class="photo-stat-label">Styles</div></div>
-          <div class="photo-stat"><div class="photo-stat-num">3</div><div class="photo-stat-label">Year of shooting</div></div>
+          <div class="photo-stat"><div class="photo-stat-num">7</div><div class="photo-stat-label" data-i18n="photo-stats-label1">Photos Shared</div></div>
+          <div class="photo-stat"><div class="photo-stat-num">7</div><div class="photo-stat-label" data-i18n="photo-stats-label2">Styles</div></div>
+          <div class="photo-stat"><div class="photo-stat-num">3</div><div class="photo-stat-label" data-i18n="photo-stats-label3">Year of shooting</div></div>
           <div style="flex:1"></div>
           <a href="https://www.instagram.com/p/DMemk7qTDWn/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" class="showcase-btn" style="padding:9px 22px;font-size:10px;">
-            <span>Highlight Post</span>
+            <span data-i18n="photo-highlight">Highlight Post</span>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
         </div>
@@ -881,7 +899,7 @@
 
       <!-- FAVORITE GAMES -->
       <div class="glass-card p-8 card-reveal">
-        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3" style="color:var(--text);font-family:'Syne',sans-serif;"><span>🎮</span> Favorite Games</h2>
+        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3" style="color:var(--text);font-family:'Syne', 'Mitr', sans-serif;" data-i18n="games-title"><span>🎮</span> Favorite Games</h2>
         <div class="flex flex-wrap gap-3 favorite-tags">
           <span class="game-tag stagger-child">Body Cam</span><span class="game-tag stagger-child">RDR 2</span>
           <span class="game-tag stagger-child">Roblox</span><span class="game-tag stagger-child">CS2</span><span class="game-tag stagger-child">Titanfall 2</span>
@@ -890,7 +908,7 @@
 
       <!-- IMAGES -->
       <div class="glass-card p-8 card-reveal">
-        <h2 class="text-2xl font-bold mb-8 flex items-center gap-3" style="color:var(--text);font-family:'Syne',sans-serif;"><span>📸</span> If I was in image I will be</h2>
+        <h2 class="text-2xl font-bold mb-8 flex items-center gap-3" style="color:var(--text);font-family:'Syne', 'Mitr', sans-serif;" data-i18n="games-image-title"><span>📸</span> If I was in image I will be</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
           <div class="img-tile aspect-square rounded-2xl overflow-hidden" style="background:var(--surface);border:1px solid var(--border)"><img src="download (1).jpg" class="w-full h-full object-cover" alt="Trip"></div>
           <div class="img-tile aspect-square rounded-2xl overflow-hidden" style="background:var(--surface);border:1px solid var(--border)"><img src="download.jpg" class="w-full h-full object-cover" alt="Cat"></div>
@@ -900,20 +918,20 @@
       </div>
 
       <!-- BIRTHDAY -->
-      <a class="text-5xl font-extrabold glow-title mb-8 text-center block reveal" style="font-family:'Unbounded',sans-serif;">birthday in</a>
+      <a class="text-5xl font-extrabold glow-title mb-8 text-center block reveal" style="font-family:'Unbounded', 'Mitr', sans-serif;" data-i18n="birthday-label">birthday in</a>
       <div class="glass-card clock-card mb-10 card-reveal">
         <div class="clock">
-          <div class="clock-unit"><span id="days">00</span><p>DAYS</p></div>
-          <div class="clock-unit"><span id="hours">00</span><p>HOURS</p></div>
-          <div class="clock-unit"><span id="minutes">00</span><p>MINS</p></div>
-          <div class="clock-unit"><span id="seconds">00</span><p>SECS</p></div>
+          <div class="clock-unit"><span id="days">00</span><p data-i18n="countdown-days">DAYS</p></div>
+          <div class="clock-unit"><span id="hours">00</span><p data-i18n="countdown-hours">HOURS</p></div>
+          <div class="clock-unit"><span id="minutes">00</span><p data-i18n="countdown-mins">MINS</p></div>
+          <div class="clock-unit"><span id="seconds">00</span><p data-i18n="countdown-secs">SECS</p></div>
         </div>
       </div>
 
       <div class="glass-card p-8 card-reveal" id="game-section" style="margin-bottom: 24px;">
   <div class="flex items-center justify-between mb-2 flex-wrap gap-3">
-    <h2 class="text-2xl font-bold flex items-center gap-3" style="color:var(--text);font-family:'Syne',sans-serif;"><span id="game-hub-icon">🕹️</span> <span id="game-hub-title">Star Dodge</span></h2>
-    <span id="game-hub-counter" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:.08em;">1 / 3</span>
+    <h2 class="text-2xl font-bold flex items-center gap-3 no-th-style" style="color:var(--text);font-family:'Syne', 'Mitr', sans-serif;"><span id="game-hub-icon">🕹️</span> <span id="game-hub-title">Star Dodge</span></h2>
+    <span id="game-hub-counter" style="font-family:'Space Mono', 'Mitr', monospace;font-size:11px;color:var(--text-muted);letter-spacing:.08em;">1 / 3</span>
   </div>
   <p id="game-hub-desc" class="text-sm mb-6 font-mono" style="color:var(--text-muted)">Dodge the purple meteors. Survive as long as you can!</p>
   <div id="game-panels">
@@ -925,7 +943,7 @@
           <div id="game-lives-display"><span class="life-heart" id="h1">♥</span><span class="life-heart" id="h2">♥</span><span class="life-heart" id="h3">♥</span></div>
         </div>
         <div id="game-overlay">
-          <h3 id="overlay-title">✦ STAR DODGE ✦</h3>
+          <h3 id="overlay-title" class="no-th-style">✦ STAR DODGE ✦</h3>
           <p id="overlay-desc">Move your mouse / finger to dodge the meteors<br>Stars = +10 pts • Purple meteors = -1 life</p>
           <div id="game-final-score"></div>
           <button id="game-start-btn" onclick="startGame()">START GAME</button>
@@ -936,44 +954,44 @@
 
     <div class="game-panel" data-game="slots" id="panel-slots" hidden>
       <div style="text-align:center;">
-        <div id="sl-credits-disp" style="font-family:'Unbounded',sans-serif;font-size:28px;font-weight:900;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;">100 <span style="font-size:14px;-webkit-text-fill-color:var(--text-muted);color:var(--text-muted);">credits</span></div>
+        <div id="sl-credits-disp" style="font-family:'Unbounded', 'Mitr', sans-serif;font-size:28px;font-weight:900;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;">100 <span style="font-size:14px;-webkit-text-fill-color:var(--text-muted);color:var(--text-muted);">credits</span></div>
         <div style="display:flex;justify-content:center;gap:12px;margin:20px 0;">
           <div id="sr0" class="glass-card" style="width:80px;height:90px;display:flex;align-items:center;justify-content:center;font-size:42px;border-radius:16px;">🍒</div>
           <div id="sr1" class="glass-card" style="width:80px;height:90px;display:flex;align-items:center;justify-content:center;font-size:42px;border-radius:16px;">🍋</div>
           <div id="sr2" class="glass-card" style="width:80px;height:90px;display:flex;align-items:center;justify-content:center;font-size:42px;border-radius:16px;">⭐</div>
         </div>
-        <div id="sl-msg" style="font-family:'Space Mono',monospace;font-size:13px;color:var(--text-muted);min-height:22px;margin:8px 0;">Place your bet and spin!</div>
+        <div id="sl-msg" style="font-family:'Space Mono', 'Mitr', monospace;font-size:13px;color:var(--text-muted);min-height:22px;margin:8px 0;">Place your bet and spin!</div>
         <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin:12px 0;">
           <button onclick="slChangeBet(-5)" class="game-tag" style="padding:6px 14px;">−</button>
-          <span style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--accent);min-width:40px;" id="sl-bet-val">10</span>
+          <span style="font-family:'Space Mono', 'Mitr', monospace;font-size:16px;font-weight:700;color:var(--accent);min-width:40px;" id="sl-bet-val">10</span>
           <button onclick="slChangeBet(5)" class="game-tag" style="padding:6px 14px;">+</button>
           <span style="font-size:12px;color:var(--text-muted);">bet</span>
         </div>
         <button id="sl-spin-btn" onclick="doSlotSpin()" class="special-btn" style="padding:12px 48px;">🎰 SPIN</button>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border);">
-          <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--text-muted);text-align:center;">💎💎💎<br><span style="color:var(--accent);">×50</span></div>
-          <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--text-muted);text-align:center;">7️⃣7️⃣7️⃣<br><span style="color:var(--accent);">×20</span></div>
-          <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--text-muted);text-align:center;">⭐⭐⭐<br><span style="color:var(--accent);">×10</span></div>
-          <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--text-muted);text-align:center;">🍇🍇🍇<br><span style="color:var(--accent);">×5</span></div>
-          <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--text-muted);text-align:center;">🍒🍒🍒<br><span style="color:var(--accent);">×3</span></div>
-          <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--text-muted);text-align:center;">Any pair<br><span style="color:var(--accent);">×1.5</span></div>
+          <div style="font-size:11px;font-family:'Space Mono', 'Mitr', monospace;color:var(--text-muted);text-align:center;">💎💎💎<br><span style="color:var(--accent);">×50</span></div>
+          <div style="font-size:11px;font-family:'Space Mono', 'Mitr', monospace;color:var(--text-muted);text-align:center;">7️⃣7️⃣7️⃣<br><span style="color:var(--accent);">×20</span></div>
+          <div style="font-size:11px;font-family:'Space Mono', 'Mitr', monospace;color:var(--text-muted);text-align:center;">⭐⭐⭐<br><span style="color:var(--accent);">×10</span></div>
+          <div style="font-size:11px;font-family:'Space Mono', 'Mitr', monospace;color:var(--text-muted);text-align:center;">🍇🍇🍇<br><span style="color:var(--accent);">×5</span></div>
+          <div style="font-size:11px;font-family:'Space Mono', 'Mitr', monospace;color:var(--text-muted);text-align:center;">🍒🍒🍒<br><span style="color:var(--accent);">×3</span></div>
+          <div style="font-size:11px;font-family:'Space Mono', 'Mitr', monospace;color:var(--text-muted);text-align:center;">Any pair<br><span style="color:var(--accent);">×1.5</span></div>
         </div>
       </div>
     </div>
 
     <div class="game-panel" data-game="blackjack" id="panel-bj" hidden>
-      <div id="bj-credits-disp" style="font-family:'Unbounded',sans-serif;font-size:28px;font-weight:900;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;">100 <span style="font-size:14px;-webkit-text-fill-color:var(--text-muted);color:var(--text-muted);">credits</span></div>
-      <p style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--text-muted);margin-bottom:8px;">DEALER</p>
+      <div id="bj-credits-disp" style="font-family:'Unbounded', 'Mitr', sans-serif;font-size:28px;font-weight:900;background:var(--title-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;">100 <span style="font-size:14px;-webkit-text-fill-color:var(--text-muted);color:var(--text-muted);">credits</span></div>
+      <p style="font-family:'Space Mono', 'Mitr', monospace;font-size:10px;letter-spacing:.15em;color:var(--text-muted);margin-bottom:8px;">DEALER</p>
       <div id="bj-dealer-area" style="display:flex;gap:8px;flex-wrap:wrap;min-height:90px;align-items:flex-start;margin-bottom:6px;"></div>
-      <p id="bj-dealer-score" style="font-family:'Space Mono',monospace;font-size:12px;color:var(--text-muted);margin-bottom:16px;"></p>
+      <p id="bj-dealer-score" style="font-family:'Space Mono', 'Mitr', monospace;font-size:12px;color:var(--text-muted);margin-bottom:16px;"></p>
       <div style="height:1px;background:var(--border);margin:12px 0;"></div>
-      <p style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--text-muted);margin-bottom:8px;">YOU</p>
+      <p style="font-family:'Space Mono', 'Mitr', monospace;font-size:10px;letter-spacing:.15em;color:var(--text-muted);margin-bottom:8px;">YOU</p>
       <div id="bj-player-area" style="display:flex;gap:8px;flex-wrap:wrap;min-height:90px;align-items:flex-start;margin-bottom:6px;"></div>
-      <p id="bj-player-score" style="font-family:'Space Mono',monospace;font-size:12px;color:var(--text-muted);margin-bottom:16px;"></p>
-      <div id="bj-message" style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;min-height:26px;margin-bottom:12px;color:var(--accent);">Place your bet and deal!</div>
+      <p id="bj-player-score" style="font-family:'Space Mono', 'Mitr', monospace;font-size:12px;color:var(--text-muted);margin-bottom:16px;"></p>
+      <div id="bj-message" style="font-family:'Syne', 'Mitr', sans-serif;font-size:16px;font-weight:700;min-height:26px;margin-bottom:12px;color:var(--accent);">Place your bet and deal!</div>
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;flex-wrap:wrap;">
         <button onclick="bjBetChange(-10)" class="game-tag" style="padding:6px 14px;">−</button>
-        <span style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--accent);min-width:40px;" id="bj-bet-disp">20</span>
+        <span style="font-family:'Space Mono', 'Mitr', monospace;font-size:16px;font-weight:700;color:var(--accent);min-width:40px;" id="bj-bet-disp">20</span>
         <button onclick="bjBetChange(10)" class="game-tag" style="padding:6px 14px;">+</button>
         <span style="font-size:12px;color:var(--text-muted);">bet</span>
       </div>
@@ -993,7 +1011,7 @@
 
       <!-- SONGS -->
       <div class="glass-card p-8 card-reveal">
-        <h2 class="text-2xl font-bold mb-8 flex items-center gap-3" style="color:var(--text);font-family:'Syne',sans-serif;"><span>🎵</span> My Favorite Songs</h2>
+        <h2 class="text-2xl font-bold mb-8 flex items-center gap-3" style="color:var(--text);font-family:'Syne', 'Mitr', sans-serif;" data-i18n="music-title"><span>🎵</span> My Favorite Songs</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
           <a href="https://open.spotify.com/album/0sSOZZhpG9iGE1XFVUWmtU?si=YfWW-NaeSKi1HeSKwtVEUg" target="_blank" class="song-card stagger-child group" style="--accent:rgba(56,189,248,0.5);--glow:rgba(56,189,248,0.25);--accent-btn:rgba(56,189,248,0.15);--accent-btn-hover:rgba(56,189,248,0.4);--bar:linear-gradient(90deg,#0ea5e9,#38bdf8)">
             <div class="song-art-banner"><img src="music-1.jpg" alt="WOS"><div class="song-spotify-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg></div></div>
@@ -1018,11 +1036,11 @@
     
     <!-- FOOTER -->
     <footer class="mt-24 mb-16 text-center footer-line pt-14 card-reveal">
-      <h2 class="text-5xl font-extrabold glow-title mb-4" style="font-family:'Unbounded',sans-serif;">Thanks for visit</h2>
-      <p class="text-lg mb-8" style="color:var(--text-muted)">Here is my <span style="color:var(--text);font-weight:600;">Social Media</span></p>
+      <h2 class="text-5xl font-extrabold glow-title mb-4" style="font-family:'Unbounded', 'Mitr', sans-serif;" data-i18n="footer-title">Thanks for visiting</h2>
+      <p class="text-lg mb-8" style="color:var(--text-muted)" data-i18n="footer-desc">Here is my <span style="color:var(--text);font-weight:600;">Social Media</span></p>
       <div class="flex justify-center gap-4 mb-12 flex-wrap">
         <a href="https://discord.gg/eV3RCcG3bf" target="_blank" class="social-link">Discord Server</a>
-        <a href="https://discord.com/users/1083375896221712436" target="_blank" class="social-link">Discord</a>
+        <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=sddsnmhjjg@gmail.com&amp;su=Im%20from%20your%20website!&amp;body=Hey%20I%20want%20to..." target="_blank" class="social-link">Email me</a>
         <a href="https://www.instagram.com/ssnmhjjg1/" target="_blank" class="social-link">Instagram</a>
       </div>
       <div class="flex justify-center mt-6">
@@ -1056,6 +1074,168 @@
   const tsIcon=document.getElementById('tsIcon');
   function applyTheme(t,playSound){html.setAttribute('data-theme',t);tsIcon.textContent=t==='dark'?'🌙':'☀️';localStorage.setItem('ice-theme',t);if(playSound){playThemeSound(t);showToast(t==='light'?'☀️ rise and shine!':'🌙 sleep mode activated Zzz~');}}
   function toggleTheme(){applyTheme(html.getAttribute('data-theme')==='dark'?'light':'dark',true);}
+
+  // ══ LANGUAGE ══
+  const langCodes = ['en', 'th'];
+  let currentLangIdx = 0;
+  function initLanguage() {
+    const saved = localStorage.getItem('ice-lang-idx');
+    if (saved !== null) {
+      currentLangIdx = parseInt(saved);
+    }
+    updateLanguageDisplay();
+  }
+  function updateLanguageDisplay() {
+    const langText = document.getElementById('langText');
+    const langCode = langCodes[currentLangIdx].toUpperCase();
+    langText.textContent = langCode;
+    localStorage.setItem('ice-lang-idx', currentLangIdx);
+    html.setAttribute('lang', langCodes[currentLangIdx]);
+    updatePageLanguage();
+  }
+  function toggleLanguage() {
+    currentLangIdx = (currentLangIdx + 1) % langCodes.length;
+    updateLanguageDisplay();
+  }
+  document.addEventListener('DOMContentLoaded', initLanguage);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLanguage);
+  } else {
+    initLanguage();
+  }
+
+  function updateGreetings() {
+    clearTimeout(autoTimer);
+    elH1.textContent = '';
+    elSub.textContent = '';
+    typeInto(elH1, rowH1, h1Ref, langs[lIdx][tIdx], () => {
+      setTimeout(() => {
+        typeInto(elSub, rowSub, subRef, subLangs[lIdx][tIdx], () => {
+          autoTimer = setTimeout(() => {
+            eraseEl(elSub, rowSub, subRef, () => {
+              eraseEl(elH1, rowH1, h1Ref, () => {
+                lIdx = (lIdx + 1) % langs.length;
+                cycle();
+              });
+            });
+          }, 2200);
+        });
+      }, 350);
+    });
+  }
+
+  // ══ PAGE TRANSLATIONS ══
+  const translations = {
+    en: {
+      "about-title": " About me",
+      "photo-title": "📷 Photography",
+      "photo-desc": "Landscapes · Building · Nature",
+      "photo-view-btn": "View on Instagram",
+      "photo-highlight": "Highlight Post",
+      "games-title": "🎮 Favorite Games",
+      "games-image-title": "📸 If I was in image I will be",
+      "birthday-label": "birthday in",
+      "music-title": "🎵 My Favorite Songs",
+      "footer-title": "Thanks for visit",
+      "footer-desc": "Here is my **Social Media**",
+      "discord-profile": "See profile on Discord",
+      "discord-loading": "Loading…",
+      "info-nickname": "Nickname:",
+      "info-nickname-val": "Gao | Ice",
+      "info-firstname": "First name:",
+      "info-firstname-val": "Mr.Natthasit",
+      "info-age": "Age:",
+      "info-age-val": "16 years old (this year)",
+      "info-education": "Education:",
+      "info-education-val": "วิทยาลัยเทคโนโลยีบริหารธุรกิจยานนาวา | Yannawa business administration technological college",
+      "info-nationality": "Nationality:",
+      "info-nationality-val": "Thai (Korean soon! lmao)",
+      "info-speaking": "Speaking:",
+      "info-speaking-val": "Thai, English(not that good)",
+      "info-gender": "Gender:",
+      "info-gender-val": "Male",
+      "info-certificate": "Certificate:",
+      "info-certificate-val": "I don't have any lmao",
+      "info-hobbies": "Hobbies:",
+      "info-hobbies-val": "Play games, Photography, learning some new skills I guess",
+      "info-goodat": "Good at:",
+      "info-goodat-val": "Photography (I'm not a dev I don't know that much about coding)",
+      "info-moreinfo": "More info:",
+      "info-moreinfo-val": "Welp I don't know why I made this website up but I guess it might be useful someday I don't know nither",
+      "photo-stats-label1": "Photos Shared",
+      "photo-stats-label2": "Styles",
+      "photo-stats-label3": "Year of shooting",
+      "countdown-days": "DAYS",
+      "countdown-hours": "HOURS",
+      "countdown-mins": "MINS",
+      "countdown-secs": "SECS"
+    },
+    th: {
+      "about-title": " เกี่ยวกับผม",
+      "photo-title": "📷 ถ่ายภาพ",
+      "photo-desc": "บ้าน · อาคาร · ธรรมชาติ",
+      "photo-view-btn": "ดูใน Instagram",
+      "photo-highlight": "ต้องโพสต์นี้เลย",
+      "games-title": "🎮 เกมที่ชอบ",
+      "games-image-title": "📸 ถ้าผมเป็นภาพผมจะเป็น",
+      "birthday-label": "จะครบวันเกิดในอีก",
+      "music-title": "🎵 เพลงที่ชอบของผม",
+      "footer-title": "ขอบคุณที่มาเยี่ยม",
+      "footer-desc": "นี่คือ **โซเชียลมีเดีย** ของผม",
+      "discord-profile": "ดูโปรไฟล์ใน Discord",
+      "discord-loading": "กำลังโหลด…",
+      "info-nickname": "ชื่อเล่น:",
+      "info-nickname-val": "Gao | Ice",
+      "info-firstname": "ชื่อจริง:",
+      "info-firstname-val": "Mr.Natthasit",
+      "info-age": "อายุ:",
+      "info-age-val": "16 ปี (ปีนี้)",
+      "info-education": "การศึกษา:",
+      "info-education-val": "วิทยาลัยเทคโนโลยีบริหารธุรกิจยานนาวา",
+      "info-nationality": "สัญชาติ:",
+      "info-nationality-val": "ไทย (เร็วๆ นี้จะเป็นเกาหลี 555)",
+      "info-speaking": "พูดภาษาอะไรได้บ้าง:",
+      "info-speaking-val": "ไทย อังกฤษ(ไม่เก่ง)",
+      "info-gender": "เพศ:",
+      "info-gender-val": "ชาย",
+      "info-certificate": "ใบประกาศนียบัตร:",
+      "info-certificate-val": "ไม่มีเลย lmao",
+      "info-hobbies": "งานอดิเรก:",
+      "info-hobbies-val": "เล่นเกม ถ่ายภาพ เรียนรู้ทักษะใหม่ๆ",
+      "info-goodat": "เก่งเรื่อง:",
+      "info-goodat-val": "ถ่ายภาพ (ผมไม่ใช่ dev ผมไม่รู้เรื่องการเขียนโค้ดมากนัก)",
+      "info-moreinfo": "ข้อมูลเพิ่มเติม:",
+      "info-moreinfo-val": "ผมไม่รู้ว่าทำไมผมถึงสร้างเว็บไซต์นี้มา แต่ผมคิดว่ามันอาจจะมีประโยชน์บ้างซักวันนึง",
+      "photo-stats-label1": "ภาพที่แชร์",
+      "photo-stats-label2": "สไตล์",
+      "photo-stats-label3": "ปีที่ถ่ายภาพ",
+      "countdown-days": "วัน",
+      "countdown-hours": "ชั่วโมง",
+      "countdown-mins": "นาที",
+      "countdown-secs": "วินาที"
+    }
+  };
+
+  function updatePageLanguage() {
+    const lang = langCodes[currentLangIdx];
+    const t = translations[lang];
+    
+    // Update all elements with data-i18n attribute
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (t[key]) {
+        let text = t[key];
+        if (text.includes('**')) {
+          // Convert **text** to styled span matching original styling
+          text = text.replace(/\*\*(.*?)\*\*/g, '<span style="color:var(--text);font-weight:600;">$1</span>');
+          el.innerHTML = text;
+        } else {
+          el.textContent = text;
+        }
+      }
+    });
+  }
+
 // ══ TIME GREETING ══
 const greetings = {
   en: ["Good Morning!",    "Good Afternoon!",   "Good Evening!",   "Maybe sleep?"],
@@ -1164,7 +1344,7 @@ function startGreetingCycle() {
   const cursor=document.getElementById('custom-cursor');
   const clickLabel=document.getElementById('cursor-click-label');
   document.addEventListener('mousemove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px';clickLabel.style.left=e.clientX+'px';clickLabel.style.top=(e.clientY-34)+'px';});
-  const clickables='a,button,[onclick],input,textarea,.game-tag,.cat-corner,.song-card,.bmp-ctrl,.bmp-play,.bmp-toggle,.special-btn,.social-link,.discord-card__profile-btn,#theme-switcher,.showcase-btn';
+  const clickables='a,button,[onclick],input,textarea,.game-tag,.cat-corner,.song-card,.bmp-ctrl,.bmp-play,.bmp-toggle,.special-btn,.social-link,.discord-card__profile-btn,#theme-switcher,#lang-switcher,.showcase-btn';
   document.addEventListener('mouseover',e=>{if(e.target.closest(clickables)){cursor.classList.add('hovering');clickLabel.classList.add('visible');}});
   document.addEventListener('mouseout',e=>{if(e.target.closest(clickables)){cursor.classList.remove('hovering');clickLabel.classList.remove('visible');}});
   document.addEventListener('mousedown',()=>cursor.classList.add('pressing'));
@@ -1544,14 +1724,14 @@ window.addEventListener('load',()=>{
     gameHubIndex=(gameHubIndex+1)%GAME_HUB.length;
     updateGameHubUI();
     if(GAME_HUB[gameHubIndex].id==='dodge'&&window.resizeStarDodge)window.resizeStarDodge();
-    document.getElementById('game-section')?.scrollIntoView({behavior:'smooth',block:'nearest'});
+    document.getElementById('game-section')?.scrollIntoView({behavior:'smooth',block:'nearest'}); 
   };
   updateGameHubUI();
 
     // ── Throttle: prevent rapid-fire if mouse jitters ──
    let lastPlay = 0;
 const THROTTLE_MS = 60;
-const CLICKABLE = 'a,button,[onclick],input,textarea,.game-tag,.cat-corner,.song-card,.bmp-ctrl,.bmp-play,.bmp-toggle,.special-btn,.social-link,.discord-card__profile-btn,#theme-switcher,.showcase-btn';
+const CLICKABLE = 'a,button,[onclick],input,textarea,.game-tag,.cat-corner,.song-card,.bmp-ctrl,.bmp-play,.bmp-toggle,.special-btn,.social-link,.discord-card__profile-btn,#theme-switcher,#lang-switcher,.showcase-btn';
   let audioCtx = null;
 function getCtx() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
