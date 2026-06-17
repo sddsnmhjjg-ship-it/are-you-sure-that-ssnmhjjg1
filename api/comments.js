@@ -64,7 +64,12 @@ module.exports = async (req, res) => {
     let comments = [];
 
     try {
-      comments = await fetchDiscordComments(limit);
+      const discordComments = await fetchDiscordComments(limit);
+      if (discordComments) {
+        comments = discordComments;
+      } else {
+        comments = readLocalComments().slice(-limit);
+      }
     } catch (err) {
       console.warn('Discord comments fetch failed, falling back to local cache:', err.message);
       comments = readLocalComments().slice(-limit);
