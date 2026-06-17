@@ -12,7 +12,7 @@ module.exports = async (req, res) => {
     return res.status(400).json({ error: 'Missing message ID (mid)' });
   }
 
-  const WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL || 'https://discord.com/api/webhooks/1509831789495980143/RyWpmIf5AWyRYuz1yXNktFxHtcFrW1gg8VR50fh6C9zug9Nb9keq38C4glpi2EkpvAQ_';
+  const WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
 
   try {
     const getRes = await fetch(`${WEBHOOK_URL}/messages/${mid}`);

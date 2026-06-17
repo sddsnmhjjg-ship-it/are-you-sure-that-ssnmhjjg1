@@ -2,7 +2,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
-const WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL || 'https://discord.com/api/webhooks/1509831789495980143/RyWpmIf5AWyRYuz1yXNktFxHtcFrW1gg8VR50fh6C9zug9Nb9keq38C4glpi2EkpvAQ_';
+const WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
 const STORE_PATH = path.join(os.tmpdir(), 'visitor-comments.json');
 const MAX_COMMENTS = 50;
 
